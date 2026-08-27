@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AccueilRouteImport } from './routes/accueil'
 import { Route as AnalysesRouteImport } from './routes/analyses'
+import { Route as ArticlesBesoinsRouteImport } from './routes/articles-besoins'
 import { Route as ConsultationsRouteImport } from './routes/consultations'
 import { Route as HistoriqueRouteImport } from './routes/historique'
 import { Route as OffresFinalesRouteImport } from './routes/offres-finales'
@@ -37,6 +38,11 @@ const AccueilRoute = AccueilRouteImport.update({
 const AnalysesRoute = AnalysesRouteImport.update({
   id: '/analyses',
   path: '/analyses',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ArticlesBesoinsRoute = ArticlesBesoinsRouteImport.update({
+  id: '/articles-besoins',
+  path: '/articles-besoins',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ConsultationsRoute = ConsultationsRouteImport.update({
@@ -99,6 +105,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/accueil': typeof AccueilRoute
   '/analyses': typeof AnalysesRoute
+  '/articles-besoins': typeof ArticlesBesoinsRoute
   '/consultations': typeof ConsultationsRoute
   '/historique': typeof HistoriqueRoute
   '/offres-finales': typeof OffresFinalesRoute
@@ -115,6 +122,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/accueil': typeof AccueilRoute
   '/analyses': typeof AnalysesRoute
+  '/articles-besoins': typeof ArticlesBesoinsRoute
   '/consultations': typeof ConsultationsRoute
   '/historique': typeof HistoriqueRoute
   '/offres-finales': typeof OffresFinalesRoute
@@ -132,6 +140,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/accueil': typeof AccueilRoute
   '/analyses': typeof AnalysesRoute
+  '/articles-besoins': typeof ArticlesBesoinsRoute
   '/consultations': typeof ConsultationsRoute
   '/historique': typeof HistoriqueRoute
   '/offres-finales': typeof OffresFinalesRoute
@@ -150,6 +159,7 @@ export interface FileRouteTypes {
     | '/'
     | '/accueil'
     | '/analyses'
+    | '/articles-besoins'
     | '/consultations'
     | '/historique'
     | '/offres-finales'
@@ -166,6 +176,7 @@ export interface FileRouteTypes {
     | '/'
     | '/accueil'
     | '/analyses'
+    | '/articles-besoins'
     | '/consultations'
     | '/historique'
     | '/offres-finales'
@@ -182,6 +193,7 @@ export interface FileRouteTypes {
     | '/'
     | '/accueil'
     | '/analyses'
+    | '/articles-besoins'
     | '/consultations'
     | '/historique'
     | '/offres-finales'
@@ -199,6 +211,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AccueilRoute: typeof AccueilRoute
   AnalysesRoute: typeof AnalysesRoute
+  ArticlesBesoinsRoute: typeof ArticlesBesoinsRoute
   ConsultationsRoute: typeof ConsultationsRoute
   HistoriqueRoute: typeof HistoriqueRoute
   OffresFinalesRoute: typeof OffresFinalesRoute
@@ -233,6 +246,13 @@ declare module '@tanstack/react-router' {
       path: '/analyses'
       fullPath: '/analyses'
       preLoaderRoute: typeof AnalysesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/articles-besoins': {
+      id: '/articles-besoins'
+      path: '/articles-besoins'
+      fullPath: '/articles-besoins'
+      preLoaderRoute: typeof ArticlesBesoinsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/consultations': {
@@ -319,6 +339,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AccueilRoute: AccueilRoute,
   AnalysesRoute: AnalysesRoute,
+  ArticlesBesoinsRoute: ArticlesBesoinsRoute,
   ConsultationsRoute: ConsultationsRoute,
   HistoriqueRoute: HistoriqueRoute,
   OffresFinalesRoute: OffresFinalesRoute,
