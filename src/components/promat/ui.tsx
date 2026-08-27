@@ -164,7 +164,7 @@ export function KpiCard({
   value: number;
   hint: string;
   icon: ReactNode;
-  tone?: Tone;
+  tone?: Tone | undefined;
   onClick?: () => void;
   delay?: number;
 }) {
@@ -399,7 +399,7 @@ export function AgentBanner({
 }: {
   titre: string;
   message: string;
-  tone?: Tone;
+  tone?: Tone | undefined;
   action?: ReactNode;
 }) {
   return (

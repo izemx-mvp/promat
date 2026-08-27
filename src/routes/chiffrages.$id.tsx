@@ -205,7 +205,7 @@ function ChiffrageWorkspace() {
                   ["controles", "Contrôles"],
                   ["versions", "Versions"],
                 ].map(([v, l]) => (
-                  <TabsTrigger key={v} value={v} className="text-xs">{l}</TabsTrigger>
+                  <TabsTrigger key={v} value={v as string} className="text-xs">{l}</TabsTrigger>
                 ))}
               </TabsList>
 
@@ -964,7 +964,7 @@ function FraisTab({ costingId }: { costingId: string }) {
         <div className="grid gap-3 md:grid-cols-5">
           <div className="space-y-1.5">
             <Label className="text-xs">Type</Label>
-            <Select value={form.type} onValueChange={(v) => setForm({ ...form, type: v })}>
+            <Select value={form.type ?? "Fret"} onValueChange={(v) => setForm({ ...form, type: v })}>
               <SelectTrigger><SelectValue /></SelectTrigger>
               <SelectContent>{TYPES_FRAIS.map((t) => <SelectItem key={t} value={t}>{t}</SelectItem>)}</SelectContent>
             </Select>
@@ -979,7 +979,7 @@ function FraisTab({ costingId }: { costingId: string }) {
           </div>
           <div className="space-y-1.5">
             <Label className="text-xs">Devise</Label>
-            <Select value={form.devise} onValueChange={(v) => setForm({ ...form, devise: v as Devise })}>
+            <Select value={form.devise ?? "EUR"} onValueChange={(v) => setForm({ ...form, devise: v as Devise })}>
               <SelectTrigger><SelectValue /></SelectTrigger>
               <SelectContent>{DEVISES.map((d) => <SelectItem key={d} value={d}>{d}</SelectItem>)}</SelectContent>
             </Select>
