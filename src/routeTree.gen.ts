@@ -14,6 +14,7 @@ import { Route as AccueilRouteImport } from './routes/accueil'
 import { Route as ConsultationsRouteImport } from './routes/consultations'
 import { Route as HistoriqueRouteImport } from './routes/historique'
 import { Route as OffresFinalesRouteImport } from './routes/offres-finales'
+import { Route as ParametresRouteImport } from './routes/parametres'
 import { Route as RecherchesRouteImport } from './routes/recherches'
 import { Route as AppelsOffresIndexRouteImport } from './routes/appels-offres.index'
 import { Route as AppelsOffresIdRouteImport } from './routes/appels-offres.$id'
@@ -45,6 +46,11 @@ const HistoriqueRoute = HistoriqueRouteImport.update({
 const OffresFinalesRoute = OffresFinalesRouteImport.update({
   id: '/offres-finales',
   path: '/offres-finales',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ParametresRoute = ParametresRouteImport.update({
+  id: '/parametres',
+  path: '/parametres',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RecherchesRoute = RecherchesRouteImport.update({
@@ -89,6 +95,7 @@ export interface FileRoutesByFullPath {
   '/consultations': typeof ConsultationsRoute
   '/historique': typeof HistoriqueRoute
   '/offres-finales': typeof OffresFinalesRoute
+  '/parametres': typeof ParametresRoute
   '/recherches': typeof RecherchesRoute
   '/appels-offres/$id': typeof AppelsOffresIdRoute
   '/chiffrages/$id': typeof ChiffragesIdRoute
@@ -103,6 +110,7 @@ export interface FileRoutesByTo {
   '/consultations': typeof ConsultationsRoute
   '/historique': typeof HistoriqueRoute
   '/offres-finales': typeof OffresFinalesRoute
+  '/parametres': typeof ParametresRoute
   '/recherches': typeof RecherchesRoute
   '/appels-offres/$id': typeof AppelsOffresIdRoute
   '/chiffrages/$id': typeof ChiffragesIdRoute
@@ -118,6 +126,7 @@ export interface FileRoutesById {
   '/consultations': typeof ConsultationsRoute
   '/historique': typeof HistoriqueRoute
   '/offres-finales': typeof OffresFinalesRoute
+  '/parametres': typeof ParametresRoute
   '/recherches': typeof RecherchesRoute
   '/appels-offres/$id': typeof AppelsOffresIdRoute
   '/chiffrages/$id': typeof ChiffragesIdRoute
@@ -134,6 +143,7 @@ export interface FileRouteTypes {
     | '/consultations'
     | '/historique'
     | '/offres-finales'
+    | '/parametres'
     | '/recherches'
     | '/appels-offres/$id'
     | '/chiffrages/$id'
@@ -148,6 +158,7 @@ export interface FileRouteTypes {
     | '/consultations'
     | '/historique'
     | '/offres-finales'
+    | '/parametres'
     | '/recherches'
     | '/appels-offres/$id'
     | '/chiffrages/$id'
@@ -162,6 +173,7 @@ export interface FileRouteTypes {
     | '/consultations'
     | '/historique'
     | '/offres-finales'
+    | '/parametres'
     | '/recherches'
     | '/appels-offres/$id'
     | '/chiffrages/$id'
@@ -177,6 +189,7 @@ export interface RootRouteChildren {
   ConsultationsRoute: typeof ConsultationsRoute
   HistoriqueRoute: typeof HistoriqueRoute
   OffresFinalesRoute: typeof OffresFinalesRoute
+  ParametresRoute: typeof ParametresRoute
   RecherchesRoute: typeof RecherchesRoute
   AppelsOffresIdRoute: typeof AppelsOffresIdRoute
   ChiffragesIdRoute: typeof ChiffragesIdRoute
@@ -221,6 +234,13 @@ declare module '@tanstack/react-router' {
       path: '/offres-finales'
       fullPath: '/offres-finales'
       preLoaderRoute: typeof OffresFinalesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/parametres': {
+      id: '/parametres'
+      path: '/parametres'
+      fullPath: '/parametres'
+      preLoaderRoute: typeof ParametresRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/recherches': {
@@ -281,6 +301,7 @@ const rootRouteChildren: RootRouteChildren = {
   ConsultationsRoute: ConsultationsRoute,
   HistoriqueRoute: HistoriqueRoute,
   OffresFinalesRoute: OffresFinalesRoute,
+  ParametresRoute: ParametresRoute,
   RecherchesRoute: RecherchesRoute,
   AppelsOffresIdRoute: AppelsOffresIdRoute,
   ChiffragesIdRoute: ChiffragesIdRoute,
