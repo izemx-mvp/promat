@@ -107,9 +107,9 @@ function ListePage() {
 
   const applyView = (v: { filtres: Record<string, string> }) => {
     reset();
-    if (v.filtres.statut) setTab(TABS.find((t) => t.label === v.filtres.statut)?.key ?? "tous");
-    if (v.filtres.scoreMin) setScoreMin(v.filtres.scoreMin);
-    if (v.filtres.priorite) setQ("");
+    if (v.filtres['statut']) setTab(TABS.find((t) => t.label === v.filtres['statut'])?.key ?? "tous");
+    if (v.filtres['scoreMin']) setScoreMin(v.filtres['scoreMin']);
+    if (v.filtres['priorite']) setQ("");
     toast.success("Vue appliquée");
   };
 

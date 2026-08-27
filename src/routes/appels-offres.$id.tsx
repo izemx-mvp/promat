@@ -225,7 +225,7 @@ function TenderWorkspace() {
                   ["chiffrage", "Chiffrage"],
                   ["historique", "Historique"],
                 ].map(([v, l]) => (
-                  <TabsTrigger key={v} value={v} className="text-xs">{l}</TabsTrigger>
+                  <TabsTrigger key={v} value={v as string} className="text-xs">{l}</TabsTrigger>
                 ))}
               </TabsList>
 

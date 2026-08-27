@@ -11,10 +11,22 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AccueilRouteImport } from './routes/accueil'
+import { Route as AnalysesRouteImport } from './routes/analyses'
+import { Route as ArticlesRouteImport } from './routes/articles'
+import { Route as ArticlesBesoinsRouteImport } from './routes/articles-besoins'
+import { Route as ComparatifsRouteImport } from './routes/comparatifs'
+import { Route as ConsultationsRouteImport } from './routes/consultations'
+import { Route as DocumentsRouteImport } from './routes/documents'
+import { Route as HistoriqueRouteImport } from './routes/historique'
+import { Route as OffresFinalesRouteImport } from './routes/offres-finales'
+import { Route as ParametresRouteImport } from './routes/parametres'
+import { Route as RecherchesRouteImport } from './routes/recherches'
 import { Route as AppelsOffresIndexRouteImport } from './routes/appels-offres.index'
 import { Route as AppelsOffresIdRouteImport } from './routes/appels-offres.$id'
 import { Route as ChiffragesIndexRouteImport } from './routes/chiffrages.index'
 import { Route as ChiffragesIdRouteImport } from './routes/chiffrages.$id'
+import { Route as FournisseursIndexRouteImport } from './routes/fournisseurs.index'
+import { Route as FournisseursIdRouteImport } from './routes/fournisseurs.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -24,6 +36,56 @@ const IndexRoute = IndexRouteImport.update({
 const AccueilRoute = AccueilRouteImport.update({
   id: '/accueil',
   path: '/accueil',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AnalysesRoute = AnalysesRouteImport.update({
+  id: '/analyses',
+  path: '/analyses',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ArticlesRoute = ArticlesRouteImport.update({
+  id: '/articles',
+  path: '/articles',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ArticlesBesoinsRoute = ArticlesBesoinsRouteImport.update({
+  id: '/articles-besoins',
+  path: '/articles-besoins',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ComparatifsRoute = ComparatifsRouteImport.update({
+  id: '/comparatifs',
+  path: '/comparatifs',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConsultationsRoute = ConsultationsRouteImport.update({
+  id: '/consultations',
+  path: '/consultations',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DocumentsRoute = DocumentsRouteImport.update({
+  id: '/documents',
+  path: '/documents',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HistoriqueRoute = HistoriqueRouteImport.update({
+  id: '/historique',
+  path: '/historique',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OffresFinalesRoute = OffresFinalesRouteImport.update({
+  id: '/offres-finales',
+  path: '/offres-finales',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ParametresRoute = ParametresRouteImport.update({
+  id: '/parametres',
+  path: '/parametres',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RecherchesRoute = RecherchesRouteImport.update({
+  id: '/recherches',
+  path: '/recherches',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AppelsOffresIndexRoute = AppelsOffresIndexRouteImport.update({
@@ -46,66 +108,160 @@ const ChiffragesIdRoute = ChiffragesIdRouteImport.update({
   path: '/chiffrages/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FournisseursIndexRoute = FournisseursIndexRouteImport.update({
+  id: '/fournisseurs/',
+  path: '/fournisseurs/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FournisseursIdRoute = FournisseursIdRouteImport.update({
+  id: '/fournisseurs/$id',
+  path: '/fournisseurs/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/accueil': typeof AccueilRoute
+  '/analyses': typeof AnalysesRoute
+  '/articles': typeof ArticlesRoute
+  '/articles-besoins': typeof ArticlesBesoinsRoute
+  '/comparatifs': typeof ComparatifsRoute
+  '/consultations': typeof ConsultationsRoute
+  '/documents': typeof DocumentsRoute
+  '/historique': typeof HistoriqueRoute
+  '/offres-finales': typeof OffresFinalesRoute
+  '/parametres': typeof ParametresRoute
+  '/recherches': typeof RecherchesRoute
   '/appels-offres/$id': typeof AppelsOffresIdRoute
   '/chiffrages/$id': typeof ChiffragesIdRoute
+  '/fournisseurs/$id': typeof FournisseursIdRoute
   '/appels-offres/': typeof AppelsOffresIndexRoute
   '/chiffrages/': typeof ChiffragesIndexRoute
+  '/fournisseurs/': typeof FournisseursIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/accueil': typeof AccueilRoute
+  '/analyses': typeof AnalysesRoute
+  '/articles': typeof ArticlesRoute
+  '/articles-besoins': typeof ArticlesBesoinsRoute
+  '/comparatifs': typeof ComparatifsRoute
+  '/consultations': typeof ConsultationsRoute
+  '/documents': typeof DocumentsRoute
+  '/historique': typeof HistoriqueRoute
+  '/offres-finales': typeof OffresFinalesRoute
+  '/parametres': typeof ParametresRoute
+  '/recherches': typeof RecherchesRoute
   '/appels-offres/$id': typeof AppelsOffresIdRoute
   '/chiffrages/$id': typeof ChiffragesIdRoute
+  '/fournisseurs/$id': typeof FournisseursIdRoute
   '/appels-offres': typeof AppelsOffresIndexRoute
   '/chiffrages': typeof ChiffragesIndexRoute
+  '/fournisseurs': typeof FournisseursIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/accueil': typeof AccueilRoute
+  '/analyses': typeof AnalysesRoute
+  '/articles': typeof ArticlesRoute
+  '/articles-besoins': typeof ArticlesBesoinsRoute
+  '/comparatifs': typeof ComparatifsRoute
+  '/consultations': typeof ConsultationsRoute
+  '/documents': typeof DocumentsRoute
+  '/historique': typeof HistoriqueRoute
+  '/offres-finales': typeof OffresFinalesRoute
+  '/parametres': typeof ParametresRoute
+  '/recherches': typeof RecherchesRoute
   '/appels-offres/$id': typeof AppelsOffresIdRoute
   '/chiffrages/$id': typeof ChiffragesIdRoute
+  '/fournisseurs/$id': typeof FournisseursIdRoute
   '/appels-offres/': typeof AppelsOffresIndexRoute
   '/chiffrages/': typeof ChiffragesIndexRoute
+  '/fournisseurs/': typeof FournisseursIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/accueil'
+    | '/analyses'
+    | '/articles'
+    | '/articles-besoins'
+    | '/comparatifs'
+    | '/consultations'
+    | '/documents'
+    | '/historique'
+    | '/offres-finales'
+    | '/parametres'
+    | '/recherches'
     | '/appels-offres/$id'
     | '/chiffrages/$id'
+    | '/fournisseurs/$id'
     | '/appels-offres/'
     | '/chiffrages/'
+    | '/fournisseurs/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/accueil'
+    | '/analyses'
+    | '/articles'
+    | '/articles-besoins'
+    | '/comparatifs'
+    | '/consultations'
+    | '/documents'
+    | '/historique'
+    | '/offres-finales'
+    | '/parametres'
+    | '/recherches'
     | '/appels-offres/$id'
     | '/chiffrages/$id'
+    | '/fournisseurs/$id'
     | '/appels-offres'
     | '/chiffrages'
+    | '/fournisseurs'
   id:
     | '__root__'
     | '/'
     | '/accueil'
+    | '/analyses'
+    | '/articles'
+    | '/articles-besoins'
+    | '/comparatifs'
+    | '/consultations'
+    | '/documents'
+    | '/historique'
+    | '/offres-finales'
+    | '/parametres'
+    | '/recherches'
     | '/appels-offres/$id'
     | '/chiffrages/$id'
+    | '/fournisseurs/$id'
     | '/appels-offres/'
     | '/chiffrages/'
+    | '/fournisseurs/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AccueilRoute: typeof AccueilRoute
+  AnalysesRoute: typeof AnalysesRoute
+  ArticlesRoute: typeof ArticlesRoute
+  ArticlesBesoinsRoute: typeof ArticlesBesoinsRoute
+  ComparatifsRoute: typeof ComparatifsRoute
+  ConsultationsRoute: typeof ConsultationsRoute
+  DocumentsRoute: typeof DocumentsRoute
+  HistoriqueRoute: typeof HistoriqueRoute
+  OffresFinalesRoute: typeof OffresFinalesRoute
+  ParametresRoute: typeof ParametresRoute
+  RecherchesRoute: typeof RecherchesRoute
   AppelsOffresIdRoute: typeof AppelsOffresIdRoute
   ChiffragesIdRoute: typeof ChiffragesIdRoute
+  FournisseursIdRoute: typeof FournisseursIdRoute
   AppelsOffresIndexRoute: typeof AppelsOffresIndexRoute
   ChiffragesIndexRoute: typeof ChiffragesIndexRoute
+  FournisseursIndexRoute: typeof FournisseursIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -122,6 +278,76 @@ declare module '@tanstack/react-router' {
       path: '/accueil'
       fullPath: '/accueil'
       preLoaderRoute: typeof AccueilRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/analyses': {
+      id: '/analyses'
+      path: '/analyses'
+      fullPath: '/analyses'
+      preLoaderRoute: typeof AnalysesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/articles': {
+      id: '/articles'
+      path: '/articles'
+      fullPath: '/articles'
+      preLoaderRoute: typeof ArticlesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/articles-besoins': {
+      id: '/articles-besoins'
+      path: '/articles-besoins'
+      fullPath: '/articles-besoins'
+      preLoaderRoute: typeof ArticlesBesoinsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/comparatifs': {
+      id: '/comparatifs'
+      path: '/comparatifs'
+      fullPath: '/comparatifs'
+      preLoaderRoute: typeof ComparatifsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/consultations': {
+      id: '/consultations'
+      path: '/consultations'
+      fullPath: '/consultations'
+      preLoaderRoute: typeof ConsultationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/documents': {
+      id: '/documents'
+      path: '/documents'
+      fullPath: '/documents'
+      preLoaderRoute: typeof DocumentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/historique': {
+      id: '/historique'
+      path: '/historique'
+      fullPath: '/historique'
+      preLoaderRoute: typeof HistoriqueRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/offres-finales': {
+      id: '/offres-finales'
+      path: '/offres-finales'
+      fullPath: '/offres-finales'
+      preLoaderRoute: typeof OffresFinalesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/parametres': {
+      id: '/parametres'
+      path: '/parametres'
+      fullPath: '/parametres'
+      preLoaderRoute: typeof ParametresRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/recherches': {
+      id: '/recherches'
+      path: '/recherches'
+      fullPath: '/recherches'
+      preLoaderRoute: typeof RecherchesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/appels-offres/': {
@@ -152,16 +378,42 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ChiffragesIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/fournisseurs/': {
+      id: '/fournisseurs/'
+      path: '/fournisseurs'
+      fullPath: '/fournisseurs/'
+      preLoaderRoute: typeof FournisseursIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/fournisseurs/$id': {
+      id: '/fournisseurs/$id'
+      path: '/fournisseurs/$id'
+      fullPath: '/fournisseurs/$id'
+      preLoaderRoute: typeof FournisseursIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AccueilRoute: AccueilRoute,
+  AnalysesRoute: AnalysesRoute,
+  ArticlesRoute: ArticlesRoute,
+  ArticlesBesoinsRoute: ArticlesBesoinsRoute,
+  ComparatifsRoute: ComparatifsRoute,
+  ConsultationsRoute: ConsultationsRoute,
+  DocumentsRoute: DocumentsRoute,
+  HistoriqueRoute: HistoriqueRoute,
+  OffresFinalesRoute: OffresFinalesRoute,
+  ParametresRoute: ParametresRoute,
+  RecherchesRoute: RecherchesRoute,
   AppelsOffresIdRoute: AppelsOffresIdRoute,
   ChiffragesIdRoute: ChiffragesIdRoute,
+  FournisseursIdRoute: FournisseursIdRoute,
   AppelsOffresIndexRoute: AppelsOffresIndexRoute,
   ChiffragesIndexRoute: ChiffragesIndexRoute,
+  FournisseursIndexRoute: FournisseursIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
