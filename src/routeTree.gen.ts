@@ -15,6 +15,7 @@ import { Route as AnalysesRouteImport } from './routes/analyses'
 import { Route as ArticlesRouteImport } from './routes/articles'
 import { Route as ArticlesBesoinsRouteImport } from './routes/articles-besoins'
 import { Route as ConsultationsRouteImport } from './routes/consultations'
+import { Route as DocumentsRouteImport } from './routes/documents'
 import { Route as HistoriqueRouteImport } from './routes/historique'
 import { Route as OffresFinalesRouteImport } from './routes/offres-finales'
 import { Route as ParametresRouteImport } from './routes/parametres'
@@ -54,6 +55,11 @@ const ArticlesBesoinsRoute = ArticlesBesoinsRouteImport.update({
 const ConsultationsRoute = ConsultationsRouteImport.update({
   id: '/consultations',
   path: '/consultations',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DocumentsRoute = DocumentsRouteImport.update({
+  id: '/documents',
+  path: '/documents',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HistoriqueRoute = HistoriqueRouteImport.update({
@@ -114,6 +120,7 @@ export interface FileRoutesByFullPath {
   '/articles': typeof ArticlesRoute
   '/articles-besoins': typeof ArticlesBesoinsRoute
   '/consultations': typeof ConsultationsRoute
+  '/documents': typeof DocumentsRoute
   '/historique': typeof HistoriqueRoute
   '/offres-finales': typeof OffresFinalesRoute
   '/parametres': typeof ParametresRoute
@@ -132,6 +139,7 @@ export interface FileRoutesByTo {
   '/articles': typeof ArticlesRoute
   '/articles-besoins': typeof ArticlesBesoinsRoute
   '/consultations': typeof ConsultationsRoute
+  '/documents': typeof DocumentsRoute
   '/historique': typeof HistoriqueRoute
   '/offres-finales': typeof OffresFinalesRoute
   '/parametres': typeof ParametresRoute
@@ -151,6 +159,7 @@ export interface FileRoutesById {
   '/articles': typeof ArticlesRoute
   '/articles-besoins': typeof ArticlesBesoinsRoute
   '/consultations': typeof ConsultationsRoute
+  '/documents': typeof DocumentsRoute
   '/historique': typeof HistoriqueRoute
   '/offres-finales': typeof OffresFinalesRoute
   '/parametres': typeof ParametresRoute
@@ -171,6 +180,7 @@ export interface FileRouteTypes {
     | '/articles'
     | '/articles-besoins'
     | '/consultations'
+    | '/documents'
     | '/historique'
     | '/offres-finales'
     | '/parametres'
@@ -189,6 +199,7 @@ export interface FileRouteTypes {
     | '/articles'
     | '/articles-besoins'
     | '/consultations'
+    | '/documents'
     | '/historique'
     | '/offres-finales'
     | '/parametres'
@@ -207,6 +218,7 @@ export interface FileRouteTypes {
     | '/articles'
     | '/articles-besoins'
     | '/consultations'
+    | '/documents'
     | '/historique'
     | '/offres-finales'
     | '/parametres'
@@ -226,6 +238,7 @@ export interface RootRouteChildren {
   ArticlesRoute: typeof ArticlesRoute
   ArticlesBesoinsRoute: typeof ArticlesBesoinsRoute
   ConsultationsRoute: typeof ConsultationsRoute
+  DocumentsRoute: typeof DocumentsRoute
   HistoriqueRoute: typeof HistoriqueRoute
   OffresFinalesRoute: typeof OffresFinalesRoute
   ParametresRoute: typeof ParametresRoute
@@ -280,6 +293,13 @@ declare module '@tanstack/react-router' {
       path: '/consultations'
       fullPath: '/consultations'
       preLoaderRoute: typeof ConsultationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/documents': {
+      id: '/documents'
+      path: '/documents'
+      fullPath: '/documents'
+      preLoaderRoute: typeof DocumentsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/historique': {
@@ -362,6 +382,7 @@ const rootRouteChildren: RootRouteChildren = {
   ArticlesRoute: ArticlesRoute,
   ArticlesBesoinsRoute: ArticlesBesoinsRoute,
   ConsultationsRoute: ConsultationsRoute,
+  DocumentsRoute: DocumentsRoute,
   HistoriqueRoute: HistoriqueRoute,
   OffresFinalesRoute: OffresFinalesRoute,
   ParametresRoute: ParametresRoute,
