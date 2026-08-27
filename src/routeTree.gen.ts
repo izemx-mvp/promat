@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AccueilRouteImport } from './routes/accueil'
+import { Route as AppelsOffresIndexRouteImport } from './routes/appels-offres.index'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -22,31 +23,40 @@ const AccueilRoute = AccueilRouteImport.update({
   path: '/accueil',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppelsOffresIndexRoute = AppelsOffresIndexRouteImport.update({
+  id: '/appels-offres/',
+  path: '/appels-offres/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/accueil': typeof AccueilRoute
+  '/appels-offres/': typeof AppelsOffresIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/accueil': typeof AccueilRoute
+  '/appels-offres': typeof AppelsOffresIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/accueil': typeof AccueilRoute
+  '/appels-offres/': typeof AppelsOffresIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/accueil'
+  fullPaths: '/' | '/accueil' | '/appels-offres/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/accueil'
-  id: '__root__' | '/' | '/accueil'
+  to: '/' | '/accueil' | '/appels-offres'
+  id: '__root__' | '/' | '/accueil' | '/appels-offres/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AccueilRoute: typeof AccueilRoute
+  AppelsOffresIndexRoute: typeof AppelsOffresIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -65,12 +75,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AccueilRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/appels-offres/': {
+      id: '/appels-offres/'
+      path: '/appels-offres'
+      fullPath: '/appels-offres/'
+      preLoaderRoute: typeof AppelsOffresIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AccueilRoute: AccueilRoute,
+  AppelsOffresIndexRoute: AppelsOffresIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
