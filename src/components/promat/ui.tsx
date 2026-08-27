@@ -74,7 +74,7 @@ export function toneForStatus(s: string): Tone {
   return "neutre";
 }
 
-export function StatusBadge({ children, tone }: { children: ReactNode; tone?: Tone }) {
+export function StatusBadge({ children, tone }: { children: ReactNode; tone?: Tone | undefined }) {
   const t = tone ?? toneForStatus(String(children));
   return (
     <span
@@ -428,7 +428,7 @@ export function LinkButton({ to, children, params }: { to: string; children: Rea
 }
 
 export { TONES };
-export function Metric({ label, value, tone }: { label: string; value: string; tone?: Tone }) {
+export function Metric({ label, value, tone }: { label: string; value: string; tone?: Tone | undefined }) {
   return (
     <div className="rounded-lg border border-border bg-surface-2 px-3 py-2">
       <p className="text-[11px] font-semibold tracking-wide text-muted-foreground uppercase">{label}</p>
