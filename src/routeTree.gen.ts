@@ -14,6 +14,7 @@ import { Route as AccueilRouteImport } from './routes/accueil'
 import { Route as AnalysesRouteImport } from './routes/analyses'
 import { Route as ArticlesRouteImport } from './routes/articles'
 import { Route as ArticlesBesoinsRouteImport } from './routes/articles-besoins'
+import { Route as ComparatifsRouteImport } from './routes/comparatifs'
 import { Route as ConsultationsRouteImport } from './routes/consultations'
 import { Route as DocumentsRouteImport } from './routes/documents'
 import { Route as HistoriqueRouteImport } from './routes/historique'
@@ -50,6 +51,11 @@ const ArticlesRoute = ArticlesRouteImport.update({
 const ArticlesBesoinsRoute = ArticlesBesoinsRouteImport.update({
   id: '/articles-besoins',
   path: '/articles-besoins',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ComparatifsRoute = ComparatifsRouteImport.update({
+  id: '/comparatifs',
+  path: '/comparatifs',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ConsultationsRoute = ConsultationsRouteImport.update({
@@ -119,6 +125,7 @@ export interface FileRoutesByFullPath {
   '/analyses': typeof AnalysesRoute
   '/articles': typeof ArticlesRoute
   '/articles-besoins': typeof ArticlesBesoinsRoute
+  '/comparatifs': typeof ComparatifsRoute
   '/consultations': typeof ConsultationsRoute
   '/documents': typeof DocumentsRoute
   '/historique': typeof HistoriqueRoute
@@ -138,6 +145,7 @@ export interface FileRoutesByTo {
   '/analyses': typeof AnalysesRoute
   '/articles': typeof ArticlesRoute
   '/articles-besoins': typeof ArticlesBesoinsRoute
+  '/comparatifs': typeof ComparatifsRoute
   '/consultations': typeof ConsultationsRoute
   '/documents': typeof DocumentsRoute
   '/historique': typeof HistoriqueRoute
@@ -158,6 +166,7 @@ export interface FileRoutesById {
   '/analyses': typeof AnalysesRoute
   '/articles': typeof ArticlesRoute
   '/articles-besoins': typeof ArticlesBesoinsRoute
+  '/comparatifs': typeof ComparatifsRoute
   '/consultations': typeof ConsultationsRoute
   '/documents': typeof DocumentsRoute
   '/historique': typeof HistoriqueRoute
@@ -179,6 +188,7 @@ export interface FileRouteTypes {
     | '/analyses'
     | '/articles'
     | '/articles-besoins'
+    | '/comparatifs'
     | '/consultations'
     | '/documents'
     | '/historique'
@@ -198,6 +208,7 @@ export interface FileRouteTypes {
     | '/analyses'
     | '/articles'
     | '/articles-besoins'
+    | '/comparatifs'
     | '/consultations'
     | '/documents'
     | '/historique'
@@ -217,6 +228,7 @@ export interface FileRouteTypes {
     | '/analyses'
     | '/articles'
     | '/articles-besoins'
+    | '/comparatifs'
     | '/consultations'
     | '/documents'
     | '/historique'
@@ -237,6 +249,7 @@ export interface RootRouteChildren {
   AnalysesRoute: typeof AnalysesRoute
   ArticlesRoute: typeof ArticlesRoute
   ArticlesBesoinsRoute: typeof ArticlesBesoinsRoute
+  ComparatifsRoute: typeof ComparatifsRoute
   ConsultationsRoute: typeof ConsultationsRoute
   DocumentsRoute: typeof DocumentsRoute
   HistoriqueRoute: typeof HistoriqueRoute
@@ -286,6 +299,13 @@ declare module '@tanstack/react-router' {
       path: '/articles-besoins'
       fullPath: '/articles-besoins'
       preLoaderRoute: typeof ArticlesBesoinsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/comparatifs': {
+      id: '/comparatifs'
+      path: '/comparatifs'
+      fullPath: '/comparatifs'
+      preLoaderRoute: typeof ComparatifsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/consultations': {
@@ -381,6 +401,7 @@ const rootRouteChildren: RootRouteChildren = {
   AnalysesRoute: AnalysesRoute,
   ArticlesRoute: ArticlesRoute,
   ArticlesBesoinsRoute: ArticlesBesoinsRoute,
+  ComparatifsRoute: ComparatifsRoute,
   ConsultationsRoute: ConsultationsRoute,
   DocumentsRoute: DocumentsRoute,
   HistoriqueRoute: HistoriqueRoute,
