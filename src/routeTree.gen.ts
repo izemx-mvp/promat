@@ -16,6 +16,7 @@ import { Route as AppelsOffresIndexRouteImport } from './routes/appels-offres.in
 import { Route as AppelsOffresIdRouteImport } from './routes/appels-offres.$id'
 import { Route as ChiffragesIndexRouteImport } from './routes/chiffrages.index'
 import { Route as ChiffragesIdRouteImport } from './routes/chiffrages.$id'
+import { Route as FournisseursIndexRouteImport } from './routes/fournisseurs.index'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -52,6 +53,11 @@ const ChiffragesIdRoute = ChiffragesIdRouteImport.update({
   path: '/chiffrages/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FournisseursIndexRoute = FournisseursIndexRouteImport.update({
+  id: '/fournisseurs/',
+  path: '/fournisseurs/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -61,6 +67,7 @@ export interface FileRoutesByFullPath {
   '/chiffrages/$id': typeof ChiffragesIdRoute
   '/appels-offres/': typeof AppelsOffresIndexRoute
   '/chiffrages/': typeof ChiffragesIndexRoute
+  '/fournisseurs/': typeof FournisseursIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -70,6 +77,7 @@ export interface FileRoutesByTo {
   '/chiffrages/$id': typeof ChiffragesIdRoute
   '/appels-offres': typeof AppelsOffresIndexRoute
   '/chiffrages': typeof ChiffragesIndexRoute
+  '/fournisseurs': typeof FournisseursIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -80,6 +88,7 @@ export interface FileRoutesById {
   '/chiffrages/$id': typeof ChiffragesIdRoute
   '/appels-offres/': typeof AppelsOffresIndexRoute
   '/chiffrages/': typeof ChiffragesIndexRoute
+  '/fournisseurs/': typeof FournisseursIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -91,6 +100,7 @@ export interface FileRouteTypes {
     | '/chiffrages/$id'
     | '/appels-offres/'
     | '/chiffrages/'
+    | '/fournisseurs/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -100,6 +110,7 @@ export interface FileRouteTypes {
     | '/chiffrages/$id'
     | '/appels-offres'
     | '/chiffrages'
+    | '/fournisseurs'
   id:
     | '__root__'
     | '/'
@@ -109,6 +120,7 @@ export interface FileRouteTypes {
     | '/chiffrages/$id'
     | '/appels-offres/'
     | '/chiffrages/'
+    | '/fournisseurs/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -119,6 +131,7 @@ export interface RootRouteChildren {
   ChiffragesIdRoute: typeof ChiffragesIdRoute
   AppelsOffresIndexRoute: typeof AppelsOffresIndexRoute
   ChiffragesIndexRoute: typeof ChiffragesIndexRoute
+  FournisseursIndexRoute: typeof FournisseursIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -172,6 +185,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ChiffragesIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/fournisseurs/': {
+      id: '/fournisseurs/'
+      path: '/fournisseurs'
+      fullPath: '/fournisseurs/'
+      preLoaderRoute: typeof FournisseursIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -183,6 +203,7 @@ const rootRouteChildren: RootRouteChildren = {
   ChiffragesIdRoute: ChiffragesIdRoute,
   AppelsOffresIndexRoute: AppelsOffresIndexRoute,
   ChiffragesIndexRoute: ChiffragesIndexRoute,
+  FournisseursIndexRoute: FournisseursIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
