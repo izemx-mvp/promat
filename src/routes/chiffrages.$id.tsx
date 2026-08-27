@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate, useParams } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { Fragment, useMemo, useState } from "react";
 import {
   AlertTriangle,
   CheckCircle2,
@@ -254,14 +254,14 @@ function ChiffrageWorkspace() {
                                 const q = quotes.find((x) => x.supplierId === s.id && x.lignes.some((l) => l.articleId === a.id));
                                 const l = q?.lignes.find((x) => x.articleId === a.id);
                                 return (
-                                  <>
-                                    <td key={s.id + "pu"} className="num border-l border-border px-2 py-2 text-right">{l ? fmtMAD(l.pu, 0) : "—"}</td>
-                                    <td key={s.id + "d"} className="num px-2 py-2">{q?.devise ?? "—"}</td>
-                                    <td key={s.id + "r"} className="max-w-[110px] truncate px-2 py-2">{l?.refProposee ?? "—"}</td>
-                                    <td key={s.id + "g"} className="px-2 py-2">{l?.genuine ?? "—"}</td>
-                                    <td key={s.id + "de"} className="num px-2 py-2 text-right">{l ? `${l.delaiSemaines} s` : "—"}</td>
-                                    <td key={s.id + "c"} className="num px-2 py-2 text-right">{l ? `${l.conformite}%` : "—"}</td>
-                                  </>
+                                  <Fragment key={s.id}>
+                                    <td className="num border-l border-border px-2 py-2 text-right">{l ? fmtMAD(l.pu, 0) : "—"}</td>
+                                    <td className="num px-2 py-2">{q?.devise ?? "—"}</td>
+                                    <td className="max-w-[110px] truncate px-2 py-2">{l?.refProposee ?? "—"}</td>
+                                    <td className="px-2 py-2">{l?.genuine ?? "—"}</td>
+                                    <td className="num px-2 py-2 text-right">{l ? `${l.delaiSemaines} s` : "—"}</td>
+                                    <td className="num px-2 py-2 text-right">{l ? `${l.conformite}%` : "—"}</td>
+                                  </Fragment>
                                 );
                               })}
                               <td className="border-l border-border px-3 py-2">
