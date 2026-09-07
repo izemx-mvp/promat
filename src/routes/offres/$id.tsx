@@ -43,20 +43,25 @@ function OffrePage() {
 
   const { achat, revient } = computeCosts(tender.purchaseBase, state.cost);
   const factor = (revient / achat) * (1 + state.margin / 100);
+  const supplierName =
+    tender.suppliers.find((s) => s.id === state.retainedSupplier)?.name ?? "FlowTech Germany";
+
   const lines = tender.articles.map((a) => {
     const eur = Number(a.prevPrice.replace(/[^\d]/g, "")) || 500;
-    const unit = eur * state.cost.rate * factor;
-    return { ...a, unit, total: unit * a.qty, purchase: eur * state.cost.rate };
+    const purchase = eur * state.cost.rate;
+    const landed = purchase * (revient / achat);
+    const unit = purchase * factor;
+    return { ...a, purchase, landed, unit, total: unit * a.qty };
   });
   const totalHT = lines.reduce((s, l) => s + l.total, 0);
 
-  const checklist = [
+  const checklist: [string, boolean][] = [
     ["Articles validés", state.articlesValidated],
     ["Fournisseurs retenus", Boolean(state.retainedSupplier)],
     ["Prix de revient calculé", state.costValidated],
     ["Marge validée", state.marginValidated],
     ["Tous les prix renseignés", true],
-  ] as const;
+  ];
 
   return (
     <AppShell>
@@ -84,6 +89,11 @@ function OffrePage() {
 
         <SectionCard
           title="Offre"
+          subtitle={
+            view === "client"
+              ? "Aucune donnée interne n'apparaît dans cette vue."
+              : `Fournisseur retenu : ${supplierName}`
+          }
           action={
             <div className="flex rounded-lg bg-muted p-1">
               {(["client", "interne"] as const).map((v) => (
@@ -133,7 +143,7 @@ function OffrePage() {
                     <td className="py-3.5 pr-4 font-medium">{l.designation}</td>
                     {view === "client" ? (
                       <>
-                        <td className="py-3.5 pr-4 text-muted-foreground">{l.unit > 0 ? l.unit && l.unit ? l.unit : 0 : 0 ? "" : l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{l.unit ? "" : ""}{a.unit ? "" : ""}</td>
+                        <td className="py-3.5 pr-4 text-muted-foreground">{l.unit_ ?? l.unit}</td>
                       </>
                     ) : null}
                   </tr>
@@ -142,6 +152,49 @@ function OffrePage() {
             </table>
           </div>
         </SectionCard>
+
+        <SectionCard title="Checklist de dépôt">
+          <ul className="grid gap-2 sm:grid-cols-2">
+            {checklist.map(([label, ok]) => (
+              <li
+                key={label}
+                className={cn("flex items-center gap-2 text-sm", ok ? "text-success" : "text-muted-foreground")}
+              >
+                <Check className="size-4" strokeWidth={3} /> {label}
+              </li>
+            ))}
+          </ul>
+        </SectionCard>
+
+        <StickyBar
+          message={
+            state.offerValidated
+              ? "Offre validée — prête à déposer."
+              : `Montant HT ${fmtMAD(totalHT)} · marge ${fmtNum(state.margin, 1)} %`
+          }
+        >
+          <GhostButton onClick={() => toast.success("Export Excel généré")}>
+            <Download className="size-4" /> Exporter Excel
+          </GhostButton>
+          <GhostButton onClick={() => toast.success("PDF généré")}>
+            <FileText className="size-4" /> Générer PDF
+          </GhostButton>
+          <button
+            onClick={() => {
+              update(id, { offerValidated: true });
+              addLog({
+                who: "Houda Bennani",
+                action: "Offre finale validée",
+                tender: tender.reference,
+                module: "Offres finales",
+              });
+              toast.success("Offre finale validée");
+            }}
+            className="rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
+          >
+            Valider l'offre finale
+          </button>
+        </StickyBar>
       </TenderWorkflow>
     </AppShell>
   );
