@@ -20,8 +20,10 @@ export function TenderWorkflow({
   current: StepKey;
   children: ReactNode;
 }) {
-  const currentStep = workflowSteps.find((s) => s.key === current) ?? workflowSteps[1];
-  const nextStep = workflowSteps.find((s) => s.number === currentStep.number + 1);
+  const currentStep = workflowSteps.find((s) => s.key === current);
+  const currentStepNumber = currentStep?.number ?? 2;
+  const currentStepLabel = currentStep?.label ?? "Analyses";
+  const nextStep = workflowSteps.find((s) => s.number === currentStepNumber + 1);
 
   return (
     <div className="pb-28">
@@ -42,7 +44,7 @@ export function TenderWorkflow({
                 <div>
                   <p className="label-xs">Étape actuelle</p>
                   <p className="mt-1 font-semibold">
-                    Étape {currentStep.number} sur 7 · {currentStep.label}
+                    Étape {currentStepNumber} sur 7 · {currentStepLabel}
                   </p>
                 </div>
                 {nextStep && (
