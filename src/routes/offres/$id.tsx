@@ -372,6 +372,36 @@ function OffrePage() {
           </div>
         </div>
 
+        {state.offerValidated && (
+          <div>
+            <h2 className="section-title">Envoyer l'offre au client</h2>
+            <p className="mt-1 mb-4 text-sm text-muted-foreground">
+              Choisissez le canal, vérifiez le contact et le message, puis envoyez.
+            </p>
+            <OfferSendPanel
+              tender={tender}
+              state={state}
+              versionLabel={active?.label ?? "V1"}
+              total={t.totalFinal}
+              onSend={(send) => {
+                update(id, { sends: [...(state.sends ?? []), send] });
+                addLog({
+                  who: "Houda Bennani",
+                  action: `Offre ${send.version} envoyée par ${send.channel} à ${send.recipient}`,
+                  tender: `AO ${tender.client}`,
+                  module: "Offres finales",
+                });
+              }}
+              onOutcome={(outcome) => update(id, { clientOutcome: outcome })}
+              onNewVersion={() => {
+                newVersion();
+                update(id, { offerValidated: false });
+              }}
+            />
+          </div>
+        )}
+
+
         <StickyBar
           message={
             <>
