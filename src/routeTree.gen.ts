@@ -22,6 +22,7 @@ import { Route as ConsultationsIndexRouteImport } from './routes/consultations/i
 import { Route as ConsultationsIdRouteImport } from './routes/consultations/$id'
 import { Route as OffresIndexRouteImport } from './routes/offres/index'
 import { Route as OffresIdRouteImport } from './routes/offres/$id'
+import { Route as ReferentielsArticlesRouteImport } from './routes/referentiels/articles'
 import { Route as ReferentielsFournisseursRouteImport } from './routes/referentiels/fournisseurs'
 
 const IndexRoute = IndexRouteImport.update({
@@ -89,6 +90,11 @@ const OffresIdRoute = OffresIdRouteImport.update({
   path: '/offres/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ReferentielsArticlesRoute = ReferentielsArticlesRouteImport.update({
+  id: '/referentiels/articles',
+  path: '/referentiels/articles',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ReferentielsFournisseursRoute =
   ReferentielsFournisseursRouteImport.update({
     id: '/referentiels/fournisseurs',
@@ -104,6 +110,7 @@ export interface FileRoutesByFullPath {
   '/comparatifs/$id': typeof ComparatifsIdRoute
   '/consultations/$id': typeof ConsultationsIdRoute
   '/offres/$id': typeof OffresIdRoute
+  '/referentiels/articles': typeof ReferentielsArticlesRoute
   '/referentiels/fournisseurs': typeof ReferentielsFournisseursRoute
   '/analyses/': typeof AnalysesIndexRoute
   '/articles/': typeof ArticlesIndexRoute
@@ -120,6 +127,7 @@ export interface FileRoutesByTo {
   '/comparatifs/$id': typeof ComparatifsIdRoute
   '/consultations/$id': typeof ConsultationsIdRoute
   '/offres/$id': typeof OffresIdRoute
+  '/referentiels/articles': typeof ReferentielsArticlesRoute
   '/referentiels/fournisseurs': typeof ReferentielsFournisseursRoute
   '/analyses': typeof AnalysesIndexRoute
   '/articles': typeof ArticlesIndexRoute
@@ -137,6 +145,7 @@ export interface FileRoutesById {
   '/comparatifs/$id': typeof ComparatifsIdRoute
   '/consultations/$id': typeof ConsultationsIdRoute
   '/offres/$id': typeof OffresIdRoute
+  '/referentiels/articles': typeof ReferentielsArticlesRoute
   '/referentiels/fournisseurs': typeof ReferentielsFournisseursRoute
   '/analyses/': typeof AnalysesIndexRoute
   '/articles/': typeof ArticlesIndexRoute
@@ -155,6 +164,7 @@ export interface FileRouteTypes {
     | '/comparatifs/$id'
     | '/consultations/$id'
     | '/offres/$id'
+    | '/referentiels/articles'
     | '/referentiels/fournisseurs'
     | '/analyses/'
     | '/articles/'
@@ -171,6 +181,7 @@ export interface FileRouteTypes {
     | '/comparatifs/$id'
     | '/consultations/$id'
     | '/offres/$id'
+    | '/referentiels/articles'
     | '/referentiels/fournisseurs'
     | '/analyses'
     | '/articles'
@@ -187,6 +198,7 @@ export interface FileRouteTypes {
     | '/comparatifs/$id'
     | '/consultations/$id'
     | '/offres/$id'
+    | '/referentiels/articles'
     | '/referentiels/fournisseurs'
     | '/analyses/'
     | '/articles/'
@@ -204,6 +216,7 @@ export interface RootRouteChildren {
   ComparatifsIdRoute: typeof ComparatifsIdRoute
   ConsultationsIdRoute: typeof ConsultationsIdRoute
   OffresIdRoute: typeof OffresIdRoute
+  ReferentielsArticlesRoute: typeof ReferentielsArticlesRoute
   ReferentielsFournisseursRoute: typeof ReferentielsFournisseursRoute
   AnalysesIndexRoute: typeof AnalysesIndexRoute
   ArticlesIndexRoute: typeof ArticlesIndexRoute
@@ -306,6 +319,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OffresIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/referentiels/articles': {
+      id: '/referentiels/articles'
+      path: '/referentiels/articles'
+      fullPath: '/referentiels/articles'
+      preLoaderRoute: typeof ReferentielsArticlesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/referentiels/fournisseurs': {
       id: '/referentiels/fournisseurs'
       path: '/referentiels/fournisseurs'
@@ -324,6 +344,7 @@ const rootRouteChildren: RootRouteChildren = {
   ComparatifsIdRoute: ComparatifsIdRoute,
   ConsultationsIdRoute: ConsultationsIdRoute,
   OffresIdRoute: OffresIdRoute,
+  ReferentielsArticlesRoute: ReferentielsArticlesRoute,
   ReferentielsFournisseursRoute: ReferentielsFournisseursRoute,
   AnalysesIndexRoute: AnalysesIndexRoute,
   ArticlesIndexRoute: ArticlesIndexRoute,
