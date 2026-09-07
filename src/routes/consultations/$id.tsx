@@ -714,7 +714,19 @@ function ConsultationPage() {
                       <p className="label-xs">Documents transmis</p>
                       <p className="mt-1 font-medium tabular-nums">{openConsult.docsSent}</p>
                     </div>
+                    <div className="sm:col-span-3 flex flex-wrap items-center gap-2">
+                      <GhostButton onClick={() => setConfirmSend(openSup)}>
+                        <Mail className="size-4" /> Voir l'envoi
+                      </GhostButton>
+                      <button
+                        onClick={() => setConfirmSend(openSup)}
+                        className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
+                      >
+                        <Send className="size-4" /> Renvoyer la consultation
+                      </button>
+                    </div>
                   </div>
+
                 ) : (
                   <div className="mt-4 space-y-3 border-t border-border pt-4">
                     <div>
