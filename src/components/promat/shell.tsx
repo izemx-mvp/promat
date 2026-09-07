@@ -1,84 +1,115 @@
 import { Link, useLocation } from "@tanstack/react-router";
-import { Bell, Search, Settings, ClipboardList, Calculator } from "lucide-react";
+import { Bell, LogOut, Search } from "lucide-react";
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
-const nav = [
-  { to: "/", num: "01", label: "Agent AO & Analyse", icon: ClipboardList },
-  { to: "/chiffrage", num: "02", label: "Agent Chiffrage", icon: Calculator },
-] as const;
+type Item = { to: string; label: string };
+
+const groups: { title: string; items: Item[] }[] = [
+  {
+    title: "Agent AO & Analyse",
+    items: [
+      { to: "/", label: "Recherches AO" },
+      { to: "/analyses", label: "Analyses" },
+      { to: "/articles", label: "Articles & besoins" },
+      { to: "/consultations", label: "Consultations fournisseurs" },
+    ],
+  },
+  {
+    title: "Agent Chiffrage",
+    items: [
+      { to: "/chiffrages", label: "Chiffrages" },
+      { to: "/comparatifs", label: "Comparatifs fournisseurs" },
+      { to: "/offres", label: "Offres finales" },
+    ],
+  },
+  {
+    title: "Référentiels",
+    items: [
+      { to: "/referentiels/fournisseurs", label: "Fournisseurs" },
+      { to: "/referentiels/articles", label: "Articles" },
+      { to: "/referentiels/documents", label: "Documents" },
+    ],
+  },
+  {
+    title: "Administration",
+    items: [
+      { to: "/admin/agents", label: "Configuration des agents" },
+      { to: "/admin/utilisateurs", label: "Gestion utilisateurs" },
+      { to: "/admin/historique", label: "Historique" },
+      { to: "/admin/parametres", label: "Paramètres généraux" },
+    ],
+  },
+];
 
 export function AppShell({ children }: { children: ReactNode }) {
   const { pathname } = useLocation();
 
   return (
-    <div className="flex h-screen overflow-hidden bg-background">
-      <aside className="flex w-[248px] shrink-0 flex-col bg-navy px-4 py-6 text-navy-foreground">
-        <div className="px-2">
-          <div className="flex items-center gap-2.5">
-            <span className="flex size-8 items-center justify-center rounded-md bg-primary font-display text-sm font-bold text-primary-foreground">
-              P
-            </span>
-            <div>
-              <p className="font-display text-base font-bold tracking-tight">PROMAT</p>
-              <p className="text-[11px] text-navy-muted">Maroc · Tender Workspace</p>
-            </div>
-          </div>
-        </div>
+    <div className="flex min-h-screen bg-background">
+      <aside className="fixed inset-y-0 left-0 z-30 flex w-[264px] flex-col overflow-y-auto bg-navy px-4 py-6 text-navy-foreground">
+        <Link to="/" className="flex items-center gap-2.5 px-2">
+          <span className="flex size-9 items-center justify-center rounded-lg bg-primary font-display text-sm font-bold text-primary-foreground">
+            P
+          </span>
+          <span>
+            <span className="block font-display text-base font-bold tracking-tight">PROMAT</span>
+            <span className="block text-[11px] text-navy-muted">Maroc · Tender OS</span>
+          </span>
+        </Link>
 
-        <nav className="mt-10 space-y-1">
-          {nav.map((item) => {
-            const active = item.to === "/" ? pathname === "/" : pathname.startsWith(item.to);
-            return (
-              <Link
-                key={item.to}
-                to={item.to}
-                className={cn(
-                  "flex items-start gap-3 rounded-xl px-3 py-3 transition-colors",
-                  active
-                    ? "bg-primary text-primary-foreground"
-                    : "text-navy-foreground/80 hover:bg-white/5",
-                )}
-              >
-                <item.icon className="mt-0.5 size-4 shrink-0" />
-                <span>
-                  <span
-                    className={cn(
-                      "block text-[11px] tabular-nums",
-                      active ? "text-primary-foreground/70" : "text-navy-muted",
-                    )}
-                  >
-                    {item.num}
-                  </span>
-                  <span className="block text-sm font-medium leading-tight">{item.label}</span>
-                </span>
-              </Link>
-            );
-          })}
+        <nav className="mt-8 space-y-6">
+          {groups.map((g) => (
+            <div key={g.title}>
+              <p className="px-3 text-[10.5px] font-semibold uppercase tracking-[0.12em] text-navy-muted">
+                {g.title}
+              </p>
+              <div className="mt-2 space-y-0.5">
+                {g.items.map((item) => {
+                  const active =
+                    item.to === "/" ? pathname === "/" : pathname.startsWith(item.to);
+                  return (
+                    <Link
+                      key={item.to}
+                      to={item.to}
+                      className={cn(
+                        "block rounded-lg px-3 py-2 text-[13.5px] transition-colors",
+                        active
+                          ? "bg-primary font-medium text-primary-foreground"
+                          : "text-navy-foreground/80 hover:bg-white/5",
+                      )}
+                    >
+                      {item.label}
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
         </nav>
 
-        <div className="mt-auto space-y-1 border-t border-white/10 pt-4">
-          <button className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-navy-foreground/80 transition-colors hover:bg-white/5">
-            <Settings className="size-4" /> Paramètres
-          </button>
-          <div className="flex items-center gap-3 rounded-lg px-3 py-2.5">
-            <span className="flex size-8 items-center justify-center rounded-full bg-white/10 text-xs font-semibold">
+        <div className="mt-auto pt-8">
+          <div className="flex items-center gap-3 rounded-xl bg-white/5 px-3 py-3">
+            <span className="flex size-9 items-center justify-center rounded-full bg-white/10 text-xs font-semibold">
               HB
             </span>
-            <span className="leading-tight">
-              <span className="block text-sm font-medium">Houda Bennani</span>
-              <span className="block text-[11px] text-navy-muted">Sourcing &amp; Chiffrage</span>
+            <span className="min-w-0 leading-tight">
+              <span className="block truncate text-sm font-medium">Houda Bennani</span>
+              <span className="block text-[11px] text-navy-muted">Responsable Commercial</span>
             </span>
           </div>
+          <button className="mt-2 flex w-full items-center gap-2 rounded-lg px-3 py-2 text-[13px] text-navy-foreground/70 transition-colors hover:bg-white/5">
+            <LogOut className="size-4" /> Déconnexion
+          </button>
         </div>
       </aside>
 
-      <div className="flex min-w-0 flex-1 flex-col">
-        <header className="flex h-16 shrink-0 items-center gap-4 border-b border-border bg-card px-6">
+      <div className="ml-[264px] flex min-w-0 flex-1 flex-col">
+        <header className="sticky top-0 z-20 flex h-16 shrink-0 items-center gap-4 border-b border-border bg-card/95 px-8 backdrop-blur">
           <div className="relative w-full max-w-md">
             <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
             <input
-              placeholder="Rechercher un appel d'offres, un article, un fournisseur…"
+              placeholder="Rechercher un dossier, un article, un fournisseur…"
               className="h-10 w-full rounded-lg border border-border bg-background pl-9 pr-3 text-sm outline-none transition placeholder:text-muted-foreground focus:border-ring"
             />
           </div>
@@ -95,88 +126,29 @@ export function AppShell({ children }: { children: ReactNode }) {
             </div>
           </div>
         </header>
-        <main className="min-h-0 flex-1 overflow-hidden">{children}</main>
+        <main className="flex-1">{children}</main>
       </div>
     </div>
   );
 }
 
-export function TenderList({
-  filters,
-  activeFilter,
-  onFilter,
-  items,
-  selectedId,
-  onSelect,
+export function PageHeader({
   title,
+  subtitle,
+  action,
 }: {
-  filters: string[];
-  activeFilter: string;
-  onFilter: (f: string) => void;
-  items: { id: string; client: string; reference: string; title: string; deadline: string; status: string }[];
-  selectedId: string;
-  onSelect: (id: string) => void;
   title: string;
+  subtitle?: string;
+  action?: ReactNode;
 }) {
   return (
-    <div className="flex h-full w-[330px] shrink-0 flex-col border-r border-border bg-card">
-      <div className="space-y-3 border-b border-border p-5">
-        <h2 className="section-title">{title}</h2>
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-          <input
-            placeholder="Rechercher…"
-            className="h-9 w-full rounded-lg border border-border bg-background pl-9 pr-3 text-sm outline-none focus:border-ring"
-          />
-        </div>
-        <div className="flex flex-wrap gap-1.5">
-          {filters.map((f) => (
-            <button
-              key={f}
-              onClick={() => onFilter(f)}
-              className={cn(
-                "rounded-full px-2.5 py-1 text-xs font-medium transition-colors",
-                activeFilter === f
-                  ? "bg-navy text-navy-foreground"
-                  : "bg-muted text-muted-foreground hover:bg-accent",
-              )}
-            >
-              {f}
-            </button>
-          ))}
-        </div>
+    <header className="flex flex-wrap items-end justify-between gap-4">
+      <div>
+        <h1 className="page-title">{title}</h1>
+        {subtitle && <p className="mt-2 max-w-xl text-[15px] text-muted-foreground">{subtitle}</p>}
       </div>
-      <div className="min-h-0 flex-1 space-y-2 overflow-y-auto p-3">
-        {items.length === 0 && (
-          <p className="px-2 py-8 text-center text-sm text-muted-foreground">
-            Aucun dossier dans ce filtre.
-          </p>
-        )}
-        {items.map((t) => {
-          const active = t.id === selectedId;
-          return (
-            <button
-              key={t.id}
-              onClick={() => onSelect(t.id)}
-              className={cn(
-                "w-full rounded-xl border p-3.5 text-left transition-all",
-                active
-                  ? "border-primary/40 bg-primary/[0.04] shadow-soft"
-                  : "border-border hover:border-ring/40 hover:bg-muted/60",
-              )}
-            >
-              <p className="text-[15px] font-semibold leading-tight">{t.client}</p>
-              <p className="mt-1 text-xs tabular-nums text-muted-foreground">{t.reference}</p>
-              <p className="mt-2 truncate text-sm text-foreground/80">{t.title}</p>
-              <div className="mt-3 flex items-center justify-between">
-                <span className="text-xs text-muted-foreground">Échéance : {t.deadline}</span>
-                <StatusDot status={t.status} />
-              </div>
-            </button>
-          );
-        })}
-      </div>
-    </div>
+      {action}
+    </header>
   );
 }
 
