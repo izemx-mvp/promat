@@ -11,6 +11,21 @@ export type CostParams = {
   autres: number;
 };
 
+export type OfferVersionStatus = "Brouillon" | "En révision" | "Validée";
+
+export type OfferVersion = {
+  id: string;
+  label: string;
+  date: string;
+  by: string;
+  discountLabel: string;
+  total: number;
+  status: OfferVersionStatus;
+  globalDiscount: number;
+  lineDiscounts: Record<string, number>;
+  proposedQty: Record<string, number>;
+};
+
 export type TenderState = {
   analysisValidated: boolean;
   decision: "pending" | "go" | "nogo";
@@ -25,6 +40,12 @@ export type TenderState = {
   margin: number;
   marginValidated: boolean;
   offerValidated: boolean;
+  globalDiscount: number;
+  lineDiscounts: Record<string, number>;
+  proposedQty: Record<string, number>;
+  showDiscountToClient: boolean;
+  versions: OfferVersion[];
+  activeVersion: string;
 };
 
 const defaultCost: CostParams = {
@@ -51,8 +72,29 @@ const baseState = (t: Tender): TenderState => {
     margin: 20,
     marginValidated: false,
     offerValidated: false,
+    globalDiscount: 0,
+    lineDiscounts: {},
+    proposedQty: {},
+    showDiscountToClient: true,
+    versions: [
+      {
+        id: "v1",
+        label: "V1",
+        date: "07/09/2026",
+        by: "Houda Bennani",
+        discountLabel: "Aucune remise",
+        total: 0,
+        status: "Brouillon",
+        globalDiscount: 0,
+        lineDiscounts: {},
+        proposedQty: {},
+      },
+    ],
+
+    activeVersion: "v1",
   };
 };
+
 
 export type AuditEntry = { time: string; who: string; action: string; tender: string; module: string };
 
