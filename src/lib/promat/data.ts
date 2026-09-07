@@ -420,7 +420,7 @@ export const tenders: Tender[] = [
       { label: "Délai", value: "Tendu", tone: "warn" },
     ],
     aiComment:
-      "Opportunité intéressante mais le délai de livraison exigé реste le principal risque.",
+      "Opportunité intéressante mais le délai de livraison exigé reste le principal risque.",
     articles: oneeArticles.slice(0, 6),
     suppliers: oneeSuppliers.slice(0, 4),
     offers: oneeOffers.slice(0, 6),
