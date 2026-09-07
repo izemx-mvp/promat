@@ -76,7 +76,21 @@ const baseState = (t: Tender): TenderState => {
     lineDiscounts: {},
     proposedQty: {},
     showDiscountToClient: true,
-    versions: [],
+    versions: [
+      {
+        id: "v1",
+        label: "V1",
+        date: "07/09/2026",
+        by: "Houda Bennani",
+        discountLabel: "Aucune remise",
+        total: 0,
+        status: "Brouillon",
+        globalDiscount: 0,
+        lineDiscounts: {},
+        proposedQty: {},
+      },
+    ],
+
     activeVersion: "v1",
   };
 };
