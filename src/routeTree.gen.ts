@@ -23,6 +23,7 @@ import { Route as ConsultationsIdRouteImport } from './routes/consultations/$id'
 import { Route as OffresIndexRouteImport } from './routes/offres/index'
 import { Route as OffresIdRouteImport } from './routes/offres/$id'
 import { Route as ReferentielsArticlesRouteImport } from './routes/referentiels/articles'
+import { Route as ReferentielsDocumentsRouteImport } from './routes/referentiels/documents'
 import { Route as ReferentielsFournisseursRouteImport } from './routes/referentiels/fournisseurs'
 
 const IndexRoute = IndexRouteImport.update({
@@ -95,6 +96,11 @@ const ReferentielsArticlesRoute = ReferentielsArticlesRouteImport.update({
   path: '/referentiels/articles',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ReferentielsDocumentsRoute = ReferentielsDocumentsRouteImport.update({
+  id: '/referentiels/documents',
+  path: '/referentiels/documents',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ReferentielsFournisseursRoute =
   ReferentielsFournisseursRouteImport.update({
     id: '/referentiels/fournisseurs',
@@ -111,6 +117,7 @@ export interface FileRoutesByFullPath {
   '/consultations/$id': typeof ConsultationsIdRoute
   '/offres/$id': typeof OffresIdRoute
   '/referentiels/articles': typeof ReferentielsArticlesRoute
+  '/referentiels/documents': typeof ReferentielsDocumentsRoute
   '/referentiels/fournisseurs': typeof ReferentielsFournisseursRoute
   '/analyses/': typeof AnalysesIndexRoute
   '/articles/': typeof ArticlesIndexRoute
@@ -128,6 +135,7 @@ export interface FileRoutesByTo {
   '/consultations/$id': typeof ConsultationsIdRoute
   '/offres/$id': typeof OffresIdRoute
   '/referentiels/articles': typeof ReferentielsArticlesRoute
+  '/referentiels/documents': typeof ReferentielsDocumentsRoute
   '/referentiels/fournisseurs': typeof ReferentielsFournisseursRoute
   '/analyses': typeof AnalysesIndexRoute
   '/articles': typeof ArticlesIndexRoute
@@ -146,6 +154,7 @@ export interface FileRoutesById {
   '/consultations/$id': typeof ConsultationsIdRoute
   '/offres/$id': typeof OffresIdRoute
   '/referentiels/articles': typeof ReferentielsArticlesRoute
+  '/referentiels/documents': typeof ReferentielsDocumentsRoute
   '/referentiels/fournisseurs': typeof ReferentielsFournisseursRoute
   '/analyses/': typeof AnalysesIndexRoute
   '/articles/': typeof ArticlesIndexRoute
@@ -165,6 +174,7 @@ export interface FileRouteTypes {
     | '/consultations/$id'
     | '/offres/$id'
     | '/referentiels/articles'
+    | '/referentiels/documents'
     | '/referentiels/fournisseurs'
     | '/analyses/'
     | '/articles/'
@@ -182,6 +192,7 @@ export interface FileRouteTypes {
     | '/consultations/$id'
     | '/offres/$id'
     | '/referentiels/articles'
+    | '/referentiels/documents'
     | '/referentiels/fournisseurs'
     | '/analyses'
     | '/articles'
@@ -199,6 +210,7 @@ export interface FileRouteTypes {
     | '/consultations/$id'
     | '/offres/$id'
     | '/referentiels/articles'
+    | '/referentiels/documents'
     | '/referentiels/fournisseurs'
     | '/analyses/'
     | '/articles/'
@@ -217,6 +229,7 @@ export interface RootRouteChildren {
   ConsultationsIdRoute: typeof ConsultationsIdRoute
   OffresIdRoute: typeof OffresIdRoute
   ReferentielsArticlesRoute: typeof ReferentielsArticlesRoute
+  ReferentielsDocumentsRoute: typeof ReferentielsDocumentsRoute
   ReferentielsFournisseursRoute: typeof ReferentielsFournisseursRoute
   AnalysesIndexRoute: typeof AnalysesIndexRoute
   ArticlesIndexRoute: typeof ArticlesIndexRoute
@@ -326,6 +339,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ReferentielsArticlesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/referentiels/documents': {
+      id: '/referentiels/documents'
+      path: '/referentiels/documents'
+      fullPath: '/referentiels/documents'
+      preLoaderRoute: typeof ReferentielsDocumentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/referentiels/fournisseurs': {
       id: '/referentiels/fournisseurs'
       path: '/referentiels/fournisseurs'
@@ -345,6 +365,7 @@ const rootRouteChildren: RootRouteChildren = {
   ConsultationsIdRoute: ConsultationsIdRoute,
   OffresIdRoute: OffresIdRoute,
   ReferentielsArticlesRoute: ReferentielsArticlesRoute,
+  ReferentielsDocumentsRoute: ReferentielsDocumentsRoute,
   ReferentielsFournisseursRoute: ReferentielsFournisseursRoute,
   AnalysesIndexRoute: AnalysesIndexRoute,
   ArticlesIndexRoute: ArticlesIndexRoute,
