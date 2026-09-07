@@ -146,7 +146,7 @@ function ComparatifPage() {
           <NextButton
             to="/chiffrages/$id"
             id={id}
-            label="Retenir ce fournisseur et passer au chiffrage"
+            label="Passer au chiffrage"
             disabled={!state.retainedSupplier}
           />
         </StickyBar>

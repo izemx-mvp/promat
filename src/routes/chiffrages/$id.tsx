@@ -103,10 +103,11 @@ function ChiffragePage() {
             action={<GhostButton onClick={() => setDetail(true)}>Voir le détail</GhostButton>}
           >
             <MoneyRow label="Achat fournisseur" value={achat} />
+            <MoneyRow label={`Conversion au taux EUR/MAD ${fmtNum(c.rate, 2)}`} value={achat} />
             <MoneyRow label="Fret" value={c.fret} onChange={(n) => setCost({ fret: n })} />
             <MoneyRow label={`Douane (${fmtNum(c.douanePct, 1)} %)`} value={douane} />
             <MoneyRow label="Transit" value={c.transit} onChange={(n) => setCost({ transit: n })} />
-            <MoneyRow label="Banque" value={c.banque} onChange={(n) => setCost({ banque: n })} />
+            <MoneyRow label="Assurance & banque" value={c.banque} onChange={(n) => setCost({ banque: n })} />
             <MoneyRow label="Autres frais" value={c.autres} onChange={(n) => setCost({ autres: n })} />
             <div className="mt-4 flex items-center justify-between rounded-xl bg-navy px-5 py-4 text-navy-foreground">
               <span className="text-xs font-semibold uppercase tracking-[0.12em]">
