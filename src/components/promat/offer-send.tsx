@@ -118,7 +118,7 @@ export function OfferSendPanel({
           <div>
             <p className="label-xs">Statut</p>
             <div className="mt-1.5">
-              {last ? <Pill tone="ok">Envoyée</Pill> : <Pill tone="info">Prête à envoyer</Pill>}
+              {last ? <Pill tone="ok">Envoyée</Pill> : <Pill tone="ai">Prête à envoyer</Pill>}
             </div>
           </div>
           <div>
@@ -141,7 +141,7 @@ export function OfferSendPanel({
           <button
             type="button"
             onClick={() => openChannel("WhatsApp")}
-            className="inline-flex items-center gap-2 rounded-lg bg-success px-4 py-2.5 text-sm font-semibold text-success-foreground transition-colors hover:opacity-90"
+            className="inline-flex items-center gap-2 rounded-lg bg-success px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:opacity-90"
           >
             <MessageCircle className="size-4" /> Envoyer par WhatsApp
           </button>
