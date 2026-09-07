@@ -194,7 +194,7 @@ export function OfferSendPanel({
       {state.clientOutcome && state.clientOutcome !== "none" && (
         <div className="mt-6 flex flex-wrap items-center gap-3 border-t border-border pt-5">
           <p className="label-xs">Statut dossier</p>
-          <Pill tone={state.clientOutcome === "accepted" ? "ok" : state.clientOutcome === "refused" ? "warn" : "info"}>
+          <Pill tone={state.clientOutcome === "accepted" ? "ok" : state.clientOutcome === "refused" ? "warn" : "ai"}>
             {outcomeLabel[state.clientOutcome]}
           </Pill>
           <div className="ml-auto flex flex-wrap items-center gap-2">
