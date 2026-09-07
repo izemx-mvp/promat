@@ -1,5 +1,5 @@
 import { Link, useLocation } from "@tanstack/react-router";
-import { Bell, Check, Circle, LogOut, Search, Settings } from "lucide-react";
+import { Bell, Check, Circle, LogOut, Search } from "lucide-react";
 import type { ReactNode } from "react";
 import { useMemo } from "react";
 import { workflowDone, workflowSteps, type WorkflowStepKey } from "@/lib/promat/progress";
