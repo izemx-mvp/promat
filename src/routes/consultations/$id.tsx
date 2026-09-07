@@ -912,9 +912,9 @@ function ConsultationPage() {
                       <thead>
                         <tr className="border-b border-border text-left text-muted-foreground">
                           <th className="py-2 font-medium">Article</th>
-                          <th className="py-2 text-right font-medium">Qté</th>
-                          <th className="py-2 font-medium">Réf. fournisseur</th>
-                          <th className="py-2 text-right font-medium">PU</th>
+                          <th className="px-3 py-2 text-right font-medium">Qté</th>
+                          <th className="px-3 py-2 font-medium">Réf. fournisseur</th>
+                          <th className="px-3 py-2 text-right font-medium">PU</th>
                           <th className="py-2 font-medium">Conformité</th>
                         </tr>
                       </thead>
@@ -922,15 +922,15 @@ function ConsultationPage() {
                         {linesOf(openSup).map((l, i) => (
                           <tr key={l.articleRef} className="border-b border-border/60">
                             <td className="py-2">{l.designation}</td>
-                            <td className="py-2 text-right tabular-nums">{l.qty}</td>
-                            <td className="py-2">
+                            <td className="px-3 py-2 text-right tabular-nums">{l.qty}</td>
+                            <td className="px-3 py-2">
                               <Input
                                 className="h-8 w-40 text-[13px]"
                                 value={l.supplierRef}
                                 onChange={(e) => editLine(openSup, i, { supplierRef: e.target.value })}
                               />
                             </td>
-                            <td className="py-2 text-right">
+                            <td className="px-3 py-2 text-right">
                               <Input
                                 className="h-8 w-28 text-right text-[13px] tabular-nums"
                                 value={String(l.price)}
