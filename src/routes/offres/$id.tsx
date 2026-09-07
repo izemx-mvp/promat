@@ -3,6 +3,8 @@ import { useState } from "react";
 import { Check, Copy, Download, FileText, Plus, Save } from "lucide-react";
 import { AppShell } from "@/components/promat/shell";
 import { Pill } from "@/components/promat/ui";
+import { OfferSendPanel } from "@/components/promat/offer-send";
+
 import { GhostButton, StickyBar, TenderWorkflow } from "@/components/promat/workflow";
 import { fmtMAD, fmtNum, type Tender } from "@/lib/promat/data";
 import { computeCosts, useTender, type TenderState } from "@/lib/promat/store";
