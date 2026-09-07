@@ -157,9 +157,9 @@ export const opportunities: Opportunity[] = [
     today: false,
     seen: true,
   },
+  {
     id: "o-oned",
     searchId: "r4",
-    tenderId: undefined,
     score: 76,
     client: "Régie de Tanger (Amendis)",
     ref: "45/AMD/2026",
