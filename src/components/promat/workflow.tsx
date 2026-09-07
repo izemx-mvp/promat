@@ -10,29 +10,30 @@ import { Field } from "./ui";
 
 export type StepKey =
   | "analyse"
-  | "go"
   | "articles"
   | "consultation"
   | "comparatif"
   | "chiffrage"
   | "offre";
 
-export const workflowSteps: { key: StepKey; label: string; to: string }[] = [
-  { key: "analyse", label: "Analyse", to: "/analyses/$id" },
-  { key: "go", label: "GO", to: "/analyses/$id" },
-  { key: "articles", label: "Articles", to: "/articles/$id" },
-  { key: "consultation", label: "Consultation", to: "/consultations/$id" },
-  { key: "comparatif", label: "Comparatif", to: "/comparatifs/$id" },
-  { key: "chiffrage", label: "Chiffrage", to: "/chiffrages/$id" },
-  { key: "offre", label: "Offre finale", to: "/offres/$id" },
+export type WorkflowStepKey = "recherche" | StepKey;
+
+export const workflowSteps: { key: WorkflowStepKey; number: number; label: string; to: string; root: string }[] = [
+  { key: "recherche", number: 1, label: "Recherches AO", to: "/", root: "/" },
+  { key: "analyse", number: 2, label: "Analyses", to: "/analyses/$id", root: "/analyses" },
+  { key: "articles", number: 3, label: "Articles & besoins", to: "/articles/$id", root: "/articles" },
+  { key: "consultation", number: 4, label: "Consultations fournisseurs", to: "/consultations/$id", root: "/consultations" },
+  { key: "comparatif", number: 5, label: "Comparatifs fournisseurs", to: "/comparatifs/$id", root: "/comparatifs" },
+  { key: "chiffrage", number: 6, label: "Chiffrages", to: "/chiffrages/$id", root: "/chiffrages" },
+  { key: "offre", number: 7, label: "Offres finales", to: "/offres/$id", root: "/offres" },
 ];
 
-export function stepDone(state: TenderState, key: StepKey) {
+export function workflowDone(state: TenderState, key: WorkflowStepKey) {
   switch (key) {
+    case "recherche":
+      return true;
     case "analyse":
-      return state.analysisValidated;
-    case "go":
-      return state.decision === "go";
+      return state.analysisValidated && state.decision === "go";
     case "articles":
       return state.articlesValidated;
     case "consultation":
@@ -46,6 +47,8 @@ export function stepDone(state: TenderState, key: StepKey) {
   }
 }
 
+export const stepDone = workflowDone;
+
 export function TenderWorkflow({
   tender,
   state,
@@ -57,6 +60,9 @@ export function TenderWorkflow({
   current: StepKey;
   children: ReactNode;
 }) {
+  const currentStep = workflowSteps.find((s) => s.key === current) ?? workflowSteps[1];
+  const nextStep = workflowSteps.find((s) => s.number === currentStep.number + 1);
+
   return (
     <div className="pb-28">
       <div className="sticky top-16 z-10 border-b border-border bg-background/90 backdrop-blur">
@@ -72,6 +78,20 @@ export function TenderWorkflow({
               <p className="mt-1 text-sm text-muted-foreground">
                 {tender.reference} · {tender.title}
               </p>
+              <div className="mt-3 flex flex-wrap gap-x-8 gap-y-2 text-sm">
+                <div>
+                  <p className="label-xs">Étape actuelle</p>
+                  <p className="mt-1 font-semibold">
+                    Étape {currentStep.number} sur 7 · {currentStep.label}
+                  </p>
+                </div>
+                {nextStep && (
+                  <div>
+                    <p className="label-xs">Prochaine étape</p>
+                    <p className="mt-1 font-semibold text-primary">{nextStep.label}</p>
+                  </div>
+                )}
+              </div>
             </div>
             <div className="text-right">
               <p className="label-xs">Échéance</p>
@@ -81,7 +101,7 @@ export function TenderWorkflow({
 
           <ol className="mt-4 flex flex-wrap items-center gap-1">
             {workflowSteps.map((s, i) => {
-              const done = stepDone(state, s.key);
+              const done = workflowDone(state, s.key);
               const active = s.key === current;
               return (
                 <li key={s.key} className="flex items-center">
@@ -89,7 +109,7 @@ export function TenderWorkflow({
                     to={s.to}
                     params={{ id: tender.id }}
                     className={cn(
-                      "flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-[13px] transition-colors",
+                      "flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-[12.5px] transition-colors",
                       active
                         ? "bg-primary/10 font-semibold text-primary"
                         : done
@@ -107,6 +127,9 @@ export function TenderWorkflow({
                         )}
                       />
                     )}
+                    <span className="font-mono text-[10px] tabular-nums text-muted-foreground">
+                      {String(s.number).padStart(2, "0")}
+                    </span>
                     {s.label}
                   </Link>
                   {i < workflowSteps.length - 1 && <span className="mx-0.5 h-px w-4 bg-border" />}
