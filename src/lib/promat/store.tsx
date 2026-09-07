@@ -3,15 +3,16 @@ import { tenders, type Tender } from "./data";
 
 export type CostParams = {
   rate: number;
+  usdRate: number;
   fret: number;
   transit: number;
   banque: number;
-  assurance: number;
   douanePct: number;
   autres: number;
 };
 
 export type TenderState = {
+  analysisValidated: boolean;
   decision: "pending" | "go" | "nogo";
   noGoReason?: string;
   articlesValidated: boolean;
@@ -24,39 +25,50 @@ export type TenderState = {
   margin: number;
   marginValidated: boolean;
   offerValidated: boolean;
-  sentToCosting: boolean;
 };
 
 const defaultCost: CostParams = {
   rate: 11,
+  usdRate: 10.1,
   fret: 10000,
-  transit: 1800,
-  banque: 900,
-  assurance: 1200,
+  transit: 4000,
+  banque: 1500,
   douanePct: 2.5,
-  autres: 3000,
+  autres: 1500,
 };
 
-const baseState = (t: Tender): TenderState => ({
-  decision: t.id === "marsa" || t.id === "oncf" ? "go" : "pending",
-  articlesValidated: t.id === "marsa" || t.id === "oncf",
-  selectedSuppliers: t.id === "marsa" ? ["s1", "s2", "s3"] : t.id === "oncf" ? ["s1", "s2"] : [],
-  consultationCreated: t.id === "marsa" || t.id === "oncf",
-  offersReceived: t.id === "marsa",
-  cost: { ...defaultCost },
-  costValidated: false,
-  margin: 20,
-  marginValidated: false,
-  offerValidated: false,
-  sentToCosting: t.id === "marsa",
-});
+const baseState = (t: Tender): TenderState => {
+  const advanced = t.id === "marsa" || t.id === "oncf";
+  return {
+    analysisValidated: advanced,
+    decision: advanced ? "go" : "pending",
+    articlesValidated: advanced,
+    selectedSuppliers: t.id === "marsa" ? ["s1", "s2", "s3"] : t.id === "oncf" ? ["s1", "s2"] : [],
+    consultationCreated: advanced,
+    offersReceived: t.id === "marsa",
+    cost: { ...defaultCost },
+    costValidated: false,
+    margin: 20,
+    marginValidated: false,
+    offerValidated: false,
+  };
+};
+
+export type AuditEntry = { time: string; who: string; action: string; tender: string; module: string };
+
+const baseLog: AuditEntry[] = [
+  { time: "10:20", who: "Yassine El Mansouri", action: "GO validé", tender: "AO ONCF", module: "Analyses" },
+  { time: "11:04", who: "Salma Cherkaoui", action: "3 fournisseurs sélectionnés", tender: "AO Marsa Maroc", module: "Consultations" },
+  { time: "14:16", who: "Agent Chiffrage", action: "Prix de revient recalculé", tender: "AO Marsa Maroc", module: "Chiffrages" },
+  { time: "15:03", who: "Yassine El Mansouri", action: "Marge modifiée 18 % → 20 %", tender: "AO Marsa Maroc", module: "Chiffrages" },
+];
 
 type Ctx = {
   tenders: Tender[];
   states: Record<string, TenderState>;
   update: (id: string, patch: Partial<TenderState>) => void;
-  handoffId: string | null;
-  setHandoffId: (id: string | null) => void;
+  log: AuditEntry[];
+  addLog: (e: Omit<AuditEntry, "time">) => void;
 };
 
 const PromatContext = createContext<Ctx | null>(null);
@@ -65,7 +77,7 @@ export function PromatProvider({ children }: { children: ReactNode }) {
   const [states, setStates] = useState<Record<string, TenderState>>(() =>
     Object.fromEntries(tenders.map((t) => [t.id, baseState(t)])),
   );
-  const [handoffId, setHandoffId] = useState<string | null>(null);
+  const [log, setLog] = useState<AuditEntry[]>(baseLog);
 
   const update = useCallback((id: string, patch: Partial<TenderState>) => {
     setStates((prev) => {
@@ -75,9 +87,14 @@ export function PromatProvider({ children }: { children: ReactNode }) {
     });
   }, []);
 
+  const addLog = useCallback((e: Omit<AuditEntry, "time">) => {
+    const time = new Date().toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
+    setLog((prev) => [{ time, ...e }, ...prev]);
+  }, []);
+
   const value = useMemo(
-    () => ({ tenders, states, update, handoffId, setHandoffId }),
-    [states, update, handoffId],
+    () => ({ tenders, states, update, log, addLog }),
+    [states, update, log, addLog],
   );
 
   return <PromatContext.Provider value={value}>{children}</PromatContext.Provider>;
@@ -89,9 +106,16 @@ export function usePromat() {
   return ctx;
 }
 
+export function useTender(id: string) {
+  const { tenders: list, states, update, addLog } = usePromat();
+  const tender = list.find((t) => t.id === id);
+  const state = states[id];
+  return { tender, state, update, addLog };
+}
+
 export function computeCosts(purchaseBase: number, c: CostParams) {
   const achat = purchaseBase;
   const douane = (achat * c.douanePct) / 100;
-  const revient = achat + c.fret + c.transit + c.banque + c.assurance + douane + c.autres;
+  const revient = achat + c.fret + c.transit + c.banque + douane + c.autres;
   return { achat, douane, revient };
 }
