@@ -2,7 +2,7 @@ import { Link, useLocation } from "@tanstack/react-router";
 import { Bell, Check, Circle, LogOut, Search, Settings } from "lucide-react";
 import type { ReactNode } from "react";
 import { useMemo } from "react";
-import { workflowDone, workflowSteps, type WorkflowStepKey } from "@/components/promat/workflow";
+import { workflowDone, workflowSteps, type WorkflowStepKey } from "@/lib/promat/progress";
 import { usePromat } from "@/lib/promat/store";
 import { cn } from "@/lib/utils";
 

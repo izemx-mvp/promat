@@ -3,51 +3,11 @@ import { ArrowRight, Check } from "lucide-react";
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import type { Tender } from "@/lib/promat/data";
+import { workflowDone, workflowSteps, type StepKey } from "@/lib/promat/progress";
 import type { TenderState } from "@/lib/promat/store";
 import { usePromat } from "@/lib/promat/store";
 import { StatusDot } from "./shell";
 import { Field } from "./ui";
-
-export type StepKey =
-  | "analyse"
-  | "articles"
-  | "consultation"
-  | "comparatif"
-  | "chiffrage"
-  | "offre";
-
-export type WorkflowStepKey = "recherche" | StepKey;
-
-export const workflowSteps: { key: WorkflowStepKey; number: number; label: string; to: string; root: string }[] = [
-  { key: "recherche", number: 1, label: "Recherches AO", to: "/", root: "/" },
-  { key: "analyse", number: 2, label: "Analyses", to: "/analyses/$id", root: "/analyses" },
-  { key: "articles", number: 3, label: "Articles & besoins", to: "/articles/$id", root: "/articles" },
-  { key: "consultation", number: 4, label: "Consultations fournisseurs", to: "/consultations/$id", root: "/consultations" },
-  { key: "comparatif", number: 5, label: "Comparatifs fournisseurs", to: "/comparatifs/$id", root: "/comparatifs" },
-  { key: "chiffrage", number: 6, label: "Chiffrages", to: "/chiffrages/$id", root: "/chiffrages" },
-  { key: "offre", number: 7, label: "Offres finales", to: "/offres/$id", root: "/offres" },
-];
-
-export function workflowDone(state: TenderState, key: WorkflowStepKey) {
-  switch (key) {
-    case "recherche":
-      return true;
-    case "analyse":
-      return state.analysisValidated && state.decision === "go";
-    case "articles":
-      return state.articlesValidated;
-    case "consultation":
-      return state.consultationCreated && state.offersReceived;
-    case "comparatif":
-      return Boolean(state.retainedSupplier);
-    case "chiffrage":
-      return state.costValidated && state.marginValidated;
-    case "offre":
-      return state.offerValidated;
-  }
-}
-
-export const stepDone = workflowDone;
 
 export function TenderWorkflow({
   tender,
@@ -164,7 +124,7 @@ export function StickyBar({
   children: ReactNode;
 }) {
   return (
-    <div className="fixed bottom-0 left-[264px] right-0 z-20 border-t border-border bg-card/95 px-8 py-4 backdrop-blur">
+    <div className="fixed bottom-0 left-[288px] right-0 z-20 border-t border-border bg-card/95 px-8 py-4 backdrop-blur">
       <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4">
         <div className="text-sm text-muted-foreground">{message}</div>
         <div className="flex items-center gap-2">{children}</div>

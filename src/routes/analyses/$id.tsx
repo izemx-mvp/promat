@@ -92,7 +92,7 @@ function AnalysePage() {
 
   return (
     <AppShell>
-      <TenderWorkflow tender={tender} state={state} current={state.decision === "go" ? "go" : "analyse"}>
+      <TenderWorkflow tender={tender} state={state} current="analyse">
         <SectionCard>
           <p className="text-sm text-muted-foreground">{tender.object}</p>
           <div className="mt-6">
@@ -191,7 +191,7 @@ function AnalysePage() {
           }
         >
           {state.decision === "go" ? (
-            <NextButton to="/articles/$id" id={id} label="Passer aux articles" />
+            <NextButton to="/articles/$id" id={id} label="Continuer vers Articles & besoins" />
           ) : (
             <NextButton label="Valider GO" onClick={validateGo} />
           )}

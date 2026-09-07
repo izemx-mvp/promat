@@ -255,6 +255,21 @@ function ConsultationPage() {
   return (
     <AppShell>
       <TenderWorkflow tender={tender} state={state} current="consultation">
+        <nav aria-label="Progression de la consultation" className="flex flex-wrap items-center gap-2 rounded-xl border border-border bg-card px-5 py-3">
+          {["Sélection fournisseurs", "Documents", "Envoi", "Réponses"].map((label, index) => {
+            const complete = index === 0 || (index === 1 && state.consultationCreated) || (index === 2 && stats.sent > 0) || (index === 3 && stats.validated > 0);
+            const active = state.consultationCreated ? (stats.sent > 0 ? (stats.validated > 0 ? 3 : 2) : 1) : 0;
+            return (
+              <div key={label} className="flex items-center gap-2">
+                <span className={cn("flex size-5 items-center justify-center rounded-full text-[10px] font-bold", complete ? "bg-success-soft text-success" : index === active ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground")}>
+                  {complete ? <Check className="size-3" strokeWidth={3} /> : index + 1}
+                </span>
+                <span className={cn("text-[13px] font-medium", index === active ? "text-foreground" : "text-muted-foreground")}>{label}</span>
+                {index < 3 && <span className="mx-1 h-px w-6 bg-border" />}
+              </div>
+            );
+          })}
+        </nav>
         {!state.consultationCreated ? (
           <>
             <SectionCard
