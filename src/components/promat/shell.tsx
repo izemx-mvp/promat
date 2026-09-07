@@ -39,11 +39,10 @@ const groups: { title: string; items: Item[] }[] = [
     items: [
       { to: "/admin/agents", label: "Configuration des agents" },
       { to: "/admin/utilisateurs", label: "Gestion utilisateurs" },
-      { to: "/admin/historique", label: "Historique" },
-      { to: "/admin/parametres", label: "Paramètres généraux" },
     ],
   },
 ];
+
 
 export function AppShell({ children }: { children: ReactNode }) {
   const { pathname } = useLocation();
