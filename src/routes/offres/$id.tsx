@@ -50,8 +50,8 @@ function OffrePage() {
     const eur = Number(a.prevPrice.replace(/[^\d]/g, "")) || 500;
     const purchase = eur * state.cost.rate;
     const landed = purchase * (revient / achat);
-    const unit = purchase * factor;
-    return { ...a, purchase, landed, unit, total: unit * a.qty };
+    const pu = purchase * factor;
+    return { ...a, purchase, landed, pu, total: pu * a.qty };
   });
   const totalHT = lines.reduce((s, l) => s + l.total, 0);
 
