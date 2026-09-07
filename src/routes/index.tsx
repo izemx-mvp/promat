@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import { AlertTriangle, ArrowUpDown, Check, Plus, Search, Sparkles, X } from "lucide-react";
 import { AppShell, PageHeader } from "@/components/promat/shell";
 import { Pill, SectionCard } from "@/components/promat/ui";
+import { NextButton, StickyBar } from "@/components/promat/workflow";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { usePromat } from "@/lib/promat/store";
 import {
@@ -83,6 +84,7 @@ function RecherchesPage() {
   const [processed, setProcessed] = useState<Processed>({});
   const [detail, setDetail] = useState<Opportunity | null>(null);
   const [askIgnore, setAskIgnore] = useState(false);
+  const [selectedTenderId, setSelectedTenderId] = useState<string | null>(null);
   const navigate = useNavigate();
   const { addLog } = usePromat();
 
@@ -117,6 +119,7 @@ function RecherchesPage() {
 
   function addOnly(o: Opportunity) {
     setProcessed((p) => ({ ...p, [o.id]: "added" }));
+    if (o.tenderId) setSelectedTenderId(o.tenderId);
     addLog({ who: "Houda Bennani", action: "Opportunité ajoutée aux AO", tender: o.client, module: "Recherches AO" });
     toast.success(`${o.ref} ajouté aux AO suivis`);
     close();
@@ -156,6 +159,10 @@ function RecherchesPage() {
             </button>
           }
         />
+        <div className="flex flex-wrap items-center gap-x-5 gap-y-1 border-b border-border pb-4">
+          <p className="label-xs text-primary">Étape 1 sur 7 · Recherches AO</p>
+          <p className="text-xs text-muted-foreground">Prochaine étape : Analyses</p>
+        </div>
 
         <div className="grid gap-3 lg:grid-cols-2">
           {searches.map((s) => {
@@ -306,6 +313,12 @@ function RecherchesPage() {
           </SectionCard>
         )}
       </div>
+
+      {selectedTenderId && (
+        <StickyBar message="Opportunité ajoutée. Le dossier est prêt pour l’analyse complète.">
+          <NextButton to="/analyses/$id" id={selectedTenderId} label="Passer à l'analyse" />
+        </StickyBar>
+      )}
 
       {/* Détail préqualification */}
       <Sheet open={!!detail} onOpenChange={(v) => !v && close()}>

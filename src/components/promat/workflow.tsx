@@ -3,48 +3,11 @@ import { ArrowRight, Check } from "lucide-react";
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import type { Tender } from "@/lib/promat/data";
+import { workflowDone, workflowSteps, type StepKey } from "@/lib/promat/progress";
 import type { TenderState } from "@/lib/promat/store";
 import { usePromat } from "@/lib/promat/store";
 import { StatusDot } from "./shell";
 import { Field } from "./ui";
-
-export type StepKey =
-  | "analyse"
-  | "go"
-  | "articles"
-  | "consultation"
-  | "comparatif"
-  | "chiffrage"
-  | "offre";
-
-export const workflowSteps: { key: StepKey; label: string; to: string }[] = [
-  { key: "analyse", label: "Analyse", to: "/analyses/$id" },
-  { key: "go", label: "GO", to: "/analyses/$id" },
-  { key: "articles", label: "Articles", to: "/articles/$id" },
-  { key: "consultation", label: "Consultation", to: "/consultations/$id" },
-  { key: "comparatif", label: "Comparatif", to: "/comparatifs/$id" },
-  { key: "chiffrage", label: "Chiffrage", to: "/chiffrages/$id" },
-  { key: "offre", label: "Offre finale", to: "/offres/$id" },
-];
-
-export function stepDone(state: TenderState, key: StepKey) {
-  switch (key) {
-    case "analyse":
-      return state.analysisValidated;
-    case "go":
-      return state.decision === "go";
-    case "articles":
-      return state.articlesValidated;
-    case "consultation":
-      return state.consultationCreated && state.offersReceived;
-    case "comparatif":
-      return Boolean(state.retainedSupplier);
-    case "chiffrage":
-      return state.costValidated && state.marginValidated;
-    case "offre":
-      return state.offerValidated;
-  }
-}
 
 export function TenderWorkflow({
   tender,
@@ -57,6 +20,11 @@ export function TenderWorkflow({
   current: StepKey;
   children: ReactNode;
 }) {
+  const currentStep = workflowSteps.find((s) => s.key === current);
+  const currentStepNumber = currentStep?.number ?? 2;
+  const currentStepLabel = currentStep?.label ?? "Analyses";
+  const nextStep = workflowSteps.find((s) => s.number === currentStepNumber + 1);
+
   return (
     <div className="pb-28">
       <div className="sticky top-16 z-10 border-b border-border bg-background/90 backdrop-blur">
@@ -72,6 +40,20 @@ export function TenderWorkflow({
               <p className="mt-1 text-sm text-muted-foreground">
                 {tender.reference} · {tender.title}
               </p>
+              <div className="mt-3 flex flex-wrap gap-x-8 gap-y-2 text-sm">
+                <div>
+                  <p className="label-xs">Étape actuelle</p>
+                  <p className="mt-1 font-semibold">
+                    Étape {currentStepNumber} sur 7 · {currentStepLabel}
+                  </p>
+                </div>
+                {nextStep && (
+                  <div>
+                    <p className="label-xs">Prochaine étape</p>
+                    <p className="mt-1 font-semibold text-primary">{nextStep.label}</p>
+                  </div>
+                )}
+              </div>
             </div>
             <div className="text-right">
               <p className="label-xs">Échéance</p>
@@ -81,7 +63,7 @@ export function TenderWorkflow({
 
           <ol className="mt-4 flex flex-wrap items-center gap-1">
             {workflowSteps.map((s, i) => {
-              const done = stepDone(state, s.key);
+              const done = workflowDone(state, s.key);
               const active = s.key === current;
               return (
                 <li key={s.key} className="flex items-center">
@@ -89,7 +71,7 @@ export function TenderWorkflow({
                     to={s.to}
                     params={{ id: tender.id }}
                     className={cn(
-                      "flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-[13px] transition-colors",
+                      "flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-[12.5px] transition-colors",
                       active
                         ? "bg-primary/10 font-semibold text-primary"
                         : done
@@ -107,6 +89,9 @@ export function TenderWorkflow({
                         )}
                       />
                     )}
+                    <span className="font-mono text-[10px] tabular-nums text-muted-foreground">
+                      {String(s.number).padStart(2, "0")}
+                    </span>
                     {s.label}
                   </Link>
                   {i < workflowSteps.length - 1 && <span className="mx-0.5 h-px w-4 bg-border" />}
@@ -141,7 +126,7 @@ export function StickyBar({
   children: ReactNode;
 }) {
   return (
-    <div className="fixed bottom-0 left-[264px] right-0 z-20 border-t border-border bg-card/95 px-8 py-4 backdrop-blur">
+    <div className="fixed bottom-0 left-[288px] right-0 z-20 border-t border-border bg-card/95 px-8 py-4 backdrop-blur">
       <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4">
         <div className="text-sm text-muted-foreground">{message}</div>
         <div className="flex items-center gap-2">{children}</div>

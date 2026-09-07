@@ -121,7 +121,7 @@ function ArticlesPage() {
             <NextButton
               to="/consultations/$id"
               id={id}
-              label="Passer aux fournisseurs"
+              label="Passer aux consultations fournisseurs"
             />
           ) : (
             <NextButton label="Valider les articles et continuer" onClick={validate} />
