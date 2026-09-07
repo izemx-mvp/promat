@@ -138,9 +138,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         </nav>
 
         <div className="mt-auto pt-8">
-          <Link to="/admin/parametres" className="mb-2 flex items-center gap-2 rounded-lg px-3 py-2 text-[13px] text-navy-foreground/70 transition-colors hover:bg-navy-foreground/5">
-            <Settings className="size-4" /> Paramètres
-          </Link>
+
           <div className="flex items-center gap-3 rounded-xl bg-navy-foreground/5 px-3 py-3">
             <span className="flex size-9 items-center justify-center rounded-full bg-white/10 text-xs font-semibold">
               HB
