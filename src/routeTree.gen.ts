@@ -16,6 +16,7 @@ import { Route as AnalysesIdRouteImport } from './routes/analyses/$id'
 import { Route as ArticlesIndexRouteImport } from './routes/articles/index'
 import { Route as ArticlesIdRouteImport } from './routes/articles/$id'
 import { Route as ConsultationsIndexRouteImport } from './routes/consultations/index'
+import { Route as ConsultationsIdRouteImport } from './routes/consultations/$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -52,12 +53,18 @@ const ConsultationsIndexRoute = ConsultationsIndexRouteImport.update({
   path: '/consultations/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ConsultationsIdRoute = ConsultationsIdRouteImport.update({
+  id: '/consultations/$id',
+  path: '/consultations/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/chiffrage': typeof ChiffrageRoute
   '/analyses/$id': typeof AnalysesIdRoute
   '/articles/$id': typeof ArticlesIdRoute
+  '/consultations/$id': typeof ConsultationsIdRoute
   '/analyses/': typeof AnalysesIndexRoute
   '/articles/': typeof ArticlesIndexRoute
   '/consultations/': typeof ConsultationsIndexRoute
@@ -67,6 +74,7 @@ export interface FileRoutesByTo {
   '/chiffrage': typeof ChiffrageRoute
   '/analyses/$id': typeof AnalysesIdRoute
   '/articles/$id': typeof ArticlesIdRoute
+  '/consultations/$id': typeof ConsultationsIdRoute
   '/analyses': typeof AnalysesIndexRoute
   '/articles': typeof ArticlesIndexRoute
   '/consultations': typeof ConsultationsIndexRoute
@@ -77,6 +85,7 @@ export interface FileRoutesById {
   '/chiffrage': typeof ChiffrageRoute
   '/analyses/$id': typeof AnalysesIdRoute
   '/articles/$id': typeof ArticlesIdRoute
+  '/consultations/$id': typeof ConsultationsIdRoute
   '/analyses/': typeof AnalysesIndexRoute
   '/articles/': typeof ArticlesIndexRoute
   '/consultations/': typeof ConsultationsIndexRoute
@@ -88,6 +97,7 @@ export interface FileRouteTypes {
     | '/chiffrage'
     | '/analyses/$id'
     | '/articles/$id'
+    | '/consultations/$id'
     | '/analyses/'
     | '/articles/'
     | '/consultations/'
@@ -97,6 +107,7 @@ export interface FileRouteTypes {
     | '/chiffrage'
     | '/analyses/$id'
     | '/articles/$id'
+    | '/consultations/$id'
     | '/analyses'
     | '/articles'
     | '/consultations'
@@ -106,6 +117,7 @@ export interface FileRouteTypes {
     | '/chiffrage'
     | '/analyses/$id'
     | '/articles/$id'
+    | '/consultations/$id'
     | '/analyses/'
     | '/articles/'
     | '/consultations/'
@@ -116,6 +128,7 @@ export interface RootRouteChildren {
   ChiffrageRoute: typeof ChiffrageRoute
   AnalysesIdRoute: typeof AnalysesIdRoute
   ArticlesIdRoute: typeof ArticlesIdRoute
+  ConsultationsIdRoute: typeof ConsultationsIdRoute
   AnalysesIndexRoute: typeof AnalysesIndexRoute
   ArticlesIndexRoute: typeof ArticlesIndexRoute
   ConsultationsIndexRoute: typeof ConsultationsIndexRoute
@@ -172,6 +185,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ConsultationsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/consultations/$id': {
+      id: '/consultations/$id'
+      path: '/consultations/$id'
+      fullPath: '/consultations/$id'
+      preLoaderRoute: typeof ConsultationsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -180,6 +200,7 @@ const rootRouteChildren: RootRouteChildren = {
   ChiffrageRoute: ChiffrageRoute,
   AnalysesIdRoute: AnalysesIdRoute,
   ArticlesIdRoute: ArticlesIdRoute,
+  ConsultationsIdRoute: ConsultationsIdRoute,
   AnalysesIndexRoute: AnalysesIndexRoute,
   ArticlesIndexRoute: ArticlesIndexRoute,
   ConsultationsIndexRoute: ConsultationsIndexRoute,
