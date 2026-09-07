@@ -36,9 +36,9 @@ const seed = [
 const modules = ["Tous", "Analyse", "Décision", "Consultation", "Chiffrage", "Offre"];
 
 function HistoriquePage() {
-  const { audit } = usePromat();
+  const { log } = usePromat();
   const [mod, setMod] = useState("Tous");
-  const rows = [...(audit ?? []), ...seed];
+  const rows = [...log, ...seed];
   const list = mod === "Tous" ? rows : rows.filter((r) => r.module === mod);
 
   return (
