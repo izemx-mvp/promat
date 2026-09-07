@@ -150,7 +150,7 @@ function OffrePage() {
   const families = Array.from(new Set(tender.articles.map((a) => familyOf(a.designation))));
 
   const activeVersion =
-    state.versions.find((v) => v.id === state.activeVersion) ?? state.versions[0];
+    (state.versions ?? []).find((v) => v.id === state.activeVersion) ?? (state.versions ?? [])[0];
   const partialOffer = t.partialLines > 0;
   const marginLow = t.marginAfter < MARGIN_THRESHOLD;
 
@@ -163,7 +163,7 @@ function OffrePage() {
 
   const setQty = (articleId: string, v: number, max: number) =>
     update(id, {
-      proposedQty: { ...state.proposedQty, [articleId]: Math.max(0, Math.min(max, v)) },
+      proposedQty: { ...(state.proposedQty ?? {}), [articleId]: Math.max(0, Math.min(max, v)) },
     });
 
   const applyBulk = () => {
@@ -205,11 +205,11 @@ function OffrePage() {
       ? {
           globalDiscount: duplicate.globalDiscount,
           lineDiscounts: { ...(duplicate.lineDiscounts ?? {}) },
-          proposedQty: { ...duplicate.proposedQty },
+          proposedQty: { ...(duplicate.proposedQty ?? {}) },
         }
       : params;
     const totals = totalsOf(tender, state, base);
-    const label = `V${state.versions.length + 1}`;
+    const label = `V${(state.versions ?? []).length + 1}`;
     const version: OfferVersion = {
       id: `${Date.now()}`,
       label,
@@ -220,14 +220,14 @@ function OffrePage() {
       status: "Brouillon",
       globalDiscount: base.globalDiscount,
       lineDiscounts: { ...(base.lineDiscounts ?? {}) },
-      proposedQty: { ...base.proposedQty },
+      proposedQty: { ...(base.proposedQty ?? {}) },
     };
     update(id, {
-      versions: [...state.versions, version],
+      versions: [...(state.versions ?? []), version],
       activeVersion: version.id,
       globalDiscount: base.globalDiscount,
       lineDiscounts: { ...(base.lineDiscounts ?? {}) },
-      proposedQty: { ...base.proposedQty },
+      proposedQty: { ...(base.proposedQty ?? {}) },
     });
     addLog({
       who: "Houda Bennani",
@@ -243,7 +243,7 @@ function OffrePage() {
       activeVersion: v.id,
       globalDiscount: v.globalDiscount,
       lineDiscounts: { ...(v.lineDiscounts ?? {}) },
-      proposedQty: { ...v.proposedQty },
+      proposedQty: { ...(v.proposedQty ?? {}) },
     });
     toast.success(`${v.label} restaurée`);
   };
@@ -251,7 +251,7 @@ function OffrePage() {
   const validateVersion = () => {
     const target = activeVersion;
     if (!target) return;
-    const versions = state.versions.map((v) =>
+    const versions = (state.versions ?? []).map((v) =>
       v.id === target.id
         ? { ...v, status: "Validée" as const, total: t.totalFinal, discountLabel: discountLabel(params) }
         : v.status === "Validée"
@@ -626,11 +626,11 @@ function OffrePage() {
                 </tr>
               </thead>
               <tbody>
-                {state.versions.map((v) => {
+                {(state.versions ?? []).map((v) => {
                   const vp: Params = {
                     globalDiscount: v.globalDiscount,
                     lineDiscounts: v.lineDiscounts ?? {},
-                    proposedQty: v.proposedQty,
+                    proposedQty: v.proposedQty ?? {},
                   };
                   const vt = totalsOf(tender, state, vp);
                   const isActive = v.id === state.activeVersion;
@@ -797,12 +797,12 @@ function OffrePage() {
             </SheetHeader>
             <div className="mt-6 grid grid-cols-2 gap-4">
               {compare.map((vid) => {
-                const v = state.versions.find((x) => x.id === vid);
+                const v = (state.versions ?? []).find((x) => x.id === vid);
                 if (!v) return null;
                 const vt = totalsOf(tender, state, {
                   globalDiscount: v.globalDiscount,
                   lineDiscounts: v.lineDiscounts ?? {},
-                  proposedQty: v.proposedQty,
+                  proposedQty: v.proposedQty ?? {},
                 });
                 return (
                   <div key={vid} className="card-soft p-4">
