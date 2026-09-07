@@ -3,6 +3,8 @@ import { useState } from "react";
 import { Check, Copy, Download, FileText, Plus, Save } from "lucide-react";
 import { AppShell } from "@/components/promat/shell";
 import { Pill } from "@/components/promat/ui";
+import { OfferSendPanel } from "@/components/promat/offer-send";
+
 import { GhostButton, StickyBar, TenderWorkflow } from "@/components/promat/workflow";
 import { fmtMAD, fmtNum, type Tender } from "@/lib/promat/data";
 import { computeCosts, useTender, type TenderState } from "@/lib/promat/store";
@@ -371,6 +373,36 @@ function OffrePage() {
             )}
           </div>
         </div>
+
+        {state.offerValidated && (
+          <div>
+            <h2 className="section-title">Envoyer l'offre au client</h2>
+            <p className="mt-1 mb-4 text-sm text-muted-foreground">
+              Choisissez le canal, vérifiez le contact et le message, puis envoyez.
+            </p>
+            <OfferSendPanel
+              tender={tender}
+              state={state}
+              versionLabel={active?.label ?? "V1"}
+              total={t.totalFinal}
+              onSend={(send) => {
+                update(id, { sends: [...(state.sends ?? []), send] });
+                addLog({
+                  who: "Houda Bennani",
+                  action: `Offre ${send.version} envoyée par ${send.channel} à ${send.recipient}`,
+                  tender: `AO ${tender.client}`,
+                  module: "Offres finales",
+                });
+              }}
+              onOutcome={(outcome) => update(id, { clientOutcome: outcome })}
+              onNewVersion={() => {
+                newVersion();
+                update(id, { offerValidated: false });
+              }}
+            />
+          </div>
+        )}
+
 
         <StickyBar
           message={

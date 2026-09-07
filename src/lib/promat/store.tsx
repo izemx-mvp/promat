@@ -26,6 +26,17 @@ export type OfferVersion = {
   proposedQty: Record<string, number>;
 };
 
+export type OfferSend = {
+  id: string;
+  version: string;
+  channel: "Email" | "WhatsApp";
+  date: string;
+  recipient: string;
+  total: number;
+};
+
+export type ClientOutcome = "none" | "waiting" | "accepted" | "refused";
+
 export type TenderState = {
   analysisValidated: boolean;
   decision: "pending" | "go" | "nogo";
@@ -46,7 +57,10 @@ export type TenderState = {
   showDiscountToClient: boolean;
   versions: OfferVersion[];
   activeVersion: string;
+  sends: OfferSend[];
+  clientOutcome: ClientOutcome;
 };
+
 
 const defaultCost: CostParams = {
   rate: 11,
@@ -92,8 +106,11 @@ const baseState = (t: Tender): TenderState => {
     ],
 
     activeVersion: "v1",
+    sends: [],
+    clientOutcome: "none",
   };
 };
+
 
 
 export type AuditEntry = { time: string; who: string; action: string; tender: string; module: string };
