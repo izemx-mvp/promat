@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminAgentsRouteImport } from './routes/admin/agents'
 import { Route as AnalysesIndexRouteImport } from './routes/analyses/index'
 import { Route as AnalysesIdRouteImport } from './routes/analyses/$id'
 import { Route as ArticlesIndexRouteImport } from './routes/articles/index'
@@ -29,6 +30,11 @@ import { Route as ReferentielsFournisseursRouteImport } from './routes/referenti
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminAgentsRoute = AdminAgentsRouteImport.update({
+  id: '/admin/agents',
+  path: '/admin/agents',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AnalysesIndexRoute = AnalysesIndexRouteImport.update({
@@ -110,6 +116,7 @@ const ReferentielsFournisseursRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin/agents': typeof AdminAgentsRoute
   '/analyses/$id': typeof AnalysesIdRoute
   '/articles/$id': typeof ArticlesIdRoute
   '/chiffrages/$id': typeof ChiffragesIdRoute
@@ -128,6 +135,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin/agents': typeof AdminAgentsRoute
   '/analyses/$id': typeof AnalysesIdRoute
   '/articles/$id': typeof ArticlesIdRoute
   '/chiffrages/$id': typeof ChiffragesIdRoute
@@ -147,6 +155,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin/agents': typeof AdminAgentsRoute
   '/analyses/$id': typeof AnalysesIdRoute
   '/articles/$id': typeof ArticlesIdRoute
   '/chiffrages/$id': typeof ChiffragesIdRoute
@@ -167,6 +176,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin/agents'
     | '/analyses/$id'
     | '/articles/$id'
     | '/chiffrages/$id'
@@ -185,6 +195,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/admin/agents'
     | '/analyses/$id'
     | '/articles/$id'
     | '/chiffrages/$id'
@@ -203,6 +214,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/admin/agents'
     | '/analyses/$id'
     | '/articles/$id'
     | '/chiffrages/$id'
@@ -222,6 +234,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminAgentsRoute: typeof AdminAgentsRoute
   AnalysesIdRoute: typeof AnalysesIdRoute
   ArticlesIdRoute: typeof ArticlesIdRoute
   ChiffragesIdRoute: typeof ChiffragesIdRoute
@@ -246,6 +259,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/agents': {
+      id: '/admin/agents'
+      path: '/admin/agents'
+      fullPath: '/admin/agents'
+      preLoaderRoute: typeof AdminAgentsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/analyses/': {
@@ -358,6 +378,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminAgentsRoute: AdminAgentsRoute,
   AnalysesIdRoute: AnalysesIdRoute,
   ArticlesIdRoute: ArticlesIdRoute,
   ChiffragesIdRoute: ChiffragesIdRoute,
