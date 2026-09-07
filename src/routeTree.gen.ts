@@ -10,43 +10,285 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as ChiffrageRouteImport } from './routes/chiffrage'
+import { Route as AdminAgentsRouteImport } from './routes/admin/agents'
+import { Route as AdminHistoriqueRouteImport } from './routes/admin/historique'
+import { Route as AdminParametresRouteImport } from './routes/admin/parametres'
+import { Route as AdminUtilisateursRouteImport } from './routes/admin/utilisateurs'
+import { Route as AnalysesIndexRouteImport } from './routes/analyses/index'
+import { Route as AnalysesIdRouteImport } from './routes/analyses/$id'
+import { Route as ArticlesIndexRouteImport } from './routes/articles/index'
+import { Route as ArticlesIdRouteImport } from './routes/articles/$id'
+import { Route as ChiffragesIndexRouteImport } from './routes/chiffrages/index'
+import { Route as ChiffragesIdRouteImport } from './routes/chiffrages/$id'
+import { Route as ComparatifsIndexRouteImport } from './routes/comparatifs/index'
+import { Route as ComparatifsIdRouteImport } from './routes/comparatifs/$id'
+import { Route as ConsultationsIndexRouteImport } from './routes/consultations/index'
+import { Route as ConsultationsIdRouteImport } from './routes/consultations/$id'
+import { Route as OffresIndexRouteImport } from './routes/offres/index'
+import { Route as OffresIdRouteImport } from './routes/offres/$id'
+import { Route as ReferentielsArticlesRouteImport } from './routes/referentiels/articles'
+import { Route as ReferentielsDocumentsRouteImport } from './routes/referentiels/documents'
+import { Route as ReferentielsFournisseursRouteImport } from './routes/referentiels/fournisseurs'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ChiffrageRoute = ChiffrageRouteImport.update({
-  id: '/chiffrage',
-  path: '/chiffrage',
+const AdminAgentsRoute = AdminAgentsRouteImport.update({
+  id: '/admin/agents',
+  path: '/admin/agents',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminHistoriqueRoute = AdminHistoriqueRouteImport.update({
+  id: '/admin/historique',
+  path: '/admin/historique',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminParametresRoute = AdminParametresRouteImport.update({
+  id: '/admin/parametres',
+  path: '/admin/parametres',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminUtilisateursRoute = AdminUtilisateursRouteImport.update({
+  id: '/admin/utilisateurs',
+  path: '/admin/utilisateurs',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AnalysesIndexRoute = AnalysesIndexRouteImport.update({
+  id: '/analyses/',
+  path: '/analyses/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AnalysesIdRoute = AnalysesIdRouteImport.update({
+  id: '/analyses/$id',
+  path: '/analyses/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ArticlesIndexRoute = ArticlesIndexRouteImport.update({
+  id: '/articles/',
+  path: '/articles/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ArticlesIdRoute = ArticlesIdRouteImport.update({
+  id: '/articles/$id',
+  path: '/articles/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ChiffragesIndexRoute = ChiffragesIndexRouteImport.update({
+  id: '/chiffrages/',
+  path: '/chiffrages/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ChiffragesIdRoute = ChiffragesIdRouteImport.update({
+  id: '/chiffrages/$id',
+  path: '/chiffrages/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ComparatifsIndexRoute = ComparatifsIndexRouteImport.update({
+  id: '/comparatifs/',
+  path: '/comparatifs/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ComparatifsIdRoute = ComparatifsIdRouteImport.update({
+  id: '/comparatifs/$id',
+  path: '/comparatifs/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConsultationsIndexRoute = ConsultationsIndexRouteImport.update({
+  id: '/consultations/',
+  path: '/consultations/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConsultationsIdRoute = ConsultationsIdRouteImport.update({
+  id: '/consultations/$id',
+  path: '/consultations/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OffresIndexRoute = OffresIndexRouteImport.update({
+  id: '/offres/',
+  path: '/offres/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OffresIdRoute = OffresIdRouteImport.update({
+  id: '/offres/$id',
+  path: '/offres/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReferentielsArticlesRoute = ReferentielsArticlesRouteImport.update({
+  id: '/referentiels/articles',
+  path: '/referentiels/articles',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReferentielsDocumentsRoute = ReferentielsDocumentsRouteImport.update({
+  id: '/referentiels/documents',
+  path: '/referentiels/documents',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReferentielsFournisseursRoute =
+  ReferentielsFournisseursRouteImport.update({
+    id: '/referentiels/fournisseurs',
+    path: '/referentiels/fournisseurs',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/chiffrage': typeof ChiffrageRoute
+  '/admin/agents': typeof AdminAgentsRoute
+  '/admin/historique': typeof AdminHistoriqueRoute
+  '/admin/parametres': typeof AdminParametresRoute
+  '/admin/utilisateurs': typeof AdminUtilisateursRoute
+  '/analyses/$id': typeof AnalysesIdRoute
+  '/articles/$id': typeof ArticlesIdRoute
+  '/chiffrages/$id': typeof ChiffragesIdRoute
+  '/comparatifs/$id': typeof ComparatifsIdRoute
+  '/consultations/$id': typeof ConsultationsIdRoute
+  '/offres/$id': typeof OffresIdRoute
+  '/referentiels/articles': typeof ReferentielsArticlesRoute
+  '/referentiels/documents': typeof ReferentielsDocumentsRoute
+  '/referentiels/fournisseurs': typeof ReferentielsFournisseursRoute
+  '/analyses/': typeof AnalysesIndexRoute
+  '/articles/': typeof ArticlesIndexRoute
+  '/chiffrages/': typeof ChiffragesIndexRoute
+  '/comparatifs/': typeof ComparatifsIndexRoute
+  '/consultations/': typeof ConsultationsIndexRoute
+  '/offres/': typeof OffresIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/chiffrage': typeof ChiffrageRoute
+  '/admin/agents': typeof AdminAgentsRoute
+  '/admin/historique': typeof AdminHistoriqueRoute
+  '/admin/parametres': typeof AdminParametresRoute
+  '/admin/utilisateurs': typeof AdminUtilisateursRoute
+  '/analyses/$id': typeof AnalysesIdRoute
+  '/articles/$id': typeof ArticlesIdRoute
+  '/chiffrages/$id': typeof ChiffragesIdRoute
+  '/comparatifs/$id': typeof ComparatifsIdRoute
+  '/consultations/$id': typeof ConsultationsIdRoute
+  '/offres/$id': typeof OffresIdRoute
+  '/referentiels/articles': typeof ReferentielsArticlesRoute
+  '/referentiels/documents': typeof ReferentielsDocumentsRoute
+  '/referentiels/fournisseurs': typeof ReferentielsFournisseursRoute
+  '/analyses': typeof AnalysesIndexRoute
+  '/articles': typeof ArticlesIndexRoute
+  '/chiffrages': typeof ChiffragesIndexRoute
+  '/comparatifs': typeof ComparatifsIndexRoute
+  '/consultations': typeof ConsultationsIndexRoute
+  '/offres': typeof OffresIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/chiffrage': typeof ChiffrageRoute
+  '/admin/agents': typeof AdminAgentsRoute
+  '/admin/historique': typeof AdminHistoriqueRoute
+  '/admin/parametres': typeof AdminParametresRoute
+  '/admin/utilisateurs': typeof AdminUtilisateursRoute
+  '/analyses/$id': typeof AnalysesIdRoute
+  '/articles/$id': typeof ArticlesIdRoute
+  '/chiffrages/$id': typeof ChiffragesIdRoute
+  '/comparatifs/$id': typeof ComparatifsIdRoute
+  '/consultations/$id': typeof ConsultationsIdRoute
+  '/offres/$id': typeof OffresIdRoute
+  '/referentiels/articles': typeof ReferentielsArticlesRoute
+  '/referentiels/documents': typeof ReferentielsDocumentsRoute
+  '/referentiels/fournisseurs': typeof ReferentielsFournisseursRoute
+  '/analyses/': typeof AnalysesIndexRoute
+  '/articles/': typeof ArticlesIndexRoute
+  '/chiffrages/': typeof ChiffragesIndexRoute
+  '/comparatifs/': typeof ComparatifsIndexRoute
+  '/consultations/': typeof ConsultationsIndexRoute
+  '/offres/': typeof OffresIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/chiffrage'
+  fullPaths:
+    | '/'
+    | '/admin/agents'
+    | '/admin/historique'
+    | '/admin/parametres'
+    | '/admin/utilisateurs'
+    | '/analyses/$id'
+    | '/articles/$id'
+    | '/chiffrages/$id'
+    | '/comparatifs/$id'
+    | '/consultations/$id'
+    | '/offres/$id'
+    | '/referentiels/articles'
+    | '/referentiels/documents'
+    | '/referentiels/fournisseurs'
+    | '/analyses/'
+    | '/articles/'
+    | '/chiffrages/'
+    | '/comparatifs/'
+    | '/consultations/'
+    | '/offres/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/chiffrage'
-  id: '__root__' | '/' | '/chiffrage'
+  to:
+    | '/'
+    | '/admin/agents'
+    | '/admin/historique'
+    | '/admin/parametres'
+    | '/admin/utilisateurs'
+    | '/analyses/$id'
+    | '/articles/$id'
+    | '/chiffrages/$id'
+    | '/comparatifs/$id'
+    | '/consultations/$id'
+    | '/offres/$id'
+    | '/referentiels/articles'
+    | '/referentiels/documents'
+    | '/referentiels/fournisseurs'
+    | '/analyses'
+    | '/articles'
+    | '/chiffrages'
+    | '/comparatifs'
+    | '/consultations'
+    | '/offres'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin/agents'
+    | '/admin/historique'
+    | '/admin/parametres'
+    | '/admin/utilisateurs'
+    | '/analyses/$id'
+    | '/articles/$id'
+    | '/chiffrages/$id'
+    | '/comparatifs/$id'
+    | '/consultations/$id'
+    | '/offres/$id'
+    | '/referentiels/articles'
+    | '/referentiels/documents'
+    | '/referentiels/fournisseurs'
+    | '/analyses/'
+    | '/articles/'
+    | '/chiffrages/'
+    | '/comparatifs/'
+    | '/consultations/'
+    | '/offres/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  ChiffrageRoute: typeof ChiffrageRoute
+  AdminAgentsRoute: typeof AdminAgentsRoute
+  AdminHistoriqueRoute: typeof AdminHistoriqueRoute
+  AdminParametresRoute: typeof AdminParametresRoute
+  AdminUtilisateursRoute: typeof AdminUtilisateursRoute
+  AnalysesIdRoute: typeof AnalysesIdRoute
+  ArticlesIdRoute: typeof ArticlesIdRoute
+  ChiffragesIdRoute: typeof ChiffragesIdRoute
+  ComparatifsIdRoute: typeof ComparatifsIdRoute
+  ConsultationsIdRoute: typeof ConsultationsIdRoute
+  OffresIdRoute: typeof OffresIdRoute
+  ReferentielsArticlesRoute: typeof ReferentielsArticlesRoute
+  ReferentielsDocumentsRoute: typeof ReferentielsDocumentsRoute
+  ReferentielsFournisseursRoute: typeof ReferentielsFournisseursRoute
+  AnalysesIndexRoute: typeof AnalysesIndexRoute
+  ArticlesIndexRoute: typeof ArticlesIndexRoute
+  ChiffragesIndexRoute: typeof ChiffragesIndexRoute
+  ComparatifsIndexRoute: typeof ComparatifsIndexRoute
+  ConsultationsIndexRoute: typeof ConsultationsIndexRoute
+  OffresIndexRoute: typeof OffresIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -58,11 +300,137 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/chiffrage': {
-      id: '/chiffrage'
-      path: '/chiffrage'
-      fullPath: '/chiffrage'
-      preLoaderRoute: typeof ChiffrageRouteImport
+    '/admin/agents': {
+      id: '/admin/agents'
+      path: '/admin/agents'
+      fullPath: '/admin/agents'
+      preLoaderRoute: typeof AdminAgentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/historique': {
+      id: '/admin/historique'
+      path: '/admin/historique'
+      fullPath: '/admin/historique'
+      preLoaderRoute: typeof AdminHistoriqueRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/parametres': {
+      id: '/admin/parametres'
+      path: '/admin/parametres'
+      fullPath: '/admin/parametres'
+      preLoaderRoute: typeof AdminParametresRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/utilisateurs': {
+      id: '/admin/utilisateurs'
+      path: '/admin/utilisateurs'
+      fullPath: '/admin/utilisateurs'
+      preLoaderRoute: typeof AdminUtilisateursRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/analyses/': {
+      id: '/analyses/'
+      path: '/analyses'
+      fullPath: '/analyses/'
+      preLoaderRoute: typeof AnalysesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/analyses/$id': {
+      id: '/analyses/$id'
+      path: '/analyses/$id'
+      fullPath: '/analyses/$id'
+      preLoaderRoute: typeof AnalysesIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/articles/': {
+      id: '/articles/'
+      path: '/articles'
+      fullPath: '/articles/'
+      preLoaderRoute: typeof ArticlesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/articles/$id': {
+      id: '/articles/$id'
+      path: '/articles/$id'
+      fullPath: '/articles/$id'
+      preLoaderRoute: typeof ArticlesIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/chiffrages/': {
+      id: '/chiffrages/'
+      path: '/chiffrages'
+      fullPath: '/chiffrages/'
+      preLoaderRoute: typeof ChiffragesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/chiffrages/$id': {
+      id: '/chiffrages/$id'
+      path: '/chiffrages/$id'
+      fullPath: '/chiffrages/$id'
+      preLoaderRoute: typeof ChiffragesIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/comparatifs/': {
+      id: '/comparatifs/'
+      path: '/comparatifs'
+      fullPath: '/comparatifs/'
+      preLoaderRoute: typeof ComparatifsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/comparatifs/$id': {
+      id: '/comparatifs/$id'
+      path: '/comparatifs/$id'
+      fullPath: '/comparatifs/$id'
+      preLoaderRoute: typeof ComparatifsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/consultations/': {
+      id: '/consultations/'
+      path: '/consultations'
+      fullPath: '/consultations/'
+      preLoaderRoute: typeof ConsultationsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/consultations/$id': {
+      id: '/consultations/$id'
+      path: '/consultations/$id'
+      fullPath: '/consultations/$id'
+      preLoaderRoute: typeof ConsultationsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/offres/': {
+      id: '/offres/'
+      path: '/offres'
+      fullPath: '/offres/'
+      preLoaderRoute: typeof OffresIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/offres/$id': {
+      id: '/offres/$id'
+      path: '/offres/$id'
+      fullPath: '/offres/$id'
+      preLoaderRoute: typeof OffresIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/referentiels/articles': {
+      id: '/referentiels/articles'
+      path: '/referentiels/articles'
+      fullPath: '/referentiels/articles'
+      preLoaderRoute: typeof ReferentielsArticlesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/referentiels/documents': {
+      id: '/referentiels/documents'
+      path: '/referentiels/documents'
+      fullPath: '/referentiels/documents'
+      preLoaderRoute: typeof ReferentielsDocumentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/referentiels/fournisseurs': {
+      id: '/referentiels/fournisseurs'
+      path: '/referentiels/fournisseurs'
+      fullPath: '/referentiels/fournisseurs'
+      preLoaderRoute: typeof ReferentielsFournisseursRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -70,7 +438,25 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  ChiffrageRoute: ChiffrageRoute,
+  AdminAgentsRoute: AdminAgentsRoute,
+  AdminHistoriqueRoute: AdminHistoriqueRoute,
+  AdminParametresRoute: AdminParametresRoute,
+  AdminUtilisateursRoute: AdminUtilisateursRoute,
+  AnalysesIdRoute: AnalysesIdRoute,
+  ArticlesIdRoute: ArticlesIdRoute,
+  ChiffragesIdRoute: ChiffragesIdRoute,
+  ComparatifsIdRoute: ComparatifsIdRoute,
+  ConsultationsIdRoute: ConsultationsIdRoute,
+  OffresIdRoute: OffresIdRoute,
+  ReferentielsArticlesRoute: ReferentielsArticlesRoute,
+  ReferentielsDocumentsRoute: ReferentielsDocumentsRoute,
+  ReferentielsFournisseursRoute: ReferentielsFournisseursRoute,
+  AnalysesIndexRoute: AnalysesIndexRoute,
+  ArticlesIndexRoute: ArticlesIndexRoute,
+  ChiffragesIndexRoute: ChiffragesIndexRoute,
+  ComparatifsIndexRoute: ComparatifsIndexRoute,
+  ConsultationsIndexRoute: ConsultationsIndexRoute,
+  OffresIndexRoute: OffresIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
