@@ -88,7 +88,7 @@ function buildLines(tender: Tender, state: TenderState, raw: Partial<Params>) {
   });
 }
 
-function totalsOf(tender: Tender, state: TenderState, p: Params) {
+function totalsOf(tender: Tender, state: TenderState, p: Partial<Params>) {
   const lines = buildLines(tender, state, p);
   const totalInit = lines.reduce((s, l) => s + l.totalInit, 0);
   const totalFinal = lines.reduce((s, l) => s + l.totalFinal, 0);
@@ -111,10 +111,10 @@ function totalsOf(tender: Tender, state: TenderState, p: Params) {
   };
 }
 
-function discountLabel(p: Params) {
-  const perLine = Object.keys(p.lineDiscounts).length;
+function discountLabel(p: Partial<Params>) {
+  const perLine = Object.keys(p.lineDiscounts ?? {}).length;
   if (perLine > 0) return `Remise partielle sur ${perLine} article${perLine > 1 ? "s" : ""}`;
-  if (p.globalDiscount > 0) return `Remise globale ${fmtNum(p.globalDiscount, 1)} %`;
+  if ((p.globalDiscount ?? 0) > 0) return `Remise globale ${fmtNum(p.globalDiscount ?? 0, 1)} %`;
   return "Aucune remise";
 }
 
@@ -139,9 +139,9 @@ function OffrePage() {
   }
 
   const params: Params = {
-    globalDiscount: state.globalDiscount,
-    lineDiscounts: state.lineDiscounts,
-    proposedQty: state.proposedQty,
+    globalDiscount: state.globalDiscount ?? 0,
+    lineDiscounts: state.lineDiscounts ?? {},
+    proposedQty: state.proposedQty ?? {},
   };
   const t = totalsOf(tender, state, params);
   const lines = t.lines;
@@ -158,7 +158,7 @@ function OffrePage() {
 
   const setLineDiscount = (articleId: string, v: number) =>
     update(id, {
-      lineDiscounts: { ...state.lineDiscounts, [articleId]: Math.max(0, Math.min(60, v)) },
+      lineDiscounts: { ...(state.lineDiscounts ?? {}), [articleId]: Math.max(0, Math.min(60, v)) },
     });
 
   const setQty = (articleId: string, v: number, max: number) =>
@@ -171,7 +171,7 @@ function OffrePage() {
       toast.error("Sélectionnez d'abord des lignes");
       return;
     }
-    const next = { ...state.lineDiscounts };
+    const next = { ...(state.lineDiscounts ?? {}) };
     selected.forEach((a) => {
       next[a] = bulkDiscount;
     });
@@ -184,7 +184,7 @@ function OffrePage() {
       toast.error("Choisissez une famille");
       return;
     }
-    const next = { ...state.lineDiscounts };
+    const next = { ...(state.lineDiscounts ?? {}) };
     lines
       .filter((l) => l.family === family)
       .forEach((l) => {
@@ -204,7 +204,7 @@ function OffrePage() {
     const base: Params = duplicate
       ? {
           globalDiscount: duplicate.globalDiscount,
-          lineDiscounts: { ...duplicate.lineDiscounts },
+          lineDiscounts: { ...(duplicate.lineDiscounts ?? {}) },
           proposedQty: { ...duplicate.proposedQty },
         }
       : params;
@@ -219,14 +219,14 @@ function OffrePage() {
       total: totals.totalFinal,
       status: "Brouillon",
       globalDiscount: base.globalDiscount,
-      lineDiscounts: { ...base.lineDiscounts },
+      lineDiscounts: { ...(base.lineDiscounts ?? {}) },
       proposedQty: { ...base.proposedQty },
     };
     update(id, {
       versions: [...state.versions, version],
       activeVersion: version.id,
       globalDiscount: base.globalDiscount,
-      lineDiscounts: { ...base.lineDiscounts },
+      lineDiscounts: { ...(base.lineDiscounts ?? {}) },
       proposedQty: { ...base.proposedQty },
     });
     addLog({
@@ -242,7 +242,7 @@ function OffrePage() {
     update(id, {
       activeVersion: v.id,
       globalDiscount: v.globalDiscount,
-      lineDiscounts: { ...v.lineDiscounts },
+      lineDiscounts: { ...(v.lineDiscounts ?? {}) },
       proposedQty: { ...v.proposedQty },
     });
     toast.success(`${v.label} restaurée`);
@@ -629,7 +629,7 @@ function OffrePage() {
                 {state.versions.map((v) => {
                   const vp: Params = {
                     globalDiscount: v.globalDiscount,
-                    lineDiscounts: v.lineDiscounts,
+                    lineDiscounts: v.lineDiscounts ?? {},
                     proposedQty: v.proposedQty,
                   };
                   const vt = totalsOf(tender, state, vp);
@@ -801,7 +801,7 @@ function OffrePage() {
                 if (!v) return null;
                 const vt = totalsOf(tender, state, {
                   globalDiscount: v.globalDiscount,
-                  lineDiscounts: v.lineDiscounts,
+                  lineDiscounts: v.lineDiscounts ?? {},
                   proposedQty: v.proposedQty,
                 });
                 return (
