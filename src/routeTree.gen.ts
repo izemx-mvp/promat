@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminAgentsRouteImport } from './routes/admin/agents'
 import { Route as AdminHistoriqueRouteImport } from './routes/admin/historique'
+import { Route as AdminParametresRouteImport } from './routes/admin/parametres'
 import { Route as AdminUtilisateursRouteImport } from './routes/admin/utilisateurs'
 import { Route as AnalysesIndexRouteImport } from './routes/analyses/index'
 import { Route as AnalysesIdRouteImport } from './routes/analyses/$id'
@@ -42,6 +43,11 @@ const AdminAgentsRoute = AdminAgentsRouteImport.update({
 const AdminHistoriqueRoute = AdminHistoriqueRouteImport.update({
   id: '/admin/historique',
   path: '/admin/historique',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminParametresRoute = AdminParametresRouteImport.update({
+  id: '/admin/parametres',
+  path: '/admin/parametres',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminUtilisateursRoute = AdminUtilisateursRouteImport.update({
@@ -130,6 +136,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin/agents': typeof AdminAgentsRoute
   '/admin/historique': typeof AdminHistoriqueRoute
+  '/admin/parametres': typeof AdminParametresRoute
   '/admin/utilisateurs': typeof AdminUtilisateursRoute
   '/analyses/$id': typeof AnalysesIdRoute
   '/articles/$id': typeof ArticlesIdRoute
@@ -151,6 +158,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin/agents': typeof AdminAgentsRoute
   '/admin/historique': typeof AdminHistoriqueRoute
+  '/admin/parametres': typeof AdminParametresRoute
   '/admin/utilisateurs': typeof AdminUtilisateursRoute
   '/analyses/$id': typeof AnalysesIdRoute
   '/articles/$id': typeof ArticlesIdRoute
@@ -173,6 +181,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin/agents': typeof AdminAgentsRoute
   '/admin/historique': typeof AdminHistoriqueRoute
+  '/admin/parametres': typeof AdminParametresRoute
   '/admin/utilisateurs': typeof AdminUtilisateursRoute
   '/analyses/$id': typeof AnalysesIdRoute
   '/articles/$id': typeof ArticlesIdRoute
@@ -196,6 +205,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin/agents'
     | '/admin/historique'
+    | '/admin/parametres'
     | '/admin/utilisateurs'
     | '/analyses/$id'
     | '/articles/$id'
@@ -217,6 +227,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin/agents'
     | '/admin/historique'
+    | '/admin/parametres'
     | '/admin/utilisateurs'
     | '/analyses/$id'
     | '/articles/$id'
@@ -238,6 +249,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin/agents'
     | '/admin/historique'
+    | '/admin/parametres'
     | '/admin/utilisateurs'
     | '/analyses/$id'
     | '/articles/$id'
@@ -260,6 +272,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminAgentsRoute: typeof AdminAgentsRoute
   AdminHistoriqueRoute: typeof AdminHistoriqueRoute
+  AdminParametresRoute: typeof AdminParametresRoute
   AdminUtilisateursRoute: typeof AdminUtilisateursRoute
   AnalysesIdRoute: typeof AnalysesIdRoute
   ArticlesIdRoute: typeof ArticlesIdRoute
@@ -299,6 +312,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/historique'
       fullPath: '/admin/historique'
       preLoaderRoute: typeof AdminHistoriqueRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/parametres': {
+      id: '/admin/parametres'
+      path: '/admin/parametres'
+      fullPath: '/admin/parametres'
+      preLoaderRoute: typeof AdminParametresRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/utilisateurs': {
@@ -420,6 +440,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminAgentsRoute: AdminAgentsRoute,
   AdminHistoriqueRoute: AdminHistoriqueRoute,
+  AdminParametresRoute: AdminParametresRoute,
   AdminUtilisateursRoute: AdminUtilisateursRoute,
   AnalysesIdRoute: AnalysesIdRoute,
   ArticlesIdRoute: ArticlesIdRoute,
