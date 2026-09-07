@@ -1,5 +1,5 @@
 import { Link, useLocation } from "@tanstack/react-router";
-import { Bell, Check, Circle, LogOut, Search, Settings } from "lucide-react";
+import { Bell, Check, Circle, LogOut, Search } from "lucide-react";
 import type { ReactNode } from "react";
 import { useMemo } from "react";
 import { workflowDone, workflowSteps, type WorkflowStepKey } from "@/lib/promat/progress";
@@ -39,11 +39,10 @@ const groups: { title: string; items: Item[] }[] = [
     items: [
       { to: "/admin/agents", label: "Configuration des agents" },
       { to: "/admin/utilisateurs", label: "Gestion utilisateurs" },
-      { to: "/admin/historique", label: "Historique" },
-      { to: "/admin/parametres", label: "Paramètres généraux" },
     ],
   },
 ];
+
 
 export function AppShell({ children }: { children: ReactNode }) {
   const { pathname } = useLocation();
@@ -139,9 +138,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         </nav>
 
         <div className="mt-auto pt-8">
-          <Link to="/admin/parametres" className="mb-2 flex items-center gap-2 rounded-lg px-3 py-2 text-[13px] text-navy-foreground/70 transition-colors hover:bg-navy-foreground/5">
-            <Settings className="size-4" /> Paramètres
-          </Link>
+
           <div className="flex items-center gap-3 rounded-xl bg-navy-foreground/5 px-3 py-3">
             <span className="flex size-9 items-center justify-center rounded-full bg-white/10 text-xs font-semibold">
               HB

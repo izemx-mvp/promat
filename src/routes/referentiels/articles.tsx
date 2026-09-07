@@ -1,4 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
+import { Plus, Upload } from "lucide-react";
+import { toast } from "sonner";
+import { ImportDialog } from "@/components/promat/import-dialog";
 import { AppShell, PageHeader } from "@/components/promat/shell";
 import { Pill, SectionCard } from "@/components/promat/ui";
 
@@ -73,12 +77,39 @@ const rows = [
 ];
 
 function ArticlesRefPage() {
+  const [importOpen, setImportOpen] = useState(false);
   return (
     <AppShell>
       <div className="mx-auto max-w-6xl space-y-8 px-8 py-8">
         <PageHeader
           title="Articles"
           subtitle="Historique des références PROMAT et alertes de variation de prix."
+          action={
+            <div className="flex items-center gap-2">
+              <button className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90">
+                <Plus className="size-4" /> Ajouter un article
+              </button>
+              <button
+                onClick={() => setImportOpen(true)}
+                className="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-4 py-2.5 text-sm font-medium transition-colors hover:bg-muted"
+              >
+                <Upload className="size-4" /> Importer
+              </button>
+            </div>
+          }
+        />
+
+        <ImportDialog
+          open={importOpen}
+          onOpenChange={setImportOpen}
+          title="Importer des articles"
+          subtitle="Réutilisez vos fichiers Excel historiques. Les colonnes reconnues sont associées automatiquement."
+          accept=".xlsx,.xls,.csv"
+          acceptLabel="Formats acceptés : Excel (.xlsx, .xls) ou CSV"
+          columns={["Référence", "Référence fabricant", "Désignation", "Marque", "Famille", "Dernier fournisseur", "Dernier prix", "Devise"]}
+          stats={{ detected: 250, valid: 243, toCheck: 7 }}
+          confirmLabel="Importer les articles"
+          onConfirm={() => toast.success("243 articles importés · 7 à vérifier")}
         />
 
         <SectionCard className="border-warning/30 bg-warning-soft/50">

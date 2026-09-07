@@ -1,6 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { FileText, Search } from "lucide-react";
+import { FileText, Search, Upload } from "lucide-react";
+import { toast } from "sonner";
+import { ImportDialog } from "@/components/promat/import-dialog";
 import { AppShell, PageHeader } from "@/components/promat/shell";
 import { Pill, SectionCard } from "@/components/promat/ui";
 import { cn } from "@/lib/utils";
@@ -44,6 +46,9 @@ const docs = [
 ];
 
 function DocumentsPage() {
+  const [importOpen, setImportOpen] = useState(false);
+  const [docType, setDocType] = useState("Appel d'offres");
+  const [linkTo, setLinkTo] = useState("ONEE – AO 24/DRC/CI/2026");
   const [cat, setCat] = useState("Tous");
   const [q, setQ] = useState("");
   const list = docs.filter(
@@ -57,6 +62,57 @@ function DocumentsPage() {
         <PageHeader
           title="Documents"
           subtitle="Chaque document reste rattaché à un dossier, un fournisseur, un article ou une offre."
+          action={
+            <button
+              onClick={() => setImportOpen(true)}
+              className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
+            >
+              <Upload className="size-4" /> Importer des documents
+            </button>
+          }
+        />
+
+        <ImportDialog
+          open={importOpen}
+          onOpenChange={setImportOpen}
+          title="Importer des documents"
+          subtitle="PDF, Word, Excel ou images. Glissez vos fichiers puis choisissez leur type."
+          accept=".pdf,.doc,.docx,.xls,.xlsx,.png,.jpg,.jpeg"
+          acceptLabel="Formats acceptés : PDF, Word, Excel, images"
+          confirmLabel="Importer"
+          extra={
+            <div className="grid gap-4 sm:grid-cols-2">
+              <label className="block">
+                <span className="label-xs">Type de document</span>
+                <select
+                  value={docType}
+                  onChange={(e) => setDocType(e.target.value)}
+                  className="mt-1.5 h-10 w-full rounded-lg border border-border bg-background px-3 text-sm outline-none focus:border-ring"
+                >
+                  {["Appel d'offres", "Document technique", "Document administratif", "Devis fournisseur", "Bordereau", "Offre finale", "Autre"].map((t) => (
+                    <option key={t}>{t}</option>
+                  ))}
+                </select>
+              </label>
+              <label className="block">
+                <span className="label-xs">Rattacher à (optionnel)</span>
+                <select
+                  value={linkTo}
+                  onChange={(e) => setLinkTo(e.target.value)}
+                  className="mt-1.5 h-10 w-full rounded-lg border border-border bg-background px-3 text-sm outline-none focus:border-ring"
+                >
+                  {["ONEE – AO 24/DRC/CI/2026", "AO ONCF", "AO Marsa Maroc", "FlowTech Germany", "HydroTech France", "Article PRM-DEB-600", "Aucun rattachement"].map((t) => (
+                    <option key={t}>{t}</option>
+                  ))}
+                </select>
+              </label>
+            </div>
+          }
+          onConfirm={(files) =>
+            toast.success(
+              `${files.length} document${files.length > 1 ? "s" : ""} importé${files.length > 1 ? "s" : ""} · ${docType} · ${linkTo}`,
+            )
+          }
         />
 
         <div className="flex flex-wrap items-center gap-3">

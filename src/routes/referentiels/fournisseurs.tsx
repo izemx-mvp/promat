@@ -1,5 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
+import { Plus, Upload } from "lucide-react";
+import { toast } from "sonner";
+import { ImportDialog } from "@/components/promat/import-dialog";
 import { AppShell, PageHeader } from "@/components/promat/shell";
 import { Pill, SectionCard } from "@/components/promat/ui";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
@@ -77,6 +80,7 @@ const rows: Row[] = [
 
 function FournisseursPage() {
   const [open, setOpen] = useState<Row | null>(null);
+  const [importOpen, setImportOpen] = useState(false);
 
   return (
     <AppShell>
@@ -84,6 +88,19 @@ function FournisseursPage() {
         <PageHeader
           title="Fournisseurs"
           subtitle="Annuaire PROMAT. Cliquez un fournisseur pour son historique complet."
+          action={
+            <div className="flex items-center gap-2">
+              <button className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90">
+                <Plus className="size-4" /> Ajouter un fournisseur
+              </button>
+              <button
+                onClick={() => setImportOpen(true)}
+                className="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-4 py-2.5 text-sm font-medium transition-colors hover:bg-muted"
+              >
+                <Upload className="size-4" /> Importer
+              </button>
+            </div>
+          }
         />
         <SectionCard>
           <div className="overflow-x-auto">
@@ -124,6 +141,19 @@ function FournisseursPage() {
           </div>
         </SectionCard>
       </div>
+
+      <ImportDialog
+        open={importOpen}
+        onOpenChange={setImportOpen}
+        title="Importer des fournisseurs"
+        subtitle="Fichier Excel ou CSV. Les colonnes reconnues sont associées automatiquement."
+        accept=".xlsx,.xls,.csv"
+        acceptLabel="Formats acceptés : Excel (.xlsx, .xls) ou CSV"
+        columns={["Nom fournisseur", "Contact", "Email", "Téléphone", "Pays", "Marques", "Familles produits", "Devise", "Incoterm"]}
+        stats={{ detected: 125, valid: 120, toCheck: 5 }}
+        confirmLabel="Importer les fournisseurs"
+        onConfirm={() => toast.success("120 fournisseurs importés · 5 lignes à vérifier")}
+      />
 
       <Sheet open={Boolean(open)} onOpenChange={(v) => !v && setOpen(null)}>
         <SheetContent className="w-full overflow-y-auto sm:max-w-lg">
