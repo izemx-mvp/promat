@@ -552,16 +552,19 @@ function ConsultationPage() {
               message={
                 stats.validated > 0
                   ? `${stats.validated} offre(s) fournisseur validée(s) et prête(s) pour comparaison.`
-                  : "Validez au moins une réponse fournisseur pour passer au comparatif."
+                  : stats.answered > 0
+                    ? "Réponses reçues : vous pouvez comparer dès maintenant (la validation reste recommandée)."
+                    : "Importez au moins une réponse fournisseur pour comparer."
               }
             >
               <NextButton
                 to="/comparatifs/$id"
                 id={id}
                 label="Passer au comparatif fournisseurs"
-                disabled={stats.validated === 0}
+                disabled={stats.validated === 0 && stats.answered === 0}
               />
             </StickyBar>
+
           </>
         )}
       </TenderWorkflow>
