@@ -143,11 +143,31 @@ function OffrePage() {
                     <td className="py-3.5 pr-4 font-medium">{l.designation}</td>
                     {view === "client" ? (
                       <>
-                        <td className="py-3.5 pr-4 text-muted-foreground">{l.unit_ ?? l.unit}</td>
+                        <td className="py-3.5 pr-4 text-muted-foreground">{l.unit}</td>
+                        <td className="py-3.5 pr-4 tabular-nums">{l.qty}</td>
+                        <td className="py-3.5 pr-4 tabular-nums">{fmtMAD(l.pu)}</td>
+                        <td className="py-3.5 font-medium tabular-nums">{fmtMAD(l.total)}</td>
                       </>
-                    ) : null}
+                    ) : (
+                      <>
+                        <td className="py-3.5 pr-4 text-muted-foreground">{supplierName}</td>
+                        <td className="py-3.5 pr-4 tabular-nums">{fmtMAD(l.purchase)}</td>
+                        <td className="py-3.5 pr-4 tabular-nums">{fmtMAD(l.landed)}</td>
+                        <td className="py-3.5 pr-4 tabular-nums">{fmtNum(state.margin, 0)} %</td>
+                        <td className="py-3.5 font-medium tabular-nums">{fmtMAD(l.pu)}</td>
+                      </>
+                    )}
                   </tr>
                 ))}
+                <tr>
+                  <td colSpan={view === "client" ? 5 : 6} className="pt-4 text-right font-medium">
+                    Total HT
+                  </td>
+                  <td className="pt-4 font-display text-lg font-bold tabular-nums">
+                    {fmtMAD(totalHT)}
+                  </td>
+                </tr>
+
               </tbody>
             </table>
           </div>
