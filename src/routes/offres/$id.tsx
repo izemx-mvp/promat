@@ -162,7 +162,10 @@ function OffrePage() {
     });
 
   const applyBulk = () => {
-    if (selected.length === 0) return toast.error("Sélectionnez d'abord des lignes");
+    if (selected.length === 0) {
+      toast.error("Sélectionnez d'abord des lignes");
+      return;
+    }
     const next = { ...state.lineDiscounts };
     selected.forEach((a) => {
       next[a] = bulkDiscount;
@@ -172,7 +175,10 @@ function OffrePage() {
   };
 
   const applyFamily = () => {
-    if (!family) return toast.error("Choisissez une famille");
+    if (!family) {
+      toast.error("Choisissez une famille");
+      return;
+    }
     const next = { ...state.lineDiscounts };
     lines
       .filter((l) => l.family === family)
