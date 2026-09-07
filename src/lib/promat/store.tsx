@@ -106,8 +106,11 @@ const baseState = (t: Tender): TenderState => {
     ],
 
     activeVersion: "v1",
+    sends: [],
+    clientOutcome: "none",
   };
 };
+
 
 
 export type AuditEntry = { time: string; who: string; action: string; tender: string; module: string };
