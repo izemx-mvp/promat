@@ -68,7 +68,11 @@ export function PromatProvider({ children }: { children: ReactNode }) {
   const [handoffId, setHandoffId] = useState<string | null>(null);
 
   const update = useCallback((id: string, patch: Partial<TenderState>) => {
-    setStates((prev) => ({ ...prev, [id]: { ...prev[id], ...patch } }));
+    setStates((prev) => {
+      const current = prev[id];
+      if (!current) return prev;
+      return { ...prev, [id]: { ...current, ...patch } };
+    });
   }, []);
 
   const value = useMemo(

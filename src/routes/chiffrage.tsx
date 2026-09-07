@@ -257,12 +257,13 @@ function StepComparatif({
   onRetain,
 }: {
   tender: Tender;
-  retained?: string;
+  retained?: string | undefined;
   onRetain: (id: string) => void;
 }) {
   const [open, setOpen] = useState(false);
   const best = tender.suppliers[0];
-  const price = tender.offers.find((o) => o.supplierId === best.id)?.price ?? 0;
+  const price = best ? (tender.offers.find((o) => o.supplierId === best.id)?.price ?? 0) : 0;
+  if (!best) return null;
 
   return (
     <>
@@ -575,7 +576,7 @@ function StepMargin({
             min={5}
             max={40}
             step={0.5}
-            onValueChange={([v]) => onMargin(v)}
+            onValueChange={(v) => onMargin(v[0] ?? margin)}
           />
         </div>
         <div className="mt-8 grid gap-6 sm:grid-cols-4">
