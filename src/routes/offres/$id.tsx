@@ -51,7 +51,12 @@ function familyOf(designation: string) {
   return designation.split(" ")[0] ?? "Autres";
 }
 
-function buildLines(tender: Tender, state: TenderState, p: Params) {
+function buildLines(tender: Tender, state: TenderState, raw: Partial<Params>) {
+  const p: Params = {
+    globalDiscount: raw.globalDiscount ?? 0,
+    lineDiscounts: raw.lineDiscounts ?? {},
+    proposedQty: raw.proposedQty ?? {},
+  };
   const { achat, revient } = computeCosts(tender.purchaseBase, state.cost);
   const landedFactor = revient / achat;
   const factor = landedFactor * (1 + state.margin / 100);
