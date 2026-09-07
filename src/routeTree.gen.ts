@@ -22,6 +22,7 @@ import { Route as ConsultationsIndexRouteImport } from './routes/consultations/i
 import { Route as ConsultationsIdRouteImport } from './routes/consultations/$id'
 import { Route as OffresIndexRouteImport } from './routes/offres/index'
 import { Route as OffresIdRouteImport } from './routes/offres/$id'
+import { Route as ReferentielsFournisseursRouteImport } from './routes/referentiels/fournisseurs'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -88,6 +89,12 @@ const OffresIdRoute = OffresIdRouteImport.update({
   path: '/offres/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ReferentielsFournisseursRoute =
+  ReferentielsFournisseursRouteImport.update({
+    id: '/referentiels/fournisseurs',
+    path: '/referentiels/fournisseurs',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -97,6 +104,7 @@ export interface FileRoutesByFullPath {
   '/comparatifs/$id': typeof ComparatifsIdRoute
   '/consultations/$id': typeof ConsultationsIdRoute
   '/offres/$id': typeof OffresIdRoute
+  '/referentiels/fournisseurs': typeof ReferentielsFournisseursRoute
   '/analyses/': typeof AnalysesIndexRoute
   '/articles/': typeof ArticlesIndexRoute
   '/chiffrages/': typeof ChiffragesIndexRoute
@@ -112,6 +120,7 @@ export interface FileRoutesByTo {
   '/comparatifs/$id': typeof ComparatifsIdRoute
   '/consultations/$id': typeof ConsultationsIdRoute
   '/offres/$id': typeof OffresIdRoute
+  '/referentiels/fournisseurs': typeof ReferentielsFournisseursRoute
   '/analyses': typeof AnalysesIndexRoute
   '/articles': typeof ArticlesIndexRoute
   '/chiffrages': typeof ChiffragesIndexRoute
@@ -128,6 +137,7 @@ export interface FileRoutesById {
   '/comparatifs/$id': typeof ComparatifsIdRoute
   '/consultations/$id': typeof ConsultationsIdRoute
   '/offres/$id': typeof OffresIdRoute
+  '/referentiels/fournisseurs': typeof ReferentielsFournisseursRoute
   '/analyses/': typeof AnalysesIndexRoute
   '/articles/': typeof ArticlesIndexRoute
   '/chiffrages/': typeof ChiffragesIndexRoute
@@ -145,6 +155,7 @@ export interface FileRouteTypes {
     | '/comparatifs/$id'
     | '/consultations/$id'
     | '/offres/$id'
+    | '/referentiels/fournisseurs'
     | '/analyses/'
     | '/articles/'
     | '/chiffrages/'
@@ -160,6 +171,7 @@ export interface FileRouteTypes {
     | '/comparatifs/$id'
     | '/consultations/$id'
     | '/offres/$id'
+    | '/referentiels/fournisseurs'
     | '/analyses'
     | '/articles'
     | '/chiffrages'
@@ -175,6 +187,7 @@ export interface FileRouteTypes {
     | '/comparatifs/$id'
     | '/consultations/$id'
     | '/offres/$id'
+    | '/referentiels/fournisseurs'
     | '/analyses/'
     | '/articles/'
     | '/chiffrages/'
@@ -191,6 +204,7 @@ export interface RootRouteChildren {
   ComparatifsIdRoute: typeof ComparatifsIdRoute
   ConsultationsIdRoute: typeof ConsultationsIdRoute
   OffresIdRoute: typeof OffresIdRoute
+  ReferentielsFournisseursRoute: typeof ReferentielsFournisseursRoute
   AnalysesIndexRoute: typeof AnalysesIndexRoute
   ArticlesIndexRoute: typeof ArticlesIndexRoute
   ChiffragesIndexRoute: typeof ChiffragesIndexRoute
@@ -292,6 +306,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OffresIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/referentiels/fournisseurs': {
+      id: '/referentiels/fournisseurs'
+      path: '/referentiels/fournisseurs'
+      fullPath: '/referentiels/fournisseurs'
+      preLoaderRoute: typeof ReferentielsFournisseursRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -303,6 +324,7 @@ const rootRouteChildren: RootRouteChildren = {
   ComparatifsIdRoute: ComparatifsIdRoute,
   ConsultationsIdRoute: ConsultationsIdRoute,
   OffresIdRoute: OffresIdRoute,
+  ReferentielsFournisseursRoute: ReferentielsFournisseursRoute,
   AnalysesIndexRoute: AnalysesIndexRoute,
   ArticlesIndexRoute: ArticlesIndexRoute,
   ChiffragesIndexRoute: ChiffragesIndexRoute,
