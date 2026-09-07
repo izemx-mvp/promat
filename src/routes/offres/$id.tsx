@@ -142,10 +142,8 @@ function OffrePage() {
   const lines = t.lines;
   const supplierName =
     tender.suppliers.find((s) => s.id === state.retainedSupplier)?.name ?? "FlowTech Germany";
-  const families = useMemo(
-    () => Array.from(new Set(tender.articles.map((a) => familyOf(a.designation)))),
-    [tender],
-  );
+  const families = Array.from(new Set(tender.articles.map((a) => familyOf(a.designation))));
+
   const activeVersion =
     state.versions.find((v) => v.id === state.activeVersion) ?? state.versions[0];
   const partialOffer = t.partialLines > 0;
