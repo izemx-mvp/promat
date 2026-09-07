@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ChiffrageRouteImport } from './routes/chiffrage'
+import { Route as AnalysesIndexRouteImport } from './routes/analyses/index'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -22,31 +23,40 @@ const ChiffrageRoute = ChiffrageRouteImport.update({
   path: '/chiffrage',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AnalysesIndexRoute = AnalysesIndexRouteImport.update({
+  id: '/analyses/',
+  path: '/analyses/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/chiffrage': typeof ChiffrageRoute
+  '/analyses/': typeof AnalysesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/chiffrage': typeof ChiffrageRoute
+  '/analyses': typeof AnalysesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/chiffrage': typeof ChiffrageRoute
+  '/analyses/': typeof AnalysesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/chiffrage'
+  fullPaths: '/' | '/chiffrage' | '/analyses/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/chiffrage'
-  id: '__root__' | '/' | '/chiffrage'
+  to: '/' | '/chiffrage' | '/analyses'
+  id: '__root__' | '/' | '/chiffrage' | '/analyses/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ChiffrageRoute: typeof ChiffrageRoute
+  AnalysesIndexRoute: typeof AnalysesIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -65,12 +75,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ChiffrageRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/analyses/': {
+      id: '/analyses/'
+      path: '/analyses'
+      fullPath: '/analyses/'
+      preLoaderRoute: typeof AnalysesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ChiffrageRoute: ChiffrageRoute,
+  AnalysesIndexRoute: AnalysesIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
