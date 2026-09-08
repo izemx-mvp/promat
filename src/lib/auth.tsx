@@ -17,7 +17,7 @@ export const demoUsers: DemoUser[] = [
   { name: "Karim Tazi", email: "karim@promat.ma", role: "Lecture seule", team: "Support", initials: "KT" },
 ];
 
-const DEFAULT: DemoUser = demoUsers[1];
+const DEFAULT: DemoUser = demoUsers[1]!;
 const KEY = "promat.session";
 
 type Ctx = {
