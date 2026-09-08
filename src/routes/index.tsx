@@ -367,19 +367,12 @@ function RecherchesPage() {
           })}
         </div>
 
-        {activeSearch ? (
+        {activeSearch && (
           <SectionCard
             title="Nouvelles opportunités détectées"
-            subtitle="Consultez les informations essentielles avant de décider si l'appel d'offres doit être analysé."
-            action={
-              <div className="text-right">
-                <p className="text-sm font-semibold">{activeSearch.name}</p>
-                <p className="text-xs text-muted-foreground">
-                  {remaining[activeSearch.id]} nouvelles opportunités
-                </p>
-              </div>
-            }
+            subtitle="Sélectionnez « Voir » pour préqualifier une opportunité."
           >
+
             <div className="mb-5 flex flex-wrap items-center gap-2">
               {filters.map((f) => (
                 <button
