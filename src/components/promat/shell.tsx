@@ -61,6 +61,9 @@ const groups: { title: string; subtitle?: string; items: Item[] }[] = [
 export function AppShell({ children }: { children: ReactNode }) {
   const { pathname } = useLocation();
   const { states } = usePromat();
+  const { notifications, markRead, markAllRead } = useReferentiel();
+  const unread = notifications.filter((n) => !n.read).length;
+
   const { theme, toggle } = useTheme();
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
