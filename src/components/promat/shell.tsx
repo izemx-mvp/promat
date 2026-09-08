@@ -4,6 +4,8 @@ import type { ReactNode } from "react";
 import { useEffect, useMemo, useState } from "react";
 import { workflowDone, workflowSteps, type WorkflowStepKey } from "@/lib/promat/progress";
 import { usePromat } from "@/lib/promat/store";
+import { useReferentiel } from "@/lib/promat/referentiel";
+
 import { useTheme } from "@/lib/theme";
 import { useAuth } from "@/lib/auth";
 import { cn } from "@/lib/utils";
@@ -59,6 +61,9 @@ const groups: { title: string; subtitle?: string; items: Item[] }[] = [
 export function AppShell({ children }: { children: ReactNode }) {
   const { pathname } = useLocation();
   const { states } = usePromat();
+  const { notifications, markRead, markAllRead } = useReferentiel();
+  const unread = notifications.filter((n) => !n.read).length;
+
   const { theme, toggle } = useTheme();
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
@@ -90,15 +95,29 @@ export function AppShell({ children }: { children: ReactNode }) {
         {/* Vertical accent gradient on right edge */}
         <span aria-hidden className="pointer-events-none absolute inset-y-0 right-0 w-px bg-gradient-to-b from-transparent via-primary/40 to-transparent" />
 
-        <Link to="/" className="flex items-center gap-3 px-2 py-1">
-          <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-white p-1.5 shadow-inner ring-1 ring-white/10">
-            <img src="/promat-logo.png" alt="PROMAT" className="h-full w-full object-contain" />
-          </span>
-          <span className="leading-tight">
-            <span className="block font-display text-[15px] font-bold tracking-tight">PROMAT</span>
-            <span className="block text-[10.5px] uppercase tracking-[0.16em] text-navy-muted">Maroc · Tender OS</span>
-          </span>
-        </Link>
+        <div className="px-3 pb-7 pt-6">
+          <Link
+            to="/"
+            aria-label="PROMAT Maroc"
+            className="inline-block origin-left transition-transform duration-200 hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/30 rounded-xl"
+          >
+            <span className="block rounded-xl bg-white px-3 py-2.5 shadow-[inset_0_1px_2px_rgba(15,23,42,0.12)]">
+              <img
+                src="/promat-logo.png"
+                alt="PROMAT Maroc"
+                width={910}
+                height={533}
+                className="block w-[112px] object-contain"
+                style={{ height: "auto", aspectRatio: "910 / 533" }}
+              />
+            </span>
+            <span className="mt-2.5 block text-[10px] uppercase tracking-[0.16em] text-navy-muted">
+              Maroc · Tender OS
+            </span>
+          </Link>
+        </div>
+        <span aria-hidden className="mx-3 block h-px bg-white/10" />
+
 
         <nav className="mt-7 space-y-5">
           {groups.map((g, groupIndex) => (
@@ -247,13 +266,65 @@ export function AppShell({ children }: { children: ReactNode }) {
               <Sun className={cn("absolute size-4 transition-all", theme === "dark" ? "scale-0 rotate-90 opacity-0" : "scale-100 rotate-0 opacity-100")} />
               <Moon className={cn("absolute size-4 transition-all", theme === "dark" ? "scale-100 rotate-0 opacity-100" : "scale-0 -rotate-90 opacity-0")} />
             </button>
-            <button className="group relative flex size-10 items-center justify-center rounded-xl border border-border bg-background/60 text-muted-foreground transition-all hover:text-foreground hover:border-primary/40">
-              <Bell className="size-4 transition-transform group-hover:rotate-12" />
-              <span className="absolute right-2.5 top-2.5 flex size-2">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-60" />
-                <span className="relative inline-flex size-2 rounded-full bg-primary" />
-              </span>
-            </button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button
+                  aria-label={`Notifications${unread ? ` (${unread} non lues)` : ""}`}
+                  className="group relative flex size-10 items-center justify-center rounded-xl border border-border bg-background/60 text-muted-foreground transition-all hover:text-foreground hover:border-primary/40 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/20"
+                >
+                  <Bell className="size-4 transition-transform group-hover:rotate-12" />
+                  {unread > 0 && (
+                    <span className="absolute right-2.5 top-2.5 flex size-2">
+                      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-60" />
+                      <span className="relative inline-flex size-2 rounded-full bg-primary" />
+                    </span>
+                  )}
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-80 p-0">
+                <div className="flex items-center justify-between px-3 py-2.5">
+                  <span className="label-xs">Notifications</span>
+                  <button
+                    onClick={markAllRead}
+                    className="text-[11px] font-medium text-muted-foreground transition-colors hover:text-primary"
+                  >
+                    Tout marquer comme lu
+                  </button>
+                </div>
+                <DropdownMenuSeparator className="my-0" />
+                {notifications.length === 0 ? (
+                  <p className="px-3 py-8 text-center text-sm text-muted-foreground">Aucun résultat.</p>
+                ) : (
+                  <div className="max-h-80 overflow-y-auto py-1">
+                    {notifications.map((n) => (
+                      <button
+                        key={n.id}
+                        onClick={() => {
+                          markRead(n.id);
+                          navigate({ to: n.to });
+                        }}
+                        className="flex w-full items-start gap-2.5 px-3 py-2.5 text-left transition-colors hover:bg-muted focus-visible:outline-none focus-visible:bg-muted"
+                      >
+                        <span
+                          className={cn(
+                            "mt-1.5 size-1.5 shrink-0 rounded-full",
+                            n.read ? "bg-border" : "bg-primary",
+                          )}
+                        />
+                        <span className="min-w-0 flex-1">
+                          <span className={cn("block truncate text-[13px]", n.read ? "font-medium text-muted-foreground" : "font-semibold")}>
+                            {n.title}
+                          </span>
+                          <span className="mt-0.5 block truncate text-[11.5px] text-muted-foreground">{n.detail}</span>
+                          <span className="mt-1 block mono text-[10px] text-muted-foreground/70">{n.time}</span>
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </DropdownMenuContent>
+            </DropdownMenu>
+
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <button className="flex items-center gap-2.5 rounded-xl border border-border bg-background/60 px-2.5 py-1.5 transition-all hover:border-primary/40">

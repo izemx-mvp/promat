@@ -52,15 +52,18 @@ function LoginPage() {
 
       {/* Left visual */}
       <div className="relative hidden overflow-hidden lg:flex lg:w-3/5 lg:flex-col lg:justify-between lg:p-12">
-        <div className="relative z-10 flex items-center gap-3">
-          <span className="flex size-11 items-center justify-center rounded-2xl bg-white p-2 ring-1 ring-white/40">
-            <img src="/promat-logo.png" alt="PROMAT" className="h-full w-full object-contain" />
-          </span>
-          <div className="leading-tight">
-            <p className="font-display text-xl font-bold tracking-tight">PROMAT Maroc</p>
-            <p className="mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">Tender OS</p>
-          </div>
+        <div className="relative z-10">
+          <img
+            src="/promat-logo.png"
+            alt="PROMAT Maroc"
+            width={910}
+            height={533}
+            className="block w-[160px] object-contain"
+            style={{ height: "auto", aspectRatio: "910 / 533" }}
+          />
+          <p className="mt-2.5 text-[10px] uppercase tracking-[0.16em] text-muted-foreground">Maroc · Tender OS</p>
         </div>
+
 
         <div className="relative z-10 max-w-xl">
           <p className="eyebrow mb-4">Deux agents · Un flux de travail</p>
@@ -107,8 +110,16 @@ function LoginPage() {
       <div className="relative z-10 flex w-full items-center justify-center p-6 lg:w-2/5 lg:p-12">
         <div className="glass-strong w-full max-w-md animate-in fade-in-0 zoom-in-95 duration-500 p-8 sm:p-10">
           <div className="mb-8 flex flex-col items-center text-center lg:hidden">
-            <img src="/promat-logo.png" alt="PROMAT" className="h-10 object-contain" />
+            <img
+              src="/promat-logo.png"
+              alt="PROMAT Maroc"
+              width={910}
+              height={533}
+              className="block w-[155px] object-contain"
+              style={{ height: "auto", aspectRatio: "910 / 533" }}
+            />
           </div>
+
 
           <p className="eyebrow mb-3">Bienvenue</p>
           <h2 className="font-display text-3xl font-bold tracking-tight">Connectez-vous</h2>

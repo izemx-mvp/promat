@@ -1,11 +1,33 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { Check, Plus, X } from "lucide-react";
+import { Check, KeyRound, MoreHorizontal, Pencil, Plus, Power, X } from "lucide-react";
 import { AppShell, PageHeader } from "@/components/promat/shell";
 import { Pill, SectionCard } from "@/components/promat/ui";
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import {
+  ConfirmDialog,
+  GhostButton,
+  Modal,
+  PrimaryButton,
+  SecondaryButton,
+  SelectField,
+  TextField,
+} from "@/components/promat/form-kit";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+import {
+  defaultMatrix,
+  permissionList,
+  roles,
+  useReferentiel,
+  type Utilisateur,
+} from "@/lib/promat/referentiel";
 
 export const Route = createFileRoute("/admin/utilisateurs")({
   head: () => ({
@@ -26,54 +48,72 @@ export const Route = createFileRoute("/admin/utilisateurs")({
   component: UsersPage,
 });
 
-const roles = [
-  "Administrateur",
-  "Responsable Commercial",
-  "Commercial",
-  "Acheteur / Sourcing",
-  "Chiffreur",
-  "Direction",
-  "Lecture seule",
-];
-
-const users = [
-  { name: "Yassine El Mansouri", email: "yassine@promat.ma", role: "Responsable Commercial", team: "Commercial", active: true, last: "Aujourd'hui 09:12" },
-  { name: "Houda Bennani", email: "houda@promat.ma", role: "Commercial", team: "Commercial", active: true, last: "Aujourd'hui 10:04" },
-  { name: "Salma Cherkaoui", email: "salma@promat.ma", role: "Acheteur / Sourcing", team: "Sourcing", active: true, last: "Hier 17:40" },
-  { name: "Omar Idrissi", email: "omar@promat.ma", role: "Chiffreur", team: "Chiffrage", active: true, last: "Hier 16:02" },
-  { name: "Nadia Alaoui", email: "nadia@promat.ma", role: "Direction", team: "Direction", active: true, last: "05/09/2026" },
-  { name: "Karim Tazi", email: "karim@promat.ma", role: "Lecture seule", team: "Support", active: false, last: "12/08/2026" },
-];
-
-const permissions = [
-  "Voir les AO",
-  "Créer un AO",
-  "Valider GO / NO GO",
-  "Modifier les articles",
-  "Lancer une consultation",
-  "Voir les prix fournisseurs",
-  "Sélectionner un fournisseur",
-  "Modifier le chiffrage",
-  "Modifier la marge",
-  "Valider l'offre finale",
-  "Exporter les offres",
-  "Configurer les agents",
-  "Gérer les utilisateurs",
-];
-
-const matrix: Record<string, string[]> = {
-  Administrateur: permissions,
-  "Responsable Commercial": permissions.filter((p) => !["Configurer les agents", "Gérer les utilisateurs"].includes(p)),
-  Commercial: ["Voir les AO", "Créer un AO", "Modifier les articles", "Lancer une consultation", "Voir les prix fournisseurs"],
-  "Acheteur / Sourcing": ["Voir les AO", "Modifier les articles", "Lancer une consultation", "Voir les prix fournisseurs", "Sélectionner un fournisseur"],
-  Chiffreur: ["Voir les AO", "Voir les prix fournisseurs", "Modifier le chiffrage", "Modifier la marge", "Exporter les offres"],
-  Direction: ["Voir les AO", "Valider GO / NO GO", "Voir les prix fournisseurs", "Modifier la marge", "Valider l'offre finale", "Exporter les offres"],
-  "Lecture seule": ["Voir les AO"],
-};
+const empty = { name: "", email: "", role: "Commercial", team: "", statut: "Actif" };
 
 function UsersPage() {
-  const [open, setOpen] = useState(false);
+  const { utilisateurs, addUtilisateur, updateUtilisateur, matrix, setMatrix } = useReferentiel();
   const [role, setRole] = useState("Commercial");
+  const [form, setForm] = useState<typeof empty | null>(null);
+  const [editing, setEditing] = useState<Utilisateur | null>(null);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [busy, setBusy] = useState(false);
+  const [toToggle, setToToggle] = useState<Utilisateur | null>(null);
+  const [toReset, setToReset] = useState<Utilisateur | null>(null);
+  const [draftMatrix, setDraftMatrix] = useState<Record<string, string[]> | null>(null);
+
+  const activeMatrix = draftMatrix ?? matrix;
+
+  function openCreate() {
+    setEditing(null);
+    setErrors({});
+    setForm({ ...empty });
+  }
+
+  function openEdit(u: Utilisateur) {
+    setEditing(u);
+    setErrors({});
+    setForm({ name: u.name, email: u.email, role: u.role, team: u.team, statut: u.active ? "Actif" : "Inactif" });
+  }
+
+  const dirty = Boolean(form && (form.name.trim() || editing));
+
+  function save() {
+    if (!form) return;
+    const next: Record<string, string> = {};
+    if (!form.name.trim()) next["name"] = "Ce champ est obligatoire.";
+    if (!form.email.trim()) next["email"] = "Ce champ est obligatoire.";
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(form.email.trim())) next["email"] = "Adresse e-mail invalide.";
+    else if (utilisateurs.some((u) => u.id !== editing?.id && u.email.toLowerCase() === form.email.trim().toLowerCase()))
+      next["email"] = "Cet e-mail est déjà utilisé.";
+    setErrors(next);
+    if (Object.keys(next).length) return;
+
+    setBusy(true);
+    setTimeout(() => {
+      const payload = {
+        name: form.name.trim(),
+        email: form.email.trim().toLowerCase(),
+        role: form.role,
+        team: form.team.trim() || "—",
+        active: form.statut === "Actif",
+      };
+      if (editing) {
+        updateUtilisateur(editing.id, payload);
+        toast.success("Modifications enregistrées.");
+      } else {
+        addUtilisateur({ ...payload, last: "Jamais" });
+        toast.success("Utilisateur ajouté.");
+      }
+      setBusy(false);
+      setForm(null);
+    }, 420);
+  }
+
+  function togglePermission(perm: string) {
+    const current = activeMatrix[role] ?? [];
+    const next = current.includes(perm) ? current.filter((p) => p !== perm) : [...current, perm];
+    setDraftMatrix({ ...activeMatrix, [role]: next });
+  }
 
   return (
     <AppShell>
@@ -82,12 +122,9 @@ function UsersPage() {
           title="Gestion utilisateurs"
           subtitle="Comptes, équipes, rôles et droits d'accès."
           action={
-            <button
-              onClick={() => setOpen(true)}
-              className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground"
-            >
+            <PrimaryButton onClick={openCreate}>
               <Plus className="size-4" /> Ajouter un utilisateur
-            </button>
+            </PrimaryButton>
           }
         />
 
@@ -96,23 +133,24 @@ function UsersPage() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-border text-left">
-                  {["Utilisateur", "Email", "Rôle", "Équipe", "Statut", "Dernière connexion", ""].map(
-                    (h) => (
-                      <th
-                        key={h}
-                        className="pb-3 pr-4 text-xs font-medium uppercase tracking-wide text-muted-foreground"
-                      >
-                        {h}
-                      </th>
-                    ),
-                  )}
+                  {["Utilisateur", "Email", "Rôle", "Équipe", "Statut", "Dernière connexion", ""].map((h) => (
+                    <th key={h} className="pb-3 pr-4 text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                      {h}
+                    </th>
+                  ))}
                 </tr>
               </thead>
               <tbody>
-                {users.map((u) => (
-                  <tr key={u.email} className="border-b border-border/60 last:border-0">
+                {utilisateurs.map((u) => (
+                  <tr
+                    key={u.id}
+                    className={cn(
+                      "border-b border-border/60 transition-colors last:border-0 hover:bg-muted/60",
+                      !u.active && "opacity-60",
+                    )}
+                  >
                     <td className="py-3.5 pr-4 font-medium">{u.name}</td>
-                    <td className="py-3.5 pr-4 text-muted-foreground">{u.email}</td>
+                    <td className="py-3.5 pr-4 mono text-[12.5px] text-muted-foreground">{u.email}</td>
                     <td className="py-3.5 pr-4">{u.role}</td>
                     <td className="py-3.5 pr-4 text-muted-foreground">{u.team}</td>
                     <td className="py-3.5 pr-4">
@@ -120,17 +158,31 @@ function UsersPage() {
                     </td>
                     <td className="py-3.5 pr-4 text-muted-foreground">{u.last}</td>
                     <td className="py-3.5 text-right">
-                      <div className="flex justify-end gap-3 text-[13px] text-muted-foreground">
-                        <button onClick={() => toast.info("Modification (démo)")} className="hover:underline">
-                          Modifier
-                        </button>
-                        <button onClick={() => toast.info("Compte désactivé")} className="hover:underline">
-                          Désactiver
-                        </button>
-                        <button onClick={() => toast.success("Email de réinitialisation envoyé")} className="hover:underline">
-                          Réinitialiser
-                        </button>
-                      </div>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <button
+                            aria-label={`Actions pour ${u.name}`}
+                            className="inline-flex size-8 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/20"
+                          >
+                            <MoreHorizontal className="size-4" />
+                          </button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end" className="w-52">
+                          <DropdownMenuItem onClick={() => openEdit(u)}>
+                            <Pencil className="mr-2 size-3.5" /> Modifier
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => setToReset(u)}>
+                            <KeyRound className="mr-2 size-3.5" /> Réinitialiser
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem
+                            onClick={() => setToToggle(u)}
+                            className={u.active ? "text-destructive focus:text-destructive" : undefined}
+                          >
+                            <Power className="mr-2 size-3.5" /> {u.active ? "Désactiver" : "Activer"}
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                     </td>
                   </tr>
                 ))}
@@ -139,17 +191,39 @@ function UsersPage() {
           </div>
         </SectionCard>
 
-        <SectionCard title="Permissions par rôle">
+        <SectionCard
+          title="Permissions par rôle"
+          subtitle="Cliquez un droit pour l'accorder ou le retirer."
+          action={
+            <div className="flex items-center gap-2">
+              <SecondaryButton
+                onClick={() => {
+                  setDraftMatrix(Object.fromEntries(Object.entries(defaultMatrix).map(([k, v]) => [k, [...v]])));
+                }}
+              >
+                Valeurs par défaut
+              </SecondaryButton>
+              <PrimaryButton
+                disabled={!draftMatrix}
+                onClick={() => {
+                  if (draftMatrix) setMatrix(draftMatrix);
+                  setDraftMatrix(null);
+                  toast.success("Permissions mises à jour.");
+                }}
+              >
+                Enregistrer les permissions
+              </PrimaryButton>
+            </div>
+          }
+        >
           <div className="flex flex-wrap gap-1.5">
             {roles.map((r) => (
               <button
                 key={r}
                 onClick={() => setRole(r)}
                 className={cn(
-                  "rounded-full px-3 py-1.5 text-[13px] font-medium transition-colors",
-                  role === r
-                    ? "bg-navy text-navy-foreground"
-                    : "bg-muted text-muted-foreground hover:bg-accent",
+                  "rounded-full px-3 py-1.5 text-[13px] font-medium transition-all focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/20",
+                  role === r ? "bg-navy text-navy-foreground" : "bg-muted text-muted-foreground hover:bg-accent",
                 )}
               >
                 {r}
@@ -157,18 +231,21 @@ function UsersPage() {
             ))}
           </div>
           <ul className="mt-5 grid gap-2 sm:grid-cols-2">
-            {permissions.map((p) => {
-              const ok = matrix[role]?.includes(p);
+            {permissionList.map((p) => {
+              const ok = (activeMatrix[role] ?? []).includes(p);
               return (
-                <li
-                  key={p}
-                  className={cn(
-                    "flex items-center gap-2 text-sm",
-                    ok ? "text-success" : "text-muted-foreground/70",
-                  )}
-                >
-                  {ok ? <Check className="size-4" strokeWidth={3} /> : <X className="size-4" />}
-                  {p}
+                <li key={p}>
+                  <button
+                    onClick={() => togglePermission(p)}
+                    aria-pressed={ok}
+                    className={cn(
+                      "flex w-full items-center gap-2 rounded-lg px-2 py-1.5 text-left text-sm transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/20",
+                      ok ? "text-success" : "text-muted-foreground/70",
+                    )}
+                  >
+                    {ok ? <Check className="size-4 shrink-0" strokeWidth={3} /> : <X className="size-4 shrink-0" />}
+                    {p}
+                  </button>
                 </li>
               );
             })}
@@ -176,46 +253,64 @@ function UsersPage() {
         </SectionCard>
       </div>
 
-      <Sheet open={open} onOpenChange={setOpen}>
-        <SheetContent className="w-full overflow-y-auto sm:max-w-md">
-          <SheetHeader>
-            <SheetTitle>Ajouter un utilisateur</SheetTitle>
-          </SheetHeader>
-          <form
-            className="mt-6 space-y-4"
-            onSubmit={(e) => {
-              e.preventDefault();
-              setOpen(false);
-              toast.success("Utilisateur créé");
-            }}
-          >
-            {["Nom", "Prénom", "Email", "Téléphone", "Équipe"].map((l) => (
-              <label key={l} className="block">
-                <span className="label-xs">{l}</span>
-                <input className="mt-1.5 h-10 w-full rounded-lg border border-border bg-background px-3 text-sm outline-none focus:border-ring" />
-              </label>
-            ))}
-            <label className="block">
-              <span className="label-xs">Rôle</span>
-              <select className="mt-1.5 h-10 w-full rounded-lg border border-border bg-background px-3 text-sm outline-none focus:border-ring">
-                {roles.map((r) => (
-                  <option key={r}>{r}</option>
-                ))}
-              </select>
-            </label>
-            <label className="block">
-              <span className="label-xs">Statut</span>
-              <select className="mt-1.5 h-10 w-full rounded-lg border border-border bg-background px-3 text-sm outline-none focus:border-ring">
-                <option>Actif</option>
-                <option>Inactif</option>
-              </select>
-            </label>
-            <button className="w-full rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground">
-              Créer l'utilisateur
-            </button>
-          </form>
-        </SheetContent>
-      </Sheet>
+      <Modal
+        open={Boolean(form)}
+        onClose={() => setForm(null)}
+        title={editing ? "Modifier l'utilisateur" : "Ajouter un utilisateur"}
+        subtitle="Le rôle détermine les droits appliqués dans toute l'application."
+        footer={
+          <>
+            <GhostButton onClick={() => setForm(null)} className="mr-auto">
+              Annuler
+            </GhostButton>
+            <PrimaryButton onClick={save} loading={busy} disabled={!dirty}>
+              {editing ? "Enregistrer" : "Créer l'utilisateur"}
+            </PrimaryButton>
+          </>
+        }
+      >
+        {form && (
+          <div className="grid gap-4 pb-4 sm:grid-cols-2">
+            <div className="sm:col-span-2">
+              <TextField label="Nom complet" required value={form.name} error={errors["name"]} onChange={(v) => setForm({ ...form, name: v })} />
+            </div>
+            <div className="sm:col-span-2">
+              <TextField label="Email" required type="email" mono value={form.email} error={errors["email"]} onChange={(v) => setForm({ ...form, email: v })} />
+            </div>
+            <SelectField label="Rôle" required value={form.role} options={roles} onChange={(v) => setForm({ ...form, role: v })} />
+            <TextField label="Équipe" value={form.team} onChange={(v) => setForm({ ...form, team: v })} />
+            <SelectField label="Statut" value={form.statut} options={["Actif", "Inactif"]} onChange={(v) => setForm({ ...form, statut: v })} />
+          </div>
+        )}
+      </Modal>
+
+      <ConfirmDialog
+        open={Boolean(toToggle)}
+        onClose={() => setToToggle(null)}
+        onConfirm={() => {
+          if (!toToggle) return;
+          updateUtilisateur(toToggle.id, { active: !toToggle.active });
+          toast.success(toToggle.active ? "Utilisateur désactivé." : "Utilisateur activé.");
+        }}
+        title={`${toToggle?.active ? "Désactiver" : "Activer"} « ${toToggle?.name ?? ""} » ?`}
+        message={
+          toToggle?.active
+            ? "Le compte ne pourra plus se connecter à Tender OS."
+            : "Le compte pourra de nouveau se connecter à Tender OS."
+        }
+        verb={toToggle?.active ? "Désactiver" : "Activer"}
+      />
+
+      <ConfirmDialog
+        open={Boolean(toReset)}
+        onClose={() => setToReset(null)}
+        onConfirm={() =>
+          toast.success(`Mot de passe réinitialisé. Un e-mail a été envoyé à ${toReset?.email ?? ""}.`)
+        }
+        title="Réinitialiser le mot de passe ?"
+        message={`Un e-mail de réinitialisation sera envoyé à ${toReset?.email ?? ""}.`}
+        verb="Réinitialiser"
+      />
     </AppShell>
   );
 }
