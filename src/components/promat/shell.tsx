@@ -63,6 +63,8 @@ export function AppShell({ children }: { children: ReactNode }) {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
   const [scrolled, setScrolled] = useState(false);
+  const [paletteOpen, setPaletteOpen] = useState(false);
+  useCommandPaletteHotkeys(setPaletteOpen);
 
   useEffect(() => {
     const on = () => setScrolled(window.scrollY > 8);
