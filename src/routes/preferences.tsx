@@ -24,6 +24,8 @@ function PrefsPage() {
   const { theme, setTheme } = useTheme();
   const { resetDemo } = useReferentiel();
   const [confirmReset, setConfirmReset] = useState(false);
+  const [notifs, setNotifs] = useState<Record<string, boolean>>({});
+
 
 
   return (
