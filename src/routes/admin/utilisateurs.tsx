@@ -80,11 +80,11 @@ function UsersPage() {
   function save() {
     if (!form) return;
     const next: Record<string, string> = {};
-    if (!form.name.trim()) next.name = "Ce champ est obligatoire.";
-    if (!form.email.trim()) next.email = "Ce champ est obligatoire.";
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(form.email.trim())) next.email = "Adresse e-mail invalide.";
+    if (!form.name.trim()) next["name"] = "Ce champ est obligatoire.";
+    if (!form.email.trim()) next["email"] = "Ce champ est obligatoire.";
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(form.email.trim())) next["email"] = "Adresse e-mail invalide.";
     else if (utilisateurs.some((u) => u.id !== editing?.id && u.email.toLowerCase() === form.email.trim().toLowerCase()))
-      next.email = "Cet e-mail est déjà utilisé.";
+      next["email"] = "Cet e-mail est déjà utilisé.";
     setErrors(next);
     if (Object.keys(next).length) return;
 
@@ -272,10 +272,10 @@ function UsersPage() {
         {form && (
           <div className="grid gap-4 pb-4 sm:grid-cols-2">
             <div className="sm:col-span-2">
-              <TextField label="Nom complet" required value={form.name} error={errors.name} onChange={(v) => setForm({ ...form, name: v })} />
+              <TextField label="Nom complet" required value={form.name} error={errors["name"]} onChange={(v) => setForm({ ...form, name: v })} />
             </div>
             <div className="sm:col-span-2">
-              <TextField label="Email" required type="email" mono value={form.email} error={errors.email} onChange={(v) => setForm({ ...form, email: v })} />
+              <TextField label="Email" required type="email" mono value={form.email} error={errors["email"]} onChange={(v) => setForm({ ...form, email: v })} />
             </div>
             <SelectField label="Rôle" required value={form.role} options={roles} onChange={(v) => setForm({ ...form, role: v })} />
             <TextField label="Équipe" value={form.team} onChange={(v) => setForm({ ...form, team: v })} />

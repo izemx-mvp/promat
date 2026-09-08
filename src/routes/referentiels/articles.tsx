@@ -123,15 +123,15 @@ function ArticlesRefPage() {
   function save() {
     if (!form) return;
     const next: Record<string, string> = {};
-    if (!form.ref.trim()) next.ref = "Ce champ est obligatoire.";
-    if (!form.designation.trim()) next.designation = "Ce champ est obligatoire.";
+    if (!form.ref.trim()) next["ref"] = "Ce champ est obligatoire.";
+    if (!form.designation.trim()) next["designation"] = "Ce champ est obligatoire.";
     const price = Number(form.price.replace(/[^\d.,-]/g, "").replace(",", "."));
-    if (!form.price.trim() || Number.isNaN(price)) next.price = "Valeur numérique attendue.";
+    if (!form.price.trim() || Number.isNaN(price)) next["price"] = "Valeur numérique attendue.";
     if (
       form.ref.trim() &&
       articles.some((a) => a.id !== editing?.id && a.ref.trim().toLowerCase() === form.ref.trim().toLowerCase())
     ) {
-      next.ref = "Cette référence existe déjà.";
+      next["ref"] = "Cette référence existe déjà.";
     }
     setErrors(next);
     if (Object.keys(next).length) return;
@@ -336,17 +336,17 @@ function ArticlesRefPage() {
       >
         {form && (
           <div className="grid gap-4 pb-4 sm:grid-cols-2">
-            <TextField label="Réf. PROMAT" required mono value={form.ref} error={errors.ref} onChange={(v) => setForm({ ...form, ref: v })} />
+            <TextField label="Réf. PROMAT" required mono value={form.ref} error={errors["ref"]} onChange={(v) => setForm({ ...form, ref: v })} />
             <TextField label="Réf. fabricant" mono value={form.mfr} onChange={(v) => setForm({ ...form, mfr: v })} />
             <div className="sm:col-span-2">
-              <TextField label="Désignation" required value={form.designation} error={errors.designation} onChange={(v) => setForm({ ...form, designation: v })} />
+              <TextField label="Désignation" required value={form.designation} error={errors["designation"]} onChange={(v) => setForm({ ...form, designation: v })} />
             </div>
             <TextField label="Marque" value={form.brand} onChange={(v) => setForm({ ...form, brand: v })} />
             <TextField label="Famille" value={form.family} onChange={(v) => setForm({ ...form, family: v })} />
             <div className="sm:col-span-2">
               <TextField label="Fournisseurs" value={form.suppliers} onChange={(v) => setForm({ ...form, suppliers: v })} />
             </div>
-            <TextField label="Dernier prix" required mono suffix={form.currency} value={form.price} error={errors.price} onChange={(v) => setForm({ ...form, price: v })} />
+            <TextField label="Dernier prix" required mono suffix={form.currency} value={form.price} error={errors["price"]} onChange={(v) => setForm({ ...form, price: v })} />
             <TextField label="Devise" mono value={form.currency} onChange={(v) => setForm({ ...form, currency: v.toUpperCase().slice(0, 3) })} />
           </div>
         )}

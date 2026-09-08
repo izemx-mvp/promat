@@ -24,11 +24,11 @@ export function Modal({
   open: boolean;
   onClose: () => void;
   title: string;
-  subtitle?: string;
+  subtitle?: string | undefined;
   children: ReactNode;
-  footer?: ReactNode;
-  danger?: boolean;
-  width?: string;
+  footer?: ReactNode | undefined;
+  danger?: boolean | undefined;
+  width?: string | undefined;
 }) {
   useEffect(() => {
     if (!open) return;
@@ -98,9 +98,9 @@ export function GhostButton({
   className,
 }: {
   children: ReactNode;
-  onClick?: () => void;
-  type?: "button" | "submit";
-  className?: string;
+  onClick?: () => void | undefined;
+  type?: "button" | "submit" | undefined;
+  className?: string | undefined;
 }) {
   return (
     <button
@@ -126,12 +126,12 @@ export function PrimaryButton({
   className,
 }: {
   children: ReactNode;
-  onClick?: () => void;
-  type?: "button" | "submit";
-  disabled?: boolean;
-  loading?: boolean;
-  done?: boolean;
-  className?: string;
+  onClick?: () => void | undefined;
+  type?: "button" | "submit" | undefined;
+  disabled?: boolean | undefined;
+  loading?: boolean | undefined;
+  done?: boolean | undefined;
+  className?: string | undefined;
 }) {
   return (
     <button
@@ -157,10 +157,10 @@ export function SecondaryButton({
   title,
 }: {
   children: ReactNode;
-  onClick?: () => void;
-  disabled?: boolean;
-  className?: string;
-  title?: string;
+  onClick?: () => void | undefined;
+  disabled?: boolean | undefined;
+  className?: string | undefined;
+  title?: string | undefined;
 }) {
   return (
     <button
@@ -194,12 +194,12 @@ export function TextField({
   label: string;
   value: string;
   onChange: (v: string) => void;
-  required?: boolean;
-  error?: string;
-  placeholder?: string;
-  type?: string;
-  suffix?: string;
-  mono?: boolean;
+  required?: boolean | undefined;
+  error?: string | undefined;
+  placeholder?: string | undefined;
+  type?: string | undefined;
+  suffix?: string | undefined;
+  mono?: boolean | undefined;
 }) {
   const id = useId();
   return (
@@ -247,7 +247,7 @@ export function SelectField({
   value: string;
   options: string[];
   onChange: (v: string) => void;
-  required?: boolean;
+  required?: boolean | undefined;
 }) {
   return (
     <div>
@@ -285,7 +285,7 @@ export function TableSearch({
 }: {
   value: string;
   onChange: (v: string) => void;
-  placeholder?: string;
+  placeholder?: string | undefined;
 }) {
   const ref = useRef<HTMLInputElement>(null);
   return (
@@ -322,9 +322,9 @@ export function EmptyState({
   text = "Aucun élément ne correspond à ces filtres.",
   action,
 }: {
-  title?: string;
-  text?: string;
-  action?: ReactNode;
+  title?: string | undefined;
+  text?: string | undefined;
+  action?: ReactNode | undefined;
 }) {
   return (
     <div className="flex flex-col items-center justify-center px-6 py-16 text-center">

@@ -125,17 +125,17 @@ function FournisseursPage() {
   function save() {
     if (!form) return;
     const next: Record<string, string> = {};
-    if (!form.name.trim()) next.name = "Ce champ est obligatoire.";
-    if (!form.families.trim()) next.families = "Ce champ est obligatoire.";
+    if (!form.name.trim()) next["name"] = "Ce champ est obligatoire.";
+    if (!form.families.trim()) next["families"] = "Ce champ est obligatoire.";
     const score = Number(form.score);
-    if (!form.score.trim() || Number.isNaN(score)) next.score = "Valeur numérique attendue.";
+    if (!form.score.trim() || Number.isNaN(score)) next["score"] = "Valeur numérique attendue.";
     if (
       form.name.trim() &&
       fournisseurs.some(
         (f) => f.id !== editing?.id && f.name.trim().toLowerCase() === form.name.trim().toLowerCase(),
       )
     ) {
-      next.name = "Cette référence existe déjà.";
+      next["name"] = "Cette référence existe déjà.";
     }
     setErrors(next);
     if (Object.keys(next).length) return;
@@ -336,7 +336,7 @@ function FournisseursPage() {
         {form && (
           <div className="grid gap-4 pb-4 sm:grid-cols-2">
             <div className="sm:col-span-2">
-              <TextField label="Nom du fournisseur" required value={form.name} error={errors.name} onChange={(v) => setForm({ ...form, name: v })} />
+              <TextField label="Nom du fournisseur" required value={form.name} error={errors["name"]} onChange={(v) => setForm({ ...form, name: v })} />
             </div>
             <SelectField label="Pays" required value={form.country} options={countries} onChange={(v) => setForm({ ...form, country: v })} />
             <TextField label="Délai de réponse moyen" value={form.response} placeholder="3 jours" onChange={(v) => setForm({ ...form, response: v })} />
@@ -344,9 +344,9 @@ function FournisseursPage() {
               <TextField label="Marques" value={form.brands} placeholder="FlowTech, Endress" onChange={(v) => setForm({ ...form, brands: v })} />
             </div>
             <div className="sm:col-span-2">
-              <TextField label="Familles de produits" required value={form.families} error={errors.families} placeholder="Instrumentation, débitmétrie" onChange={(v) => setForm({ ...form, families: v })} />
+              <TextField label="Familles de produits" required value={form.families} error={errors["families"]} placeholder="Instrumentation, débitmétrie" onChange={(v) => setForm({ ...form, families: v })} />
             </div>
-            <TextField label="Score" required suffix="/ 100" mono value={form.score} error={errors.score} onChange={(v) => setForm({ ...form, score: v })} />
+            <TextField label="Score" required suffix="/ 100" mono value={form.score} error={errors["score"]} onChange={(v) => setForm({ ...form, score: v })} />
           </div>
         )}
       </Modal>
