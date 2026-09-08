@@ -56,14 +56,47 @@ function PrefsPage() {
             {["Nouvel AO pertinent", "Décision GO / NO GO requise", "Document manquant", "Échéance proche"].map((n) => (
               <li key={n} className="flex items-center justify-between rounded-xl border border-border bg-background/50 px-4 py-3">
                 <span className="text-sm font-medium">{n}</span>
-                <span className="relative inline-flex h-6 w-11 items-center rounded-full bg-primary transition-colors">
-                  <span className="ml-auto mr-0.5 size-5 rounded-full bg-white shadow" />
-                </span>
+                <button
+                  role="switch"
+                  aria-checked={notifs[n] ?? true}
+                  aria-label={n}
+                  onClick={() => setNotifs((s) => ({ ...s, [n]: !(s[n] ?? true) }))}
+                  className={cn(
+                    "relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/20",
+                    (notifs[n] ?? true) ? "bg-primary" : "bg-border",
+                  )}
+                >
+                  <span
+                    className={cn(
+                      "size-5 rounded-full bg-white shadow transition-transform",
+                      (notifs[n] ?? true) ? "translate-x-[22px]" : "translate-x-0.5",
+                    )}
+                  />
+                </button>
               </li>
             ))}
           </ul>
         </SectionCard>
+
+        <SectionCard title="Données de démonstration" subtitle="Restaure les fournisseurs, articles, utilisateurs et notifications d'origine.">
+          <SecondaryButton onClick={() => setConfirmReset(true)}>
+            Réinitialiser les données de démonstration
+          </SecondaryButton>
+        </SectionCard>
       </div>
+
+      <ConfirmDialog
+        open={confirmReset}
+        onClose={() => setConfirmReset(false)}
+        onConfirm={() => {
+          resetDemo();
+          toast.success("Données de démonstration réinitialisées.");
+        }}
+        title="Réinitialiser les données de démonstration ?"
+        message="Toutes vos modifications locales seront perdues. Cette action est irréversible."
+        verb="Réinitialiser"
+      />
     </AppShell>
   );
+
 }
