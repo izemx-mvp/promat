@@ -462,14 +462,8 @@ function RecherchesPage() {
               </table>
             </div>
           </SectionCard>
-        ) : (
-          <SectionCard title="Nouvelles opportunités détectées">
-            <p className="text-sm text-muted-foreground">
-              Cliquez sur le badge « X nouvelles » d'une recherche pour préqualifier les opportunités
-              détectées.
-            </p>
-          </SectionCard>
         )}
+
       </div>
 
       {selectedTenderId && (
