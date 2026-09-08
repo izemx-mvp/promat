@@ -466,6 +466,175 @@ function RecherchesPage() {
 
       </div>
 
+      {/* Assistant de création de recherche */}
+      <Modal
+        open={wizardOpen}
+        onClose={() => setWizardOpen(false)}
+        title="Nouvelle recherche automatique"
+        subtitle={`Étape ${step + 1} sur ${wizardSteps.length} · ${wizardSteps[step]}`}
+        width="max-w-2xl"
+        footer={
+          <>
+            <GhostButton
+              onClick={() => (step === 0 ? setWizardOpen(false) : setStep(step - 1))}
+              className="mr-auto"
+            >
+              {step === 0 ? "Annuler" : "Retour"}
+            </GhostButton>
+            {step < wizardSteps.length - 1 ? (
+              <PrimaryButton
+                onClick={() => setStep(step + 1)}
+                disabled={(step === 0 && !query.trim()) || (step === 1 && sources.length === 0)}
+              >
+                Continuer
+              </PrimaryButton>
+            ) : (
+              <PrimaryButton onClick={saveSearch}>
+                <Plus className="size-4" /> Enregistrer la recherche
+              </PrimaryButton>
+            )}
+          </>
+        }
+      >
+        <div className="pb-4">
+          <ol className="mb-6 flex items-center gap-2">
+            {wizardSteps.map((label, i) => (
+              <li key={label} className="flex min-w-0 flex-1 items-center gap-2">
+                <span
+                  className={cn(
+                    "flex size-6 shrink-0 items-center justify-center rounded-full text-[11px] font-semibold",
+                    i < step
+                      ? "bg-success text-white"
+                      : i === step
+                        ? "bg-primary text-primary-foreground"
+                        : "bg-muted text-muted-foreground",
+                  )}
+                >
+                  {i < step ? <Check className="size-3.5" strokeWidth={3} /> : i + 1}
+                </span>
+                <span
+                  className={cn(
+                    "hidden truncate text-[11.5px] font-medium sm:block",
+                    i === step ? "text-foreground" : "text-muted-foreground",
+                  )}
+                >
+                  {label}
+                </span>
+                {i < wizardSteps.length - 1 && <span className="h-px flex-1 bg-border" />}
+              </li>
+            ))}
+          </ol>
+
+          {step === 0 && (
+            <div className="space-y-4">
+              <div className="relative">
+                <Search className="absolute left-4 top-1/2 size-5 -translate-y-1/2 text-muted-foreground" />
+                <input
+                  autoFocus
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder="Ex : débitmètre, Terex, pompe hydraulique, pièces de rechange…"
+                  className="h-14 w-full rounded-xl border border-border bg-background pl-12 pr-4 text-[16px] outline-none transition placeholder:text-muted-foreground focus:border-ring"
+                />
+              </div>
+              <p className="text-sm text-muted-foreground">
+                Séparez les mots-clés par des virgules. L'Agent AO les utilise pour analyser les avis publiés.
+              </p>
+            </div>
+          )}
+
+          {step === 1 && (
+            <div className="space-y-2">
+              {allSources.map((s) => {
+                const on = sources.includes(s);
+                return (
+                  <button
+                    key={s}
+                    onClick={() => setSources((p) => (on ? p.filter((x) => x !== s) : [...p, s]))}
+                    className={cn(
+                      "flex w-full items-center gap-3 rounded-xl border px-4 py-3 text-left text-sm font-medium transition-colors",
+                      on ? "border-primary/40 bg-primary/5" : "border-border hover:bg-muted",
+                    )}
+                  >
+                    <span
+                      className={cn(
+                        "flex size-5 items-center justify-center rounded-md border",
+                        on ? "border-primary bg-primary text-primary-foreground" : "border-border",
+                      )}
+                    >
+                      {on && <Check className="size-3.5" strokeWidth={3} />}
+                    </span>
+                    {s}
+                  </button>
+                );
+              })}
+            </div>
+          )}
+
+          {step === 2 && (
+            <div className="grid gap-4 sm:grid-cols-2">
+              <label className="block">
+                <span className="label-xs">Budget minimum (MAD)</span>
+                <input
+                  value={minBudget}
+                  onChange={(e) => setMinBudget(e.target.value)}
+                  placeholder="500 000"
+                  className="mt-1.5 h-11 w-full rounded-xl border border-border bg-background px-3 text-sm outline-none focus:border-ring"
+                />
+              </label>
+              <label className="block">
+                <span className="label-xs">Client ciblé</span>
+                <input
+                  value={client}
+                  onChange={(e) => setClient(e.target.value)}
+                  placeholder="ONEE"
+                  className="mt-1.5 h-11 w-full rounded-xl border border-border bg-background px-3 text-sm outline-none focus:border-ring"
+                />
+              </label>
+              <p className="text-sm text-muted-foreground sm:col-span-2">
+                Ces filtres sont optionnels. Laissez vide pour recevoir toutes les opportunités correspondantes.
+              </p>
+            </div>
+          )}
+
+          {step === 3 && (
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+              {frequencies.map((f) => (
+                <button
+                  key={f}
+                  onClick={() => setFreq(f)}
+                  className={cn(
+                    "rounded-xl border px-3 py-3 text-[13px] font-medium transition-colors",
+                    freq === f ? "border-primary/40 bg-primary/5 text-foreground" : "border-border text-muted-foreground hover:bg-muted",
+                  )}
+                >
+                  {f}
+                </button>
+              ))}
+            </div>
+          )}
+
+          {step === 4 && (
+            <dl className="grid gap-x-6 gap-y-3 sm:grid-cols-2">
+              {[
+                ["Mots-clés", query.trim()],
+                ["Sources", sources.join(", ")],
+                ["Budget minimum", minBudget ? `${minBudget} MAD` : "Aucun"],
+                ["Client ciblé", client || "Tous"],
+                ["Fréquence", freq],
+                ["Statut", freq === "Manuelle" ? "En pause (lancement manuel)" : "Active"],
+              ].map(([k, v]) => (
+                <div key={k}>
+                  <dt className="label-xs">{k}</dt>
+                  <dd className="mt-0.5 text-[15px] font-medium">{v}</dd>
+                </div>
+              ))}
+            </dl>
+          )}
+        </div>
+      </Modal>
+
+
       {selectedTenderId && (
         <StickyBar message="Opportunité ajoutée. Le dossier est prêt pour l’analyse complète.">
           <NextButton to="/analyses/$id" id={selectedTenderId} label="Passer à l'analyse" />
