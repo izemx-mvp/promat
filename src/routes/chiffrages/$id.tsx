@@ -1,5 +1,5 @@
 import { createFileRoute, useParams } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { Check } from "lucide-react";
 import { AppShell } from "@/components/promat/shell";
 import { Pill, SectionCard } from "@/components/promat/ui";
@@ -223,7 +223,7 @@ function ChiffragePage() {
     setSection(k);
   };
 
-  const lines = useMemo(() => buildLines(tender, c, extra), [tender, c, extra]);
+  const lines = buildLines(tender, c, extra);
   const totalAchat = lines.reduce((s, l) => s + l.achat, 0);
   const totalDouane = lines.reduce((s, l) => s + l.douane, 0);
   const totalFees =
