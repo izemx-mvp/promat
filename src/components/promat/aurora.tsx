@@ -179,15 +179,16 @@ export function AuroraBackground() {
         }}
       />
 
-      {/* Frosted wash to keep contrast */}
+      {/* Soft vignette to keep text edges readable, does not kill color */}
       <div
         className="absolute inset-0"
         style={{
-          background: "var(--background)",
-          opacity: 0.55,
-          backdropFilter: "blur(60px)",
+          background:
+            "radial-gradient(ellipse at 50% 40%, transparent 0%, transparent 45%, var(--background) 130%)",
+          opacity: 0.4,
         }}
       />
+
 
       {/* Engineering grid */}
       <div
