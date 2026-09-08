@@ -1,6 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
+import { toast } from "sonner";
 import { AppShell, PageHeader } from "@/components/promat/shell";
 import { SectionCard } from "@/components/promat/ui";
+import { ConfirmDialog, SecondaryButton } from "@/components/promat/form-kit";
+import { useReferentiel } from "@/lib/promat/referentiel";
 import { useTheme } from "@/lib/theme";
 import { cn } from "@/lib/utils";
 
@@ -18,6 +22,9 @@ export const Route = createFileRoute("/preferences")({
 
 function PrefsPage() {
   const { theme, setTheme } = useTheme();
+  const { resetDemo } = useReferentiel();
+  const [confirmReset, setConfirmReset] = useState(false);
+
 
   return (
     <AppShell>
