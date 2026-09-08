@@ -24,7 +24,7 @@ function NotFoundComponent() {
     <div className="relative flex min-h-screen items-center justify-center px-4">
       <AuroraBackground />
       <div className="relative z-10 max-w-lg text-center">
-        <img src="/promat-logo.png" alt="PROMAT" className="mx-auto mb-8 h-10 object-contain" />
+        <img src="/promat-logo.png" alt="PROMAT Maroc" width={910} height={533} className="mx-auto mb-8 w-[150px] object-contain" style={{ height: "auto", aspectRatio: "910 / 533" }} />
         <h1 className="page-title" style={{ fontSize: "clamp(6rem, 16vw, 10rem)", lineHeight: 1 }}>
           404
         </h1>
