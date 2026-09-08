@@ -57,7 +57,7 @@ export function Modal({
       <div
         className={cn(
           "glass-strong relative z-10 flex max-h-[92vh] w-full flex-col overflow-hidden rounded-t-3xl sm:rounded-3xl",
-          "motion-safe:animate-in motion-safe:fade-in-0 motion-safe:zoom-in-95 motion-safe:slide-in-from-bottom-3 motion-safe:duration-250",
+          "motion-safe:animate-in motion-safe:fade-in-0 motion-safe:zoom-in-95 motion-safe:slide-in-from-bottom-3 motion-safe:duration-200",
           width,
         )}
       >
