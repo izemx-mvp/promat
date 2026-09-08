@@ -51,15 +51,16 @@ export function Modal({
       <button
         aria-label="Fermer"
         onClick={onClose}
-        className="absolute inset-0 bg-navy/40 motion-safe:animate-in motion-safe:fade-in-0 motion-safe:duration-200"
+        className="absolute inset-0 bg-navy/40 motion-safe:animate-[modal-fade_180ms_ease-out]"
         style={{ backdropFilter: "blur(8px)" }}
       />
       <div
         className={cn(
           "glass-strong relative z-10 flex max-h-[92vh] w-full flex-col overflow-hidden rounded-t-3xl sm:rounded-3xl",
-          "motion-safe:animate-in motion-safe:fade-in-0 motion-safe:zoom-in-95 motion-safe:slide-in-from-bottom-3 motion-safe:duration-250",
+          "motion-safe:animate-[modal-pop_220ms_cubic-bezier(0.22,1,0.36,1)]",
           width,
         )}
+
       >
         <span aria-hidden className="mx-auto mt-2.5 block h-1.5 w-10 rounded-full bg-border sm:hidden" />
         <header className="flex items-start gap-3 px-6 pb-4 pt-5 sm:px-7 sm:pt-6">

@@ -95,31 +95,34 @@ export function AppShell({ children }: { children: ReactNode }) {
         {/* Vertical accent gradient on right edge */}
         <span aria-hidden className="pointer-events-none absolute inset-y-0 right-0 w-px bg-gradient-to-b from-transparent via-primary/40 to-transparent" />
 
-        <div className="px-3 pb-7 pt-6">
+        <div className="px-3 pb-4 pt-4">
           <Link
             to="/"
             aria-label="PROMAT Maroc"
-            className="inline-block origin-left transition-transform duration-200 hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/30 rounded-xl"
+            className="flex items-center gap-2.5 rounded-lg transition-transform duration-200 hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/30"
           >
-            <span className="block rounded-xl bg-white px-3 py-2.5 shadow-[inset_0_1px_2px_rgba(15,23,42,0.12)]">
+            <span className="block rounded-lg bg-white px-2 py-1.5">
               <img
                 src="/promat-logo.png"
                 alt="PROMAT Maroc"
                 width={910}
                 height={533}
-                className="block w-[112px] object-contain"
+                className="block w-[72px] object-contain"
                 style={{ height: "auto", aspectRatio: "910 / 533" }}
               />
             </span>
-            <span className="mt-2.5 block text-[10px] uppercase tracking-[0.16em] text-navy-muted">
-              Maroc · Tender OS
+            <span className="block text-[9px] uppercase leading-tight tracking-[0.14em] text-navy-muted">
+              Maroc
+              <br />
+              Tender OS
             </span>
           </Link>
         </div>
+
         <span aria-hidden className="mx-3 block h-px bg-white/10" />
 
 
-        <nav className="mt-7 space-y-5">
+        <nav className="mt-5 space-y-5">
           {groups.map((g, groupIndex) => (
             <div key={g.title}>
               {groupIndex === 1 && (

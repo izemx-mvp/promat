@@ -306,3 +306,5 @@
 @media (prefers-reduced-motion: reduce) {
   .aurora-blob, .aurora-conic, .aurora-wave, .aurora-scan { animation: none !important; }
 }
+@keyframes modal-fade { from { opacity: 0 } to { opacity: 1 } }
+@keyframes modal-pop { from { opacity: 0; transform: translate3d(0, 14px, 0) scale(0.96) } to { opacity: 1; transform: none } }

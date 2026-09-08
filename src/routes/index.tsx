@@ -1,11 +1,12 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { AlertTriangle, ArrowUpDown, Check, MoreHorizontal, Plus, Search, Settings2, Sparkles, X } from "lucide-react";
+import { AlertTriangle, ArrowLeft, ArrowUpDown, Check, MoreHorizontal, Plus, Search, Sparkles, X } from "lucide-react";
 import { AppShell, PageHeader } from "@/components/promat/shell";
+import { GhostButton, Modal, PrimaryButton } from "@/components/promat/form-kit";
 import { Pill, SectionCard } from "@/components/promat/ui";
 import { NextButton, StickyBar } from "@/components/promat/workflow";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -56,6 +57,8 @@ type SavedSearch = {
 
 const frequencies = ["Toutes les heures", "Tous les jours", "Chaque semaine", "Manuelle"];
 const allSources = ["Portail des marchés publics", "ONEE", "OCP", "Autres sources configurées"];
+const wizardSteps = ["Mots-clés", "Sources", "Filtres", "Fréquence", "Récapitulatif"];
+
 
 const initialSearches: SavedSearch[] = [
   { id: "r1", name: "Pièces de rechange", keywords: "Terex, Grove, Potain, pièces détachées", last: "Aujourd'hui à 08:00", frequency: "Tous les jours", sources: allSources.slice(0, 3), active: true },
@@ -101,7 +104,9 @@ function ReadinessCard({ o }: { o: Opportunity }) {
 function RecherchesPage() {
   const [searches, setSearches] = useState<SavedSearch[]>(initialSearches);
   const [query, setQuery] = useState("");
-  const [cfgOpen, setCfgOpen] = useState(false);
+  const [wizardOpen, setWizardOpen] = useState(false);
+  const [step, setStep] = useState(0);
+
   const [freq, setFreq] = useState("Tous les jours");
   const [sources, setSources] = useState<string[]>(allSources.slice(0, 3));
   const [minBudget, setMinBudget] = useState("");
@@ -188,13 +193,18 @@ function RecherchesPage() {
     openResults(s.id);
   }
 
-  function saveSearch(e: React.FormEvent) {
-    e.preventDefault();
+  function openWizard() {
+    setQuery("");
+    setFreq("Tous les jours");
+    setSources(allSources.slice(0, 3));
+    setMinBudget("");
+    setClient("");
+    setStep(0);
+    setWizardOpen(true);
+  }
+
+  function saveSearch() {
     const kw = query.trim();
-    if (!kw) {
-      toast.error("Saisissez au moins un mot-clé");
-      return;
-    }
     const id = `r${Date.now()}`;
     setSearches((p) => [
       {
@@ -210,111 +220,57 @@ function RecherchesPage() {
       },
       ...p,
     ]);
-    setQuery("");
-    setCfgOpen(false);
+    setWizardOpen(false);
     toast.success(`Recherche enregistrée — l'Agent AO la relance ${freq.toLowerCase()}`);
   }
+
 
   return (
     <AppShell>
       <div className="mx-auto max-w-6xl space-y-8 px-8 py-8">
-        <PageHeader
-          title="Recherches AO"
-          subtitle="L'Agent AO surveille les sources et remonte les opportunités. Vous les préqualifiez avant toute analyse complète."
-        />
-        <div className="flex flex-wrap items-center gap-x-5 gap-y-1 border-b border-border pb-4">
-          <p className="label-xs text-primary">Étape 1 sur 7 · Recherches AO</p>
-          <p className="text-xs text-muted-foreground">Prochaine étape : Analyses</p>
-        </div>
-
-        <form onSubmit={saveSearch} className="flex flex-wrap items-center gap-3">
-          <div className="relative min-w-0 flex-1">
-            <Search className="absolute left-4 top-1/2 size-5 -translate-y-1/2 text-muted-foreground" />
-            <input
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Ex : débitmètre, Terex, pompe hydraulique, pièces de rechange…"
-              className="h-14 w-full rounded-xl border border-border bg-card pl-12 pr-4 text-[16px] outline-none transition placeholder:text-muted-foreground focus:border-ring"
+        {activeSearch ? (
+          <>
+            <button
+              onClick={() => setActive(null)}
+              className="inline-flex items-center gap-2 text-[13px] font-medium text-muted-foreground transition-colors hover:text-foreground"
+            >
+              <ArrowLeft className="size-4" /> Retour aux recherches
+            </button>
+            <PageHeader
+              eyebrow={`Résultats · ${activeSearch.frequency.toLowerCase()}`}
+              title={activeSearch.name}
+              subtitle="Consultez les informations essentielles avant de décider si l'appel d'offres doit être analysé."
+              action={
+                <div className="text-right">
+                  <p className="text-sm font-semibold">{remaining[activeSearch.id]} nouvelles opportunités</p>
+                  <p className="text-xs text-muted-foreground">Dernière recherche : {activeSearch.last}</p>
+                </div>
+              }
             />
-          </div>
-          <Popover open={cfgOpen} onOpenChange={setCfgOpen}>
-            <PopoverTrigger asChild>
-              <button
-                type="button"
-                aria-label="Configurer la recherche automatique"
-                className="flex size-14 items-center justify-center rounded-xl border border-border bg-card text-muted-foreground transition-colors hover:bg-muted"
-              >
-                <Settings2 className="size-5" />
-              </button>
-            </PopoverTrigger>
-            <PopoverContent align="end" className="w-80 space-y-4">
-              <div>
-                <p className="label-xs">Fréquence de recherche</p>
-                <div className="mt-2 grid grid-cols-2 gap-1.5">
-                  {frequencies.map((f) => (
-                    <button
-                      key={f}
-                      type="button"
-                      onClick={() => setFreq(f)}
-                      className={cn(
-                        "rounded-lg px-2.5 py-1.5 text-[12.5px] font-medium transition-colors",
-                        freq === f ? "bg-navy text-navy-foreground" : "bg-muted text-muted-foreground hover:bg-accent",
-                      )}
-                    >
-                      {f}
-                    </button>
-                  ))}
-                </div>
-              </div>
-              <div>
-                <p className="label-xs">Sources à rechercher</p>
-                <div className="mt-2 space-y-1.5">
-                  {allSources.map((s) => (
-                    <label key={s} className="flex cursor-pointer items-center gap-2 text-[13px]">
-                      <input
-                        type="checkbox"
-                        checked={sources.includes(s)}
-                        onChange={() =>
-                          setSources((p) => (p.includes(s) ? p.filter((x) => x !== s) : [...p, s]))
-                        }
-                        className="size-4 rounded border-border accent-primary"
-                      />
-                      {s}
-                    </label>
-                  ))}
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-2">
-                <label className="block">
-                  <span className="label-xs">Budget minimum</span>
-                  <input
-                    value={minBudget}
-                    onChange={(e) => setMinBudget(e.target.value)}
-                    placeholder="500 000"
-                    className="mt-1 h-9 w-full rounded-lg border border-border bg-background px-2.5 text-sm outline-none focus:border-ring"
-                  />
-                </label>
-                <label className="block">
-                  <span className="label-xs">Client ciblé</span>
-                  <input
-                    value={client}
-                    onChange={(e) => setClient(e.target.value)}
-                    placeholder="ONEE"
-                    className="mt-1 h-9 w-full rounded-lg border border-border bg-background px-2.5 text-sm outline-none focus:border-ring"
-                  />
-                </label>
-              </div>
-            </PopoverContent>
-          </Popover>
-          <button
-            type="submit"
-            className="inline-flex h-14 items-center gap-2 rounded-xl bg-primary px-5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
-          >
-            <Plus className="size-4" /> Enregistrer la recherche
-          </button>
-        </form>
+          </>
+        ) : (
+          <>
+            <PageHeader
+              title="Recherches AO"
+              subtitle="L'Agent AO surveille les sources et remonte les opportunités. Vous les préqualifiez avant toute analyse complète."
+              action={
+                <button
+                  onClick={openWizard}
+                  className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
+                >
+                  <Plus className="size-4" /> Nouvelle recherche
+                </button>
+              }
+            />
+            <div className="flex flex-wrap items-center gap-x-5 gap-y-1 border-b border-border pb-4">
+              <p className="label-xs text-primary">Étape 1 sur 7 · Recherches AO</p>
+              <p className="text-xs text-muted-foreground">Prochaine étape : Analyses</p>
+            </div>
+          </>
+        )}
 
-        <div className="grid gap-3 lg:grid-cols-2">
+        <div className={cn("grid gap-3 lg:grid-cols-2", activeSearch && "hidden")}>
+
           {searches.map((s) => {
             const n = remaining[s.id] ?? 0;
             return (
@@ -414,19 +370,12 @@ function RecherchesPage() {
           })}
         </div>
 
-        {activeSearch ? (
+        {activeSearch && (
           <SectionCard
             title="Nouvelles opportunités détectées"
-            subtitle="Consultez les informations essentielles avant de décider si l'appel d'offres doit être analysé."
-            action={
-              <div className="text-right">
-                <p className="text-sm font-semibold">{activeSearch.name}</p>
-                <p className="text-xs text-muted-foreground">
-                  {remaining[activeSearch.id]} nouvelles opportunités
-                </p>
-              </div>
-            }
+            subtitle="Sélectionnez « Voir » pour préqualifier une opportunité."
           >
+
             <div className="mb-5 flex flex-wrap items-center gap-2">
               {filters.map((f) => (
                 <button
@@ -516,15 +465,178 @@ function RecherchesPage() {
               </table>
             </div>
           </SectionCard>
-        ) : (
-          <SectionCard title="Nouvelles opportunités détectées">
-            <p className="text-sm text-muted-foreground">
-              Cliquez sur le badge « X nouvelles » d'une recherche pour préqualifier les opportunités
-              détectées.
-            </p>
-          </SectionCard>
         )}
+
       </div>
+
+      {/* Assistant de création de recherche */}
+      <Modal
+        open={wizardOpen}
+        onClose={() => setWizardOpen(false)}
+        title="Nouvelle recherche automatique"
+        subtitle={`Étape ${step + 1} sur ${wizardSteps.length} · ${wizardSteps[step]}`}
+        width="max-w-2xl"
+        footer={
+          <>
+            <GhostButton
+              onClick={() => (step === 0 ? setWizardOpen(false) : setStep(step - 1))}
+              className="mr-auto"
+            >
+              {step === 0 ? "Annuler" : "Retour"}
+            </GhostButton>
+            {step < wizardSteps.length - 1 ? (
+              <PrimaryButton
+                onClick={() => setStep(step + 1)}
+                disabled={(step === 0 && !query.trim()) || (step === 1 && sources.length === 0)}
+              >
+                Continuer
+              </PrimaryButton>
+            ) : (
+              <PrimaryButton onClick={saveSearch}>
+                <Plus className="size-4" /> Enregistrer la recherche
+              </PrimaryButton>
+            )}
+          </>
+        }
+      >
+        <div className="pb-4">
+          <ol className="mb-6 flex items-center gap-2">
+            {wizardSteps.map((label, i) => (
+              <li key={label} className="flex min-w-0 flex-1 items-center gap-2">
+                <span
+                  className={cn(
+                    "flex size-6 shrink-0 items-center justify-center rounded-full text-[11px] font-semibold",
+                    i < step
+                      ? "bg-success text-white"
+                      : i === step
+                        ? "bg-primary text-primary-foreground"
+                        : "bg-muted text-muted-foreground",
+                  )}
+                >
+                  {i < step ? <Check className="size-3.5" strokeWidth={3} /> : i + 1}
+                </span>
+                <span
+                  className={cn(
+                    "hidden truncate text-[11.5px] font-medium sm:block",
+                    i === step ? "text-foreground" : "text-muted-foreground",
+                  )}
+                >
+                  {label}
+                </span>
+                {i < wizardSteps.length - 1 && <span className="h-px flex-1 bg-border" />}
+              </li>
+            ))}
+          </ol>
+
+          {step === 0 && (
+            <div className="space-y-4">
+              <div className="relative">
+                <Search className="absolute left-4 top-1/2 size-5 -translate-y-1/2 text-muted-foreground" />
+                <input
+                  autoFocus
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder="Ex : débitmètre, Terex, pompe hydraulique, pièces de rechange…"
+                  className="h-14 w-full rounded-xl border border-border bg-background pl-12 pr-4 text-[16px] outline-none transition placeholder:text-muted-foreground focus:border-ring"
+                />
+              </div>
+              <p className="text-sm text-muted-foreground">
+                Séparez les mots-clés par des virgules. L'Agent AO les utilise pour analyser les avis publiés.
+              </p>
+            </div>
+          )}
+
+          {step === 1 && (
+            <div className="space-y-2">
+              {allSources.map((s) => {
+                const on = sources.includes(s);
+                return (
+                  <button
+                    key={s}
+                    onClick={() => setSources((p) => (on ? p.filter((x) => x !== s) : [...p, s]))}
+                    className={cn(
+                      "flex w-full items-center gap-3 rounded-xl border px-4 py-3 text-left text-sm font-medium transition-colors",
+                      on ? "border-primary/40 bg-primary/5" : "border-border hover:bg-muted",
+                    )}
+                  >
+                    <span
+                      className={cn(
+                        "flex size-5 items-center justify-center rounded-md border",
+                        on ? "border-primary bg-primary text-primary-foreground" : "border-border",
+                      )}
+                    >
+                      {on && <Check className="size-3.5" strokeWidth={3} />}
+                    </span>
+                    {s}
+                  </button>
+                );
+              })}
+            </div>
+          )}
+
+          {step === 2 && (
+            <div className="grid gap-4 sm:grid-cols-2">
+              <label className="block">
+                <span className="label-xs">Budget minimum (MAD)</span>
+                <input
+                  value={minBudget}
+                  onChange={(e) => setMinBudget(e.target.value)}
+                  placeholder="500 000"
+                  className="mt-1.5 h-11 w-full rounded-xl border border-border bg-background px-3 text-sm outline-none focus:border-ring"
+                />
+              </label>
+              <label className="block">
+                <span className="label-xs">Client ciblé</span>
+                <input
+                  value={client}
+                  onChange={(e) => setClient(e.target.value)}
+                  placeholder="ONEE"
+                  className="mt-1.5 h-11 w-full rounded-xl border border-border bg-background px-3 text-sm outline-none focus:border-ring"
+                />
+              </label>
+              <p className="text-sm text-muted-foreground sm:col-span-2">
+                Ces filtres sont optionnels. Laissez vide pour recevoir toutes les opportunités correspondantes.
+              </p>
+            </div>
+          )}
+
+          {step === 3 && (
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+              {frequencies.map((f) => (
+                <button
+                  key={f}
+                  onClick={() => setFreq(f)}
+                  className={cn(
+                    "rounded-xl border px-3 py-3 text-[13px] font-medium transition-colors",
+                    freq === f ? "border-primary/40 bg-primary/5 text-foreground" : "border-border text-muted-foreground hover:bg-muted",
+                  )}
+                >
+                  {f}
+                </button>
+              ))}
+            </div>
+          )}
+
+          {step === 4 && (
+            <dl className="grid gap-x-6 gap-y-3 sm:grid-cols-2">
+              {[
+                ["Mots-clés", query.trim()],
+                ["Sources", sources.join(", ")],
+                ["Budget minimum", minBudget ? `${minBudget} MAD` : "Aucun"],
+                ["Client ciblé", client || "Tous"],
+                ["Fréquence", freq],
+                ["Statut", freq === "Manuelle" ? "En pause (lancement manuel)" : "Active"],
+              ].map(([k, v]) => (
+                <div key={k}>
+                  <dt className="label-xs">{k}</dt>
+                  <dd className="mt-0.5 text-[15px] font-medium">{v}</dd>
+                </div>
+              ))}
+            </dl>
+          )}
+        </div>
+      </Modal>
+
 
       {selectedTenderId && (
         <StickyBar message="Opportunité ajoutée. Le dossier est prêt pour l’analyse complète.">
