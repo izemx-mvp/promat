@@ -15,6 +15,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { CommandPalette, useCommandPaletteHotkeys } from "@/components/promat/command-palette";
 
 type Item = { to: string; label: string; step?: WorkflowStepKey };
 
