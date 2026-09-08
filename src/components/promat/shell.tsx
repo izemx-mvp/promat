@@ -227,16 +227,17 @@ export function AppShell({ children }: { children: ReactNode }) {
           )}
           style={{ background: "var(--glass-strong)", backdropFilter: "blur(20px) saturate(160%)" }}
         >
-          <div className="relative w-full max-w-md">
-            <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-            <input
-              placeholder="Rechercher…"
-              className="h-10 w-full rounded-xl border border-border bg-background/60 pl-9 pr-16 text-sm outline-none transition placeholder:text-muted-foreground focus:border-primary focus:ring-4 focus:ring-primary/15"
-            />
-            <span className="absolute right-2 top-1/2 flex -translate-y-1/2 items-center gap-1 rounded-md border border-border bg-muted/60 px-1.5 py-0.5 mono text-[10px] text-muted-foreground">
+          <button
+            type="button"
+            onClick={() => setPaletteOpen(true)}
+            className="group relative flex h-10 w-full max-w-md items-center gap-2 rounded-xl border border-border bg-background/60 pl-3 pr-2 text-left text-sm text-muted-foreground outline-none transition hover:border-primary/40 hover:text-foreground focus:border-primary focus:ring-4 focus:ring-primary/15"
+          >
+            <Search className="size-4 shrink-0" />
+            <span className="flex-1 truncate">Rechercher un module, un dossier, une action…</span>
+            <span className="flex items-center gap-1 rounded-md border border-border bg-muted/60 px-1.5 py-0.5 mono text-[10px]">
               <Command className="size-2.5" /> K
             </span>
-          </div>
+          </button>
           <div className="ml-auto flex items-center gap-2">
             <button
               onClick={toggle}
