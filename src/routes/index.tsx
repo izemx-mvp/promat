@@ -225,103 +225,49 @@ function RecherchesPage() {
   return (
     <AppShell>
       <div className="mx-auto max-w-6xl space-y-8 px-8 py-8">
-        <PageHeader
-          title="Recherches AO"
-          subtitle="L'Agent AO surveille les sources et remonte les opportunités. Vous les préqualifiez avant toute analyse complète."
-        />
-        <div className="flex flex-wrap items-center gap-x-5 gap-y-1 border-b border-border pb-4">
-          <p className="label-xs text-primary">Étape 1 sur 7 · Recherches AO</p>
-          <p className="text-xs text-muted-foreground">Prochaine étape : Analyses</p>
-        </div>
-
-        <form onSubmit={saveSearch} className="flex flex-wrap items-center gap-3">
-          <div className="relative min-w-0 flex-1">
-            <Search className="absolute left-4 top-1/2 size-5 -translate-y-1/2 text-muted-foreground" />
-            <input
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Ex : débitmètre, Terex, pompe hydraulique, pièces de rechange…"
-              className="h-14 w-full rounded-xl border border-border bg-card pl-12 pr-4 text-[16px] outline-none transition placeholder:text-muted-foreground focus:border-ring"
+        {activeSearch ? (
+          <>
+            <button
+              onClick={() => setActive(null)}
+              className="inline-flex items-center gap-2 text-[13px] font-medium text-muted-foreground transition-colors hover:text-foreground"
+            >
+              <ArrowLeft className="size-4" /> Retour aux recherches
+            </button>
+            <PageHeader
+              eyebrow={`Résultats · ${activeSearch.frequency.toLowerCase()}`}
+              title={activeSearch.name}
+              subtitle="Consultez les informations essentielles avant de décider si l'appel d'offres doit être analysé."
+              action={
+                <div className="text-right">
+                  <p className="text-sm font-semibold">{remaining[activeSearch.id]} nouvelles opportunités</p>
+                  <p className="text-xs text-muted-foreground">Dernière recherche : {activeSearch.last}</p>
+                </div>
+              }
             />
-          </div>
-          <Popover open={cfgOpen} onOpenChange={setCfgOpen}>
-            <PopoverTrigger asChild>
-              <button
-                type="button"
-                aria-label="Configurer la recherche automatique"
-                className="flex size-14 items-center justify-center rounded-xl border border-border bg-card text-muted-foreground transition-colors hover:bg-muted"
-              >
-                <Settings2 className="size-5" />
-              </button>
-            </PopoverTrigger>
-            <PopoverContent align="end" className="w-80 space-y-4">
-              <div>
-                <p className="label-xs">Fréquence de recherche</p>
-                <div className="mt-2 grid grid-cols-2 gap-1.5">
-                  {frequencies.map((f) => (
-                    <button
-                      key={f}
-                      type="button"
-                      onClick={() => setFreq(f)}
-                      className={cn(
-                        "rounded-lg px-2.5 py-1.5 text-[12.5px] font-medium transition-colors",
-                        freq === f ? "bg-navy text-navy-foreground" : "bg-muted text-muted-foreground hover:bg-accent",
-                      )}
-                    >
-                      {f}
-                    </button>
-                  ))}
-                </div>
-              </div>
-              <div>
-                <p className="label-xs">Sources à rechercher</p>
-                <div className="mt-2 space-y-1.5">
-                  {allSources.map((s) => (
-                    <label key={s} className="flex cursor-pointer items-center gap-2 text-[13px]">
-                      <input
-                        type="checkbox"
-                        checked={sources.includes(s)}
-                        onChange={() =>
-                          setSources((p) => (p.includes(s) ? p.filter((x) => x !== s) : [...p, s]))
-                        }
-                        className="size-4 rounded border-border accent-primary"
-                      />
-                      {s}
-                    </label>
-                  ))}
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-2">
-                <label className="block">
-                  <span className="label-xs">Budget minimum</span>
-                  <input
-                    value={minBudget}
-                    onChange={(e) => setMinBudget(e.target.value)}
-                    placeholder="500 000"
-                    className="mt-1 h-9 w-full rounded-lg border border-border bg-background px-2.5 text-sm outline-none focus:border-ring"
-                  />
-                </label>
-                <label className="block">
-                  <span className="label-xs">Client ciblé</span>
-                  <input
-                    value={client}
-                    onChange={(e) => setClient(e.target.value)}
-                    placeholder="ONEE"
-                    className="mt-1 h-9 w-full rounded-lg border border-border bg-background px-2.5 text-sm outline-none focus:border-ring"
-                  />
-                </label>
-              </div>
-            </PopoverContent>
-          </Popover>
-          <button
-            type="submit"
-            className="inline-flex h-14 items-center gap-2 rounded-xl bg-primary px-5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
-          >
-            <Plus className="size-4" /> Enregistrer la recherche
-          </button>
-        </form>
+          </>
+        ) : (
+          <>
+            <PageHeader
+              title="Recherches AO"
+              subtitle="L'Agent AO surveille les sources et remonte les opportunités. Vous les préqualifiez avant toute analyse complète."
+              action={
+                <button
+                  onClick={openWizard}
+                  className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
+                >
+                  <Plus className="size-4" /> Nouvelle recherche
+                </button>
+              }
+            />
+            <div className="flex flex-wrap items-center gap-x-5 gap-y-1 border-b border-border pb-4">
+              <p className="label-xs text-primary">Étape 1 sur 7 · Recherches AO</p>
+              <p className="text-xs text-muted-foreground">Prochaine étape : Analyses</p>
+            </div>
+          </>
+        )}
 
-        <div className="grid gap-3 lg:grid-cols-2">
+        <div className={cn("grid gap-3 lg:grid-cols-2", activeSearch && "hidden")}>
+
           {searches.map((s) => {
             const n = remaining[s.id] ?? 0;
             return (
