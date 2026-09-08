@@ -57,6 +57,8 @@ type SavedSearch = {
 
 const frequencies = ["Toutes les heures", "Tous les jours", "Chaque semaine", "Manuelle"];
 const allSources = ["Portail des marchés publics", "ONEE", "OCP", "Autres sources configurées"];
+const wizardSteps = ["Mots-clés", "Sources", "Filtres", "Fréquence", "Récapitulatif"];
+
 
 const initialSearches: SavedSearch[] = [
   { id: "r1", name: "Pièces de rechange", keywords: "Terex, Grove, Potain, pièces détachées", last: "Aujourd'hui à 08:00", frequency: "Tous les jours", sources: allSources.slice(0, 3), active: true },
