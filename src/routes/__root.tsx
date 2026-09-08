@@ -14,6 +14,8 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { PromatProvider } from "../lib/promat/store";
+import { ReferentielProvider } from "../lib/promat/referentiel";
+
 import { Toaster } from "../components/ui/sonner";
 import { ThemeProvider } from "../lib/theme";
 import { AuthProvider, useAuth } from "../lib/auth";
