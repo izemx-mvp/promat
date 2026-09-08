@@ -261,13 +261,65 @@ export function AppShell({ children }: { children: ReactNode }) {
               <Sun className={cn("absolute size-4 transition-all", theme === "dark" ? "scale-0 rotate-90 opacity-0" : "scale-100 rotate-0 opacity-100")} />
               <Moon className={cn("absolute size-4 transition-all", theme === "dark" ? "scale-100 rotate-0 opacity-100" : "scale-0 -rotate-90 opacity-0")} />
             </button>
-            <button className="group relative flex size-10 items-center justify-center rounded-xl border border-border bg-background/60 text-muted-foreground transition-all hover:text-foreground hover:border-primary/40">
-              <Bell className="size-4 transition-transform group-hover:rotate-12" />
-              <span className="absolute right-2.5 top-2.5 flex size-2">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-60" />
-                <span className="relative inline-flex size-2 rounded-full bg-primary" />
-              </span>
-            </button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button
+                  aria-label={`Notifications${unread ? ` (${unread} non lues)` : ""}`}
+                  className="group relative flex size-10 items-center justify-center rounded-xl border border-border bg-background/60 text-muted-foreground transition-all hover:text-foreground hover:border-primary/40 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/20"
+                >
+                  <Bell className="size-4 transition-transform group-hover:rotate-12" />
+                  {unread > 0 && (
+                    <span className="absolute right-2.5 top-2.5 flex size-2">
+                      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-60" />
+                      <span className="relative inline-flex size-2 rounded-full bg-primary" />
+                    </span>
+                  )}
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-80 p-0">
+                <div className="flex items-center justify-between px-3 py-2.5">
+                  <span className="label-xs">Notifications</span>
+                  <button
+                    onClick={markAllRead}
+                    className="text-[11px] font-medium text-muted-foreground transition-colors hover:text-primary"
+                  >
+                    Tout marquer comme lu
+                  </button>
+                </div>
+                <DropdownMenuSeparator className="my-0" />
+                {notifications.length === 0 ? (
+                  <p className="px-3 py-8 text-center text-sm text-muted-foreground">Aucun résultat.</p>
+                ) : (
+                  <div className="max-h-80 overflow-y-auto py-1">
+                    {notifications.map((n) => (
+                      <button
+                        key={n.id}
+                        onClick={() => {
+                          markRead(n.id);
+                          navigate({ to: n.to });
+                        }}
+                        className="flex w-full items-start gap-2.5 px-3 py-2.5 text-left transition-colors hover:bg-muted focus-visible:outline-none focus-visible:bg-muted"
+                      >
+                        <span
+                          className={cn(
+                            "mt-1.5 size-1.5 shrink-0 rounded-full",
+                            n.read ? "bg-border" : "bg-primary",
+                          )}
+                        />
+                        <span className="min-w-0 flex-1">
+                          <span className={cn("block truncate text-[13px]", n.read ? "font-medium text-muted-foreground" : "font-semibold")}>
+                            {n.title}
+                          </span>
+                          <span className="mt-0.5 block truncate text-[11.5px] text-muted-foreground">{n.detail}</span>
+                          <span className="mt-1 block mono text-[10px] text-muted-foreground/70">{n.time}</span>
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </DropdownMenuContent>
+            </DropdownMenu>
+
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <button className="flex items-center gap-2.5 rounded-xl border border-border bg-background/60 px-2.5 py-1.5 transition-all hover:border-primary/40">
