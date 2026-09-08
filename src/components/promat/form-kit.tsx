@@ -98,7 +98,7 @@ export function GhostButton({
   className,
 }: {
   children: ReactNode;
-  onClick?: () => void | undefined;
+  onClick?: (() => void) | undefined;
   type?: "button" | "submit" | undefined;
   className?: string | undefined;
 }) {
@@ -126,7 +126,7 @@ export function PrimaryButton({
   className,
 }: {
   children: ReactNode;
-  onClick?: () => void | undefined;
+  onClick?: (() => void) | undefined;
   type?: "button" | "submit" | undefined;
   disabled?: boolean | undefined;
   loading?: boolean | undefined;
@@ -157,7 +157,7 @@ export function SecondaryButton({
   title,
 }: {
   children: ReactNode;
-  onClick?: () => void | undefined;
+  onClick?: (() => void) | undefined;
   disabled?: boolean | undefined;
   className?: string | undefined;
   title?: string | undefined;
