@@ -101,7 +101,9 @@ function ReadinessCard({ o }: { o: Opportunity }) {
 function RecherchesPage() {
   const [searches, setSearches] = useState<SavedSearch[]>(initialSearches);
   const [query, setQuery] = useState("");
-  const [cfgOpen, setCfgOpen] = useState(false);
+  const [wizardOpen, setWizardOpen] = useState(false);
+  const [step, setStep] = useState(0);
+
   const [freq, setFreq] = useState("Tous les jours");
   const [sources, setSources] = useState<string[]>(allSources.slice(0, 3));
   const [minBudget, setMinBudget] = useState("");
