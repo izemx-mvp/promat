@@ -161,13 +161,16 @@ function RootComponent() {
       <ThemeProvider>
         <AuthProvider>
           <PromatProvider>
-            <AuroraBackground />
-            <AuthGate>
-              {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-              <Outlet />
-            </AuthGate>
-            <Toaster />
+            <ReferentielProvider>
+              <AuroraBackground />
+              <AuthGate>
+                {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+                <Outlet />
+              </AuthGate>
+              <Toaster />
+            </ReferentielProvider>
           </PromatProvider>
+
         </AuthProvider>
       </ThemeProvider>
     </QueryClientProvider>
