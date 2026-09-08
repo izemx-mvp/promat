@@ -190,13 +190,18 @@ function RecherchesPage() {
     openResults(s.id);
   }
 
-  function saveSearch(e: React.FormEvent) {
-    e.preventDefault();
+  function openWizard() {
+    setQuery("");
+    setFreq("Tous les jours");
+    setSources(allSources.slice(0, 3));
+    setMinBudget("");
+    setClient("");
+    setStep(0);
+    setWizardOpen(true);
+  }
+
+  function saveSearch() {
     const kw = query.trim();
-    if (!kw) {
-      toast.error("Saisissez au moins un mot-clé");
-      return;
-    }
     const id = `r${Date.now()}`;
     setSearches((p) => [
       {
@@ -212,10 +217,10 @@ function RecherchesPage() {
       },
       ...p,
     ]);
-    setQuery("");
-    setCfgOpen(false);
+    setWizardOpen(false);
     toast.success(`Recherche enregistrée — l'Agent AO la relance ${freq.toLowerCase()}`);
   }
+
 
   return (
     <AppShell>
