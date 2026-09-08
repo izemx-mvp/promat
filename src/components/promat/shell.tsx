@@ -122,7 +122,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         <span aria-hidden className="mx-3 block h-px bg-white/10" />
 
 
-        <nav className="mt-7 space-y-5">
+        <nav className="mt-5 space-y-5">
           {groups.map((g, groupIndex) => (
             <div key={g.title}>
               {groupIndex === 1 && (
