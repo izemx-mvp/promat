@@ -10,6 +10,9 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as PreferencesRouteImport } from './routes/preferences'
+import { Route as ProfilRouteImport } from './routes/profil'
 import { Route as AdminAgentsRouteImport } from './routes/admin/agents'
 import { Route as AdminHistoriqueRouteImport } from './routes/admin/historique'
 import { Route as AdminParametresRouteImport } from './routes/admin/parametres'
@@ -33,6 +36,21 @@ import { Route as ReferentielsFournisseursRouteImport } from './routes/referenti
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PreferencesRoute = PreferencesRouteImport.update({
+  id: '/preferences',
+  path: '/preferences',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfilRoute = ProfilRouteImport.update({
+  id: '/profil',
+  path: '/profil',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminAgentsRoute = AdminAgentsRouteImport.update({
@@ -134,6 +152,9 @@ const ReferentielsFournisseursRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/login': typeof LoginRoute
+  '/preferences': typeof PreferencesRoute
+  '/profil': typeof ProfilRoute
   '/admin/agents': typeof AdminAgentsRoute
   '/admin/historique': typeof AdminHistoriqueRoute
   '/admin/parametres': typeof AdminParametresRoute
@@ -156,6 +177,9 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/login': typeof LoginRoute
+  '/preferences': typeof PreferencesRoute
+  '/profil': typeof ProfilRoute
   '/admin/agents': typeof AdminAgentsRoute
   '/admin/historique': typeof AdminHistoriqueRoute
   '/admin/parametres': typeof AdminParametresRoute
@@ -179,6 +203,9 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/login': typeof LoginRoute
+  '/preferences': typeof PreferencesRoute
+  '/profil': typeof ProfilRoute
   '/admin/agents': typeof AdminAgentsRoute
   '/admin/historique': typeof AdminHistoriqueRoute
   '/admin/parametres': typeof AdminParametresRoute
@@ -203,6 +230,9 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/login'
+    | '/preferences'
+    | '/profil'
     | '/admin/agents'
     | '/admin/historique'
     | '/admin/parametres'
@@ -225,6 +255,9 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/login'
+    | '/preferences'
+    | '/profil'
     | '/admin/agents'
     | '/admin/historique'
     | '/admin/parametres'
@@ -247,6 +280,9 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/login'
+    | '/preferences'
+    | '/profil'
     | '/admin/agents'
     | '/admin/historique'
     | '/admin/parametres'
@@ -270,6 +306,9 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  LoginRoute: typeof LoginRoute
+  PreferencesRoute: typeof PreferencesRoute
+  ProfilRoute: typeof ProfilRoute
   AdminAgentsRoute: typeof AdminAgentsRoute
   AdminHistoriqueRoute: typeof AdminHistoriqueRoute
   AdminParametresRoute: typeof AdminParametresRoute
@@ -298,6 +337,27 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/preferences': {
+      id: '/preferences'
+      path: '/preferences'
+      fullPath: '/preferences'
+      preLoaderRoute: typeof PreferencesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profil': {
+      id: '/profil'
+      path: '/profil'
+      fullPath: '/profil'
+      preLoaderRoute: typeof ProfilRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/agents': {
@@ -438,6 +498,9 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  LoginRoute: LoginRoute,
+  PreferencesRoute: PreferencesRoute,
+  ProfilRoute: ProfilRoute,
   AdminAgentsRoute: AdminAgentsRoute,
   AdminHistoriqueRoute: AdminHistoriqueRoute,
   AdminParametresRoute: AdminParametresRoute,
