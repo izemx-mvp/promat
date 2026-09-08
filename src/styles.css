@@ -284,13 +284,22 @@
 }
 .shine:hover .shine-sweep { transform: translateX(120%); }
 
-/* Aurora background keyframes */
-@keyframes aurora-drift-1 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(6%,-4%) scale(1.08)} }
-@keyframes aurora-drift-2 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(-5%,5%) scale(1.12)} }
-@keyframes aurora-drift-3 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(4%,6%) scale(0.94)} }
-@keyframes aurora-drift-4 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(-6%,-3%) scale(1.06)} }
+/* Aurora background keyframes — dramatic, always-visible motion */
+@keyframes aurora-drift-1 { 0%,100%{transform:translate3d(0,0,0) scale(1) rotate(0deg)} 33%{transform:translate3d(18%,-10%,0) scale(1.18) rotate(6deg)} 66%{transform:translate3d(-12%,14%,0) scale(0.92) rotate(-4deg)} }
+@keyframes aurora-drift-2 { 0%,100%{transform:translate3d(0,0,0) scale(1) rotate(0deg)} 33%{transform:translate3d(-18%,12%,0) scale(1.22) rotate(-8deg)} 66%{transform:translate3d(14%,-8%,0) scale(0.95) rotate(5deg)} }
+@keyframes aurora-drift-3 { 0%,100%{transform:translate3d(0,0,0) scale(1) rotate(0deg)} 33%{transform:translate3d(14%,16%,0) scale(0.88) rotate(7deg)} 66%{transform:translate3d(-16%,-10%,0) scale(1.14) rotate(-6deg)} }
+@keyframes aurora-drift-4 { 0%,100%{transform:translate3d(0,0,0) scale(1) rotate(0deg)} 33%{transform:translate3d(-14%,-14%,0) scale(1.16) rotate(-9deg)} 66%{transform:translate3d(18%,10%,0) scale(0.9) rotate(4deg)} }
+@keyframes aurora-drift-5 { 0%,100%{transform:translate3d(0,0,0) scale(1)} 50%{transform:translate3d(10%,-14%,0) scale(1.2)} }
+@keyframes conic-spin { from { transform: rotate(0deg) scale(1.6);} to { transform: rotate(360deg) scale(1.6);} }
 @keyframes grid-drift { from { transform: translate3d(0,0,0);} to { transform: translate3d(48px,48px,0);} }
 @keyframes pulse-halo { 0%,100%{box-shadow:0 0 0 0 rgba(229,13,45,0.5)} 50%{box-shadow:0 0 0 8px rgba(229,13,45,0)} }
 @keyframes shimmer { 0%{background-position:-200% 0} 100%{background-position:200% 0} }
+@keyframes wave-flow { 0%{transform:translate3d(0,0,0)} 100%{transform:translate3d(-50%,0,0)} }
+@keyframes scan-line { 0%{transform:translate3d(-100%,0,0)} 100%{transform:translate3d(100%,0,0)} }
+@keyframes float-particle { 0%,100%{transform:translate3d(0,0,0)} 50%{transform:translate3d(20px,-30px,0)} }
 
 .animate-pulse-halo { animation: pulse-halo 2.4s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .aurora-blob, .aurora-conic, .aurora-wave, .aurora-scan { animation: none !important; }
+}
