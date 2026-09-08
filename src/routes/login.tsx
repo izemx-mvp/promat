@@ -110,8 +110,16 @@ function LoginPage() {
       <div className="relative z-10 flex w-full items-center justify-center p-6 lg:w-2/5 lg:p-12">
         <div className="glass-strong w-full max-w-md animate-in fade-in-0 zoom-in-95 duration-500 p-8 sm:p-10">
           <div className="mb-8 flex flex-col items-center text-center lg:hidden">
-            <img src="/promat-logo.png" alt="PROMAT" className="h-10 object-contain" />
+            <img
+              src="/promat-logo.png"
+              alt="PROMAT Maroc"
+              width={910}
+              height={533}
+              className="block w-[155px] object-contain"
+              style={{ height: "auto", aspectRatio: "910 / 533" }}
+            />
           </div>
+
 
           <p className="eyebrow mb-3">Bienvenue</p>
           <h2 className="font-display text-3xl font-bold tracking-tight">Connectez-vous</h2>
