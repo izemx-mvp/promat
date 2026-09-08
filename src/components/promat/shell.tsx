@@ -4,6 +4,8 @@ import type { ReactNode } from "react";
 import { useEffect, useMemo, useState } from "react";
 import { workflowDone, workflowSteps, type WorkflowStepKey } from "@/lib/promat/progress";
 import { usePromat } from "@/lib/promat/store";
+import { useReferentiel } from "@/lib/promat/referentiel";
+
 import { useTheme } from "@/lib/theme";
 import { useAuth } from "@/lib/auth";
 import { cn } from "@/lib/utils";
