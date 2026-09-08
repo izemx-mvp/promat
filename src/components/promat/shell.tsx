@@ -90,15 +90,29 @@ export function AppShell({ children }: { children: ReactNode }) {
         {/* Vertical accent gradient on right edge */}
         <span aria-hidden className="pointer-events-none absolute inset-y-0 right-0 w-px bg-gradient-to-b from-transparent via-primary/40 to-transparent" />
 
-        <Link to="/" className="flex items-center gap-3 px-2 py-1">
-          <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-white p-1.5 shadow-inner ring-1 ring-white/10">
-            <img src="/promat-logo.png" alt="PROMAT" className="h-full w-full object-contain" />
-          </span>
-          <span className="leading-tight">
-            <span className="block font-display text-[15px] font-bold tracking-tight">PROMAT</span>
-            <span className="block text-[10.5px] uppercase tracking-[0.16em] text-navy-muted">Maroc · Tender OS</span>
-          </span>
-        </Link>
+        <div className="px-3 pb-7 pt-6">
+          <Link
+            to="/"
+            aria-label="PROMAT Maroc"
+            className="inline-block origin-left transition-transform duration-200 hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/30 rounded-xl"
+          >
+            <span className="block rounded-xl bg-white px-3 py-2.5 shadow-[inset_0_1px_2px_rgba(15,23,42,0.12)]">
+              <img
+                src="/promat-logo.png"
+                alt="PROMAT Maroc"
+                width={910}
+                height={533}
+                className="block w-[112px] object-contain"
+                style={{ height: "auto", aspectRatio: "910 / 533" }}
+              />
+            </span>
+            <span className="mt-2.5 block text-[10px] uppercase tracking-[0.16em] text-navy-muted">
+              Maroc · Tender OS
+            </span>
+          </Link>
+        </div>
+        <span aria-hidden className="mx-3 block h-px bg-white/10" />
+
 
         <nav className="mt-7 space-y-5">
           {groups.map((g, groupIndex) => (
