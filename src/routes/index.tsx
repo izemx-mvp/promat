@@ -104,8 +104,10 @@ function ReadinessCard({ o }: { o: Opportunity }) {
 function RecherchesPage() {
   const [searches, setSearches] = useState<SavedSearch[]>(initialSearches);
   const [query, setQuery] = useState("");
-  const [wizardOpen, setWizardOpen] = useState(false);
-  const [step, setStep] = useState(0);
+  const [quickOpen, setQuickOpen] = useState(false);
+  const [quickQuery, setQuickQuery] = useState("");
+  const [immediate, setImmediate] = useState<string | null>(null);
+  const [cfgOpen, setCfgOpen] = useState(false);
 
   const [freq, setFreq] = useState("Tous les jours");
   const [sources, setSources] = useState<string[]>(allSources.slice(0, 3));
@@ -117,7 +119,6 @@ function RecherchesPage() {
   const [processed, setProcessed] = useState<Processed>({});
   const [detail, setDetail] = useState<Opportunity | null>(null);
   const [askIgnore, setAskIgnore] = useState(false);
-  const [selectedTenderId, setSelectedTenderId] = useState<string | null>(null);
   const navigate = useNavigate();
   const { addLog } = usePromat();
 
@@ -130,7 +131,19 @@ function RecherchesPage() {
   }, [processed, searches]);
 
   const list = useMemo(() => {
-    let l = opportunities.filter((o) => o.searchId === active && processed[o.id] !== "ignored");
+    let l = opportunities.filter((o) => {
+      if (processed[o.id] === "ignored") return false;
+      if (immediate !== null) {
+        const terms = immediate
+          .toLowerCase()
+          .split(/[,\s]+/)
+          .filter(Boolean);
+        if (terms.length === 0) return true;
+        const hay = `${o.client} ${o.object} ${o.title} ${o.ref}`.toLowerCase();
+        return terms.some((t) => hay.includes(t));
+      }
+      return o.searchId === active;
+    });
     if (filter === "top") l = l.filter((o) => o.score > 90);
     if (filter === "budget") l = l.filter((o) => o.budget >= 1000000);
     if (filter === "deadline") l = l.filter((o) => o.daysLeft <= 10);
@@ -141,33 +154,49 @@ function RecherchesPage() {
     if (sort === "budget") sorted.sort((a, b) => b.budget - a.budget);
     if (sort === "deadline") sorted.sort((a, b) => a.daysLeft - b.daysLeft);
     return sorted;
-  }, [active, filter, sort, processed]);
+  }, [active, filter, sort, processed, immediate]);
 
-  const activeSearch = searches.find((s) => s.id === active);
+  const savedSearch = searches.find((s) => s.id === active);
+  const activeSearch: SavedSearch | undefined =
+    immediate !== null
+      ? {
+          id: "__immediate",
+          name: immediate || "Recherche immédiate",
+          keywords: immediate,
+          last: "À l'instant",
+          frequency: "Recherche immédiate",
+          sources: allSources,
+          active: false,
+        }
+      : savedSearch;
 
   function close() {
     setDetail(null);
     setAskIgnore(false);
   }
 
+  function goNext(o: Opportunity) {
+    if (o.tenderId) {
+      navigate({ to: "/analyses/$id", params: { id: o.tenderId } });
+    } else {
+      toast.info("Dossier créé. L'analyse sera disponible dès réception des documents.");
+    }
+  }
+
   function addOnly(o: Opportunity) {
     setProcessed((p) => ({ ...p, [o.id]: "added" }));
-    if (o.tenderId) setSelectedTenderId(o.tenderId);
     addLog({ who: "Houda Bennani", action: "Opportunité ajoutée aux AO", tender: o.client, module: "Recherches AO" });
     toast.success(`${o.ref} ajouté aux AO suivis`);
     close();
+    goNext(o);
   }
 
   function addAndAnalyse(o: Opportunity) {
     setProcessed((p) => ({ ...p, [o.id]: "added" }));
     addLog({ who: "Houda Bennani", action: "Analyse complète lancée", tender: o.client, module: "Recherches AO" });
     close();
-    if (o.tenderId) {
-      toast.success("Analyse complète lancée par l'Agent AO");
-      navigate({ to: "/analyses/$id", params: { id: o.tenderId } });
-    } else {
-      toast.success(`${o.ref} ajouté — analyse complète en préparation`);
-    }
+    if (o.tenderId) toast.success("Analyse complète lancée par l'Agent AO");
+    goNext(o);
   }
 
   function ignore(o: Opportunity, reason: string) {
@@ -182,6 +211,7 @@ function RecherchesPage() {
   }
 
   function openResults(id: string) {
+    setImmediate(null);
     setActive(id);
     setFilter("all");
   }
@@ -193,18 +223,28 @@ function RecherchesPage() {
     openResults(s.id);
   }
 
-  function openWizard() {
+  function runImmediate() {
+    const kw = quickQuery.trim();
+    if (!kw) return;
+    setQuickOpen(false);
+    setActive(null);
+    setImmediate(kw);
+    setFilter("all");
+    toast.success(`Recherche lancée pour « ${kw} »`);
+  }
+
+  function openConfig() {
     setQuery("");
     setFreq("Tous les jours");
     setSources(allSources.slice(0, 3));
     setMinBudget("");
     setClient("");
-    setStep(0);
-    setWizardOpen(true);
+    setCfgOpen(true);
   }
 
   function saveSearch() {
     const kw = query.trim();
+    if (!kw || sources.length === 0) return;
     const id = `r${Date.now()}`;
     setSearches((p) => [
       {
@@ -220,9 +260,10 @@ function RecherchesPage() {
       },
       ...p,
     ]);
-    setWizardOpen(false);
-    toast.success(`Recherche enregistrée — l'Agent AO la relance ${freq.toLowerCase()}`);
+    setCfgOpen(false);
+    toast.success(`Recherche automatique enregistrée — relance ${freq.toLowerCase()}`);
   }
+
 
 
   return (
