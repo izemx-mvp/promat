@@ -524,85 +524,75 @@ function RecherchesPage() {
 
       </div>
 
-      {/* Assistant de création de recherche */}
+      {/* Recherche immédiate */}
       <Modal
-        open={wizardOpen}
-        onClose={() => setWizardOpen(false)}
-        title="Nouvelle recherche automatique"
-        subtitle={`Étape ${step + 1} sur ${wizardSteps.length} · ${wizardSteps[step]}`}
-        width="max-w-2xl"
+        open={quickOpen}
+        onClose={() => setQuickOpen(false)}
+        title="Nouvelle recherche"
+        subtitle="Recherche immédiate sur toutes les sources surveillées."
+        width="max-w-xl"
         footer={
           <>
-            <GhostButton
-              onClick={() => (step === 0 ? setWizardOpen(false) : setStep(step - 1))}
-              className="mr-auto"
-            >
-              {step === 0 ? "Annuler" : "Retour"}
+            <GhostButton onClick={() => setQuickOpen(false)} className="mr-auto">
+              Annuler
             </GhostButton>
-            {step < wizardSteps.length - 1 ? (
-              <PrimaryButton
-                onClick={() => setStep(step + 1)}
-                disabled={(step === 0 && !query.trim()) || (step === 1 && sources.length === 0)}
-              >
-                Continuer
-              </PrimaryButton>
-            ) : (
-              <PrimaryButton onClick={saveSearch}>
-                <Plus className="size-4" /> Enregistrer la recherche
-              </PrimaryButton>
-            )}
+            <PrimaryButton onClick={runImmediate} disabled={!quickQuery.trim()}>
+              <Search className="size-4" /> Rechercher
+            </PrimaryButton>
           </>
         }
       >
-        <div className="pb-4">
-          <ol className="mb-6 flex items-center gap-2">
-            {wizardSteps.map((label, i) => (
-              <li key={label} className="flex min-w-0 flex-1 items-center gap-2">
-                <span
-                  className={cn(
-                    "flex size-6 shrink-0 items-center justify-center rounded-full text-[11px] font-semibold",
-                    i < step
-                      ? "bg-success text-white"
-                      : i === step
-                        ? "bg-primary text-primary-foreground"
-                        : "bg-muted text-muted-foreground",
-                  )}
-                >
-                  {i < step ? <Check className="size-3.5" strokeWidth={3} /> : i + 1}
-                </span>
-                <span
-                  className={cn(
-                    "hidden truncate text-[11.5px] font-medium sm:block",
-                    i === step ? "text-foreground" : "text-muted-foreground",
-                  )}
-                >
-                  {label}
-                </span>
-                {i < wizardSteps.length - 1 && <span className="h-px flex-1 bg-border" />}
-              </li>
-            ))}
-          </ol>
+        <div className="space-y-4 pb-2">
+          <div className="relative">
+            <Search className="absolute left-4 top-1/2 size-5 -translate-y-1/2 text-muted-foreground" />
+            <input
+              autoFocus
+              value={quickQuery}
+              onChange={(e) => setQuickQuery(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && runImmediate()}
+              placeholder="Ex : débitmètre, Terex, pompe hydraulique, pièces de rechange…"
+              className="h-14 w-full rounded-xl border border-border bg-background pl-12 pr-4 text-[16px] outline-none transition placeholder:text-muted-foreground focus:border-ring"
+            />
+          </div>
+          <p className="text-sm text-muted-foreground">
+            Les résultats s'affichent immédiatement. Pour une surveillance automatique, utilisez
+            « Configuration ».
+          </p>
+        </div>
+      </Modal>
 
-          {step === 0 && (
-            <div className="space-y-4">
-              <div className="relative">
-                <Search className="absolute left-4 top-1/2 size-5 -translate-y-1/2 text-muted-foreground" />
-                <input
-                  autoFocus
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  placeholder="Ex : débitmètre, Terex, pompe hydraulique, pièces de rechange…"
-                  className="h-14 w-full rounded-xl border border-border bg-background pl-12 pr-4 text-[16px] outline-none transition placeholder:text-muted-foreground focus:border-ring"
-                />
-              </div>
-              <p className="text-sm text-muted-foreground">
-                Séparez les mots-clés par des virgules. L'Agent AO les utilise pour analyser les avis publiés.
-              </p>
-            </div>
-          )}
+      {/* Configuration d'une recherche automatique */}
+      <Modal
+        open={cfgOpen}
+        onClose={() => setCfgOpen(false)}
+        title="Configuration d'une recherche automatique"
+        subtitle="L'Agent AO relance cette recherche selon la fréquence choisie."
+        width="max-w-2xl"
+        footer={
+          <>
+            <GhostButton onClick={() => setCfgOpen(false)} className="mr-auto">
+              Annuler
+            </GhostButton>
+            <PrimaryButton onClick={saveSearch} disabled={!query.trim() || sources.length === 0}>
+              <Plus className="size-4" /> Enregistrer la recherche
+            </PrimaryButton>
+          </>
+        }
+      >
+        <div className="space-y-6 pb-2">
+          <div>
+            <span className="label-xs">Mots-clés</span>
+            <input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Ex : débitmètre, Terex, pompe hydraulique…"
+              className="mt-1.5 h-12 w-full rounded-xl border border-border bg-background px-4 text-[15px] outline-none focus:border-ring"
+            />
+          </div>
 
-          {step === 1 && (
-            <div className="space-y-2">
+          <div>
+            <span className="label-xs">Sources à rechercher</span>
+            <div className="mt-2 grid gap-2 sm:grid-cols-2">
               {allSources.map((s) => {
                 const on = sources.includes(s);
                 return (
@@ -610,13 +600,13 @@ function RecherchesPage() {
                     key={s}
                     onClick={() => setSources((p) => (on ? p.filter((x) => x !== s) : [...p, s]))}
                     className={cn(
-                      "flex w-full items-center gap-3 rounded-xl border px-4 py-3 text-left text-sm font-medium transition-colors",
+                      "flex w-full items-center gap-3 rounded-xl border px-4 py-3 text-left text-[13px] font-medium transition-colors",
                       on ? "border-primary/40 bg-primary/5" : "border-border hover:bg-muted",
                     )}
                   >
                     <span
                       className={cn(
-                        "flex size-5 items-center justify-center rounded-md border",
+                        "flex size-5 shrink-0 items-center justify-center rounded-md border",
                         on ? "border-primary bg-primary text-primary-foreground" : "border-border",
                       )}
                     >
@@ -627,77 +617,51 @@ function RecherchesPage() {
                 );
               })}
             </div>
-          )}
+          </div>
 
-          {step === 2 && (
-            <div className="grid gap-4 sm:grid-cols-2">
-              <label className="block">
-                <span className="label-xs">Budget minimum (MAD)</span>
-                <input
-                  value={minBudget}
-                  onChange={(e) => setMinBudget(e.target.value)}
-                  placeholder="500 000"
-                  className="mt-1.5 h-11 w-full rounded-xl border border-border bg-background px-3 text-sm outline-none focus:border-ring"
-                />
-              </label>
-              <label className="block">
-                <span className="label-xs">Client ciblé</span>
-                <input
-                  value={client}
-                  onChange={(e) => setClient(e.target.value)}
-                  placeholder="ONEE"
-                  className="mt-1.5 h-11 w-full rounded-xl border border-border bg-background px-3 text-sm outline-none focus:border-ring"
-                />
-              </label>
-              <p className="text-sm text-muted-foreground sm:col-span-2">
-                Ces filtres sont optionnels. Laissez vide pour recevoir toutes les opportunités correspondantes.
-              </p>
-            </div>
-          )}
-
-          {step === 3 && (
-            <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+          <div>
+            <span className="label-xs">Fréquence</span>
+            <div className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-4">
               {frequencies.map((f) => (
                 <button
                   key={f}
                   onClick={() => setFreq(f)}
                   className={cn(
-                    "rounded-xl border px-3 py-3 text-[13px] font-medium transition-colors",
-                    freq === f ? "border-primary/40 bg-primary/5 text-foreground" : "border-border text-muted-foreground hover:bg-muted",
+                    "rounded-xl border px-3 py-2.5 text-[13px] font-medium transition-colors",
+                    freq === f
+                      ? "border-primary/40 bg-primary/5 text-foreground"
+                      : "border-border text-muted-foreground hover:bg-muted",
                   )}
                 >
                   {f}
                 </button>
               ))}
             </div>
-          )}
+          </div>
 
-          {step === 4 && (
-            <dl className="grid gap-x-6 gap-y-3 sm:grid-cols-2">
-              {[
-                ["Mots-clés", query.trim()],
-                ["Sources", sources.join(", ")],
-                ["Budget minimum", minBudget ? `${minBudget} MAD` : "Aucun"],
-                ["Client ciblé", client || "Tous"],
-                ["Fréquence", freq],
-                ["Statut", freq === "Manuelle" ? "En pause (lancement manuel)" : "Active"],
-              ].map(([k, v]) => (
-                <div key={k}>
-                  <dt className="label-xs">{k}</dt>
-                  <dd className="mt-0.5 text-[15px] font-medium">{v}</dd>
-                </div>
-              ))}
-            </dl>
-          )}
+          <div className="grid gap-4 sm:grid-cols-2">
+            <label className="block">
+              <span className="label-xs">Budget minimum (MAD)</span>
+              <input
+                value={minBudget}
+                onChange={(e) => setMinBudget(e.target.value)}
+                placeholder="500 000"
+                className="mt-1.5 h-11 w-full rounded-xl border border-border bg-background px-3 text-sm outline-none focus:border-ring"
+              />
+            </label>
+            <label className="block">
+              <span className="label-xs">Client ciblé</span>
+              <input
+                value={client}
+                onChange={(e) => setClient(e.target.value)}
+                placeholder="ONEE"
+                className="mt-1.5 h-11 w-full rounded-xl border border-border bg-background px-3 text-sm outline-none focus:border-ring"
+              />
+            </label>
+          </div>
         </div>
       </Modal>
 
-
-      {selectedTenderId && (
-        <StickyBar message="Opportunité ajoutée. Le dossier est prêt pour l’analyse complète.">
-          <NextButton to="/analyses/$id" id={selectedTenderId} label="Passer à l'analyse" />
-        </StickyBar>
-      )}
 
       {/* Détail préqualification */}
       <Sheet open={!!detail} onOpenChange={(v) => !v && close()}>
