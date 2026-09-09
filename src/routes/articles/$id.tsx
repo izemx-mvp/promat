@@ -30,7 +30,9 @@ export const Route = createFileRoute("/articles/$id")({
 function ArticlesPage() {
   const { id } = useParams({ from: "/articles/$id" });
   const { tender, state, update, addLog } = useTender(id);
+  const navigate = useNavigate();
   const [open, setOpen] = useState<Article | null>(null);
+
 
   if (!tender || !state) {
     return (
