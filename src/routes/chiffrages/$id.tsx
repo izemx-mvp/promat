@@ -193,7 +193,9 @@ function MoneyField({
 
 function ChiffragePage() {
   const { id } = useParams({ from: "/chiffrages/$id" });
+  const navigate = useNavigate();
   const { tender, state, update, addLog } = useTender(id);
+
   const [section, setSection] = useState<SectionKey>("comparatif");
   const [visited, setVisited] = useState<SectionKey[]>([]);
   const [detailId, setDetailId] = useState<string | null>(null);
