@@ -639,8 +639,10 @@ function ChiffragePage() {
               tender: tender.reference,
               module: "Chiffrages",
             });
-            toast.success("Chiffrage validé");
+            toast.success("Chiffrage validé — ouverture de l'offre finale");
+            navigate({ to: "/offres/$id", params: { id } });
           }}
+
         />
       </TenderWorkflow>
 
