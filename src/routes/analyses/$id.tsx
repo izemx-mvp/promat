@@ -87,8 +87,10 @@ function AnalysePage() {
   const validateGo = () => {
     update(id, { analysisValidated: true, decision: "go" });
     addLog({ who: "Houda Bennani", action: "GO validé", tender: tender.reference, module: "Analyses" });
-    toast.success("GO validé — passez aux articles");
+    toast.success("GO validé — ouverture des articles & besoins");
+    navigate({ to: "/articles/$id", params: { id } });
   };
+
 
   return (
     <AppShell>

@@ -1,4 +1,4 @@
-import { createFileRoute, useParams } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, useParams } from "@tanstack/react-router";
 import { useState } from "react";
 import { Check, Sparkles } from "lucide-react";
 import { AppShell } from "@/components/promat/shell";
@@ -31,7 +31,9 @@ export const Route = createFileRoute("/comparatifs/$id")({
 
 function ComparatifPage() {
   const { id } = useParams({ from: "/comparatifs/$id" });
+  const navigate = useNavigate();
   const { tender, state, update, addLog } = useTender(id);
+
   const [detail, setDetail] = useState(false);
 
   if (!tender || !state) {
@@ -57,8 +59,10 @@ function ComparatifPage() {
       tender: tender.reference,
       module: "Comparatifs",
     });
-    toast.success("Fournisseur retenu");
+    toast.success("Fournisseur retenu — ouverture du chiffrage");
+    navigate({ to: "/chiffrages/$id", params: { id } });
   };
+
 
   return (
     <AppShell>

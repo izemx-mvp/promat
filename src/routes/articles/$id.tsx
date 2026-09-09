@@ -1,4 +1,4 @@
-import { createFileRoute, useParams } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, useParams } from "@tanstack/react-router";
 import { useState } from "react";
 import { AppShell } from "@/components/promat/shell";
 import { Pill, SectionCard } from "@/components/promat/ui";
@@ -30,7 +30,9 @@ export const Route = createFileRoute("/articles/$id")({
 function ArticlesPage() {
   const { id } = useParams({ from: "/articles/$id" });
   const { tender, state, update, addLog } = useTender(id);
+  const navigate = useNavigate();
   const [open, setOpen] = useState<Article | null>(null);
+
 
   if (!tender || !state) {
     return (
@@ -51,8 +53,10 @@ function ArticlesPage() {
       tender: tender.reference,
       module: "Articles",
     });
-    toast.success("Articles validés");
+    toast.success("Articles validés — ouverture des consultations fournisseurs");
+    navigate({ to: "/consultations/$id", params: { id } });
   };
+
 
   return (
     <AppShell>

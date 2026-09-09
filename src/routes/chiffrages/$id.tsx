@@ -1,4 +1,4 @@
-import { createFileRoute, useParams } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, useParams } from "@tanstack/react-router";
 import { useState } from "react";
 import { Check } from "lucide-react";
 import { AppShell } from "@/components/promat/shell";
@@ -193,7 +193,9 @@ function MoneyField({
 
 function ChiffragePage() {
   const { id } = useParams({ from: "/chiffrages/$id" });
+  const navigate = useNavigate();
   const { tender, state, update, addLog } = useTender(id);
+
   const [section, setSection] = useState<SectionKey>("comparatif");
   const [visited, setVisited] = useState<SectionKey[]>([]);
   const [detailId, setDetailId] = useState<string | null>(null);
@@ -637,8 +639,10 @@ function ChiffragePage() {
               tender: tender.reference,
               module: "Chiffrages",
             });
-            toast.success("Chiffrage validé");
+            toast.success("Chiffrage validé — ouverture de l'offre finale");
+            navigate({ to: "/offres/$id", params: { id } });
           }}
+
         />
       </TenderWorkflow>
 
