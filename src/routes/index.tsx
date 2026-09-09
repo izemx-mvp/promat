@@ -1,11 +1,11 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { AlertTriangle, ArrowLeft, ArrowUpDown, Check, MoreHorizontal, Plus, Search, Sparkles, X } from "lucide-react";
+import { AlertTriangle, ArrowLeft, ArrowUpDown, Check, MoreHorizontal, Plus, Search, Settings2, Sparkles, X } from "lucide-react";
 import { AppShell, PageHeader } from "@/components/promat/shell";
 import { GhostButton, Modal, PrimaryButton } from "@/components/promat/form-kit";
 import { Pill, SectionCard } from "@/components/promat/ui";
-import { NextButton, StickyBar } from "@/components/promat/workflow";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+
 
 import {
   DropdownMenu,
