@@ -31,7 +31,9 @@ export const Route = createFileRoute("/comparatifs/$id")({
 
 function ComparatifPage() {
   const { id } = useParams({ from: "/comparatifs/$id" });
+  const navigate = useNavigate();
   const { tender, state, update, addLog } = useTender(id);
+
   const [detail, setDetail] = useState(false);
 
   if (!tender || !state) {
