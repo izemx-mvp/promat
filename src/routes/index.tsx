@@ -57,7 +57,7 @@ type SavedSearch = {
 
 const frequencies = ["Toutes les heures", "Tous les jours", "Chaque semaine", "Manuelle"];
 const allSources = ["Portail des marchés publics", "ONEE", "OCP", "Autres sources configurées"];
-const wizardSteps = ["Mots-clés", "Sources", "Filtres", "Fréquence", "Récapitulatif"];
+
 
 
 const initialSearches: SavedSearch[] = [
