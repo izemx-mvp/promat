@@ -272,7 +272,10 @@ function RecherchesPage() {
         {activeSearch ? (
           <>
             <button
-              onClick={() => setActive(null)}
+              onClick={() => {
+                setActive(null);
+                setImmediate(null);
+              }}
               className="inline-flex items-center gap-2 text-[13px] font-medium text-muted-foreground transition-colors hover:text-foreground"
             >
               <ArrowLeft className="size-4" /> Retour aux recherches
@@ -283,7 +286,9 @@ function RecherchesPage() {
               subtitle="Consultez les informations essentielles avant de décider si l'appel d'offres doit être analysé."
               action={
                 <div className="text-right">
-                  <p className="text-sm font-semibold">{remaining[activeSearch.id]} nouvelles opportunités</p>
+                  <p className="text-sm font-semibold">
+                    {immediate !== null ? list.length : remaining[activeSearch.id]} opportunités
+                  </p>
                   <p className="text-xs text-muted-foreground">Dernière recherche : {activeSearch.last}</p>
                 </div>
               }
@@ -295,14 +300,23 @@ function RecherchesPage() {
               title="Recherches AO"
               subtitle="L'Agent AO surveille les sources et remonte les opportunités. Vous les préqualifiez avant toute analyse complète."
               action={
-                <button
-                  onClick={openWizard}
-                  className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
-                >
-                  <Plus className="size-4" /> Nouvelle recherche
-                </button>
+                <div className="flex items-center gap-2">
+                  <GhostButton onClick={openConfig}>
+                    <Settings2 className="size-4" /> Configuration
+                  </GhostButton>
+                  <button
+                    onClick={() => {
+                      setQuickQuery("");
+                      setQuickOpen(true);
+                    }}
+                    className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
+                  >
+                    <Search className="size-4" /> Nouvelle recherche
+                  </button>
+                </div>
               }
             />
+
             <div className="flex flex-wrap items-center gap-x-5 gap-y-1 border-b border-border pb-4">
               <p className="label-xs text-primary">Étape 1 sur 7 · Recherches AO</p>
               <p className="text-xs text-muted-foreground">Prochaine étape : Analyses</p>
