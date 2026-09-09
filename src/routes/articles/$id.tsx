@@ -53,8 +53,10 @@ function ArticlesPage() {
       tender: tender.reference,
       module: "Articles",
     });
-    toast.success("Articles validés");
+    toast.success("Articles validés — ouverture des consultations fournisseurs");
+    navigate({ to: "/consultations/$id", params: { id } });
   };
+
 
   return (
     <AppShell>
