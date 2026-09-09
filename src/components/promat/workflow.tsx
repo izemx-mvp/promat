@@ -28,40 +28,32 @@ export function TenderWorkflow({
   return (
     <div className="pb-28">
       <div className="sticky top-16 z-10 border-b border-border bg-background/90 backdrop-blur">
-        <div className="mx-auto max-w-6xl px-8 pb-3 pt-6">
-          <div className="flex flex-wrap items-start justify-between gap-4">
-            <div>
-              <div className="flex items-center gap-3">
-                <h1 className="font-display text-[26px] font-bold tracking-tight">
-                  {tender.client}
-                </h1>
-                <StatusDot status={tender.status} />
-              </div>
-              <p className="mt-1 text-sm text-muted-foreground">
+        <div className="mx-auto max-w-6xl px-8 pb-2.5 pt-4">
+          <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-1.5">
+            <div className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-1">
+              <h1 className="font-display text-[19px] font-bold tracking-tight">{tender.client}</h1>
+              <StatusDot status={tender.status} />
+              <span className="truncate text-[12.5px] text-muted-foreground">
                 {tender.reference} · {tender.title}
-              </p>
-              <div className="mt-3 flex flex-wrap gap-x-8 gap-y-2 text-sm">
-                <div>
-                  <p className="label-xs">Étape actuelle</p>
-                  <p className="mt-1 font-semibold">
-                    Étape {currentStepNumber} sur 7 · {currentStepLabel}
-                  </p>
-                </div>
-                {nextStep && (
-                  <div>
-                    <p className="label-xs">Prochaine étape</p>
-                    <p className="mt-1 font-semibold text-primary">{nextStep.label}</p>
-                  </div>
-                )}
-              </div>
+              </span>
             </div>
-            <div className="text-right">
-              <p className="label-xs">Échéance</p>
-              <p className="text-[15px] font-medium">{tender.deadlineLong}</p>
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[12.5px]">
+              <span className="text-muted-foreground">
+                Étape {currentStepNumber}/7 ·{" "}
+                <span className="font-semibold text-foreground">{currentStepLabel}</span>
+              </span>
+              {nextStep && (
+                <span className="text-muted-foreground">
+                  Prochaine · <span className="font-semibold text-primary">{nextStep.label}</span>
+                </span>
+              )}
+              <span className="text-muted-foreground">
+                Échéance · <span className="font-medium text-foreground">{tender.deadlineLong}</span>
+              </span>
             </div>
           </div>
 
-          <ol className="mt-4 flex flex-wrap items-center gap-1">
+          <ol className="mt-2 flex flex-wrap items-center gap-0.5">
             {workflowSteps.map((s, i) => {
               const done = workflowDone(state, s.key);
               const active = s.key === current;
@@ -71,7 +63,7 @@ export function TenderWorkflow({
                     to={s.to}
                     params={{ id: tender.id }}
                     className={cn(
-                      "flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-[12.5px] transition-colors",
+                      "flex items-center gap-1.5 rounded-md px-2 py-1 text-[12px] transition-colors",
                       active
                         ? "bg-primary/10 font-semibold text-primary"
                         : done
@@ -80,11 +72,11 @@ export function TenderWorkflow({
                     )}
                   >
                     {done ? (
-                      <Check className="size-3.5 text-success" strokeWidth={3} />
+                      <Check className="size-3 text-success" strokeWidth={3} />
                     ) : (
                       <span
                         className={cn(
-                          "size-2 rounded-full",
+                          "size-1.5 rounded-full",
                           active ? "bg-primary" : "bg-border",
                         )}
                       />
@@ -94,13 +86,14 @@ export function TenderWorkflow({
                     </span>
                     {s.label}
                   </Link>
-                  {i < workflowSteps.length - 1 && <span className="mx-0.5 h-px w-4 bg-border" />}
+                  {i < workflowSteps.length - 1 && <span className="mx-0.5 h-px w-3 bg-border" />}
                 </li>
               );
             })}
           </ol>
         </div>
       </div>
+
 
       <div className="mx-auto max-w-6xl space-y-6 px-8 py-8">{children}</div>
     </div>
