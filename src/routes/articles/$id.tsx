@@ -1,4 +1,4 @@
-import { createFileRoute, useParams } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, useParams } from "@tanstack/react-router";
 import { useState } from "react";
 import { AppShell } from "@/components/promat/shell";
 import { Pill, SectionCard } from "@/components/promat/ui";
