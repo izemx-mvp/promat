@@ -57,8 +57,10 @@ function ComparatifPage() {
       tender: tender.reference,
       module: "Comparatifs",
     });
-    toast.success("Fournisseur retenu");
+    toast.success("Fournisseur retenu — ouverture du chiffrage");
+    navigate({ to: "/chiffrages/$id", params: { id } });
   };
+
 
   return (
     <AppShell>
